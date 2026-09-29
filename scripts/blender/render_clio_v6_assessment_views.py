@@ -1,10 +1,10 @@
 """
 =============================================================================
-RENDER RENAULT CLIO V6 PHASE 2 (2000S HATCHBACK) ASSESSMENT VIEWS
+RENDER RENAULT CLIO V6 PHASE 2 (2000S HATCHBACK) ASSESSMENT VIEWS - V4
 =============================================================================
 Renders high-fidelity beauty assessment shots of the generated Renault Clio V6 Phase 2:
-1. Front 3/4 Hero (Bleu Iliade, triangular projector headlamps, front chin splitter)
-2. Rear 3/4 (Massive side ram-air scoops, high-downforce roof wing, center dual exhausts)
+1. Front 3/4 Hero (Bleu Iliade, swept projector headlamps, front chin splitter)
+2. Rear 3/4 (Sculpted side ram-air scoops, high-downforce roof wing, center dual exhausts)
 3. Side Profile (18" OZ Superturismo wheels, blistered arches, side intake pods)
 4. Front Elevation (Dual-split upper grille, Renault chrome diamond, lower radiator mouth)
 5. Rear Elevation (Dual center-exit chrome exhausts, rear diffuser, triangular taillights)
@@ -15,31 +15,47 @@ import bpy
 import math
 import os
 import shutil
+import sys
 from mathutils import Vector, Euler
 
-# 1. Clean entire scene
-bpy.ops.object.select_all(action='SELECT')
-bpy.ops.object.delete(use_global=False)
-for block in [bpy.data.meshes, bpy.data.materials, bpy.data.curves, bpy.data.lights, bpy.data.cameras]:
-    for item in list(block):
-        if item.users == 0:
-            block.remove(item)
+# Add generator directory to path
+gen_dir = r"E:\Car_Automation\scripts\blender\generators"
+if gen_dir not in sys.path:
+    sys.path.append(gen_dir)
 
-# 2. Import freshly exported Master GLB to verify roundtrip fidelity
-glb_path = r"e:\Car_Automation\public\models\Car_Renault_Clio_V6_Phase2_2000s.glb"
-print(f"[IMPORT] Loading Master GLB: {glb_path}")
-bpy.ops.import_scene.gltf(filepath=glb_path)
+if "generate_renault_clio_v6_phase2_master_cad" in sys.modules:
+    del sys.modules["generate_renault_clio_v6_phase2_master_cad"]
 
-# Hide any hitboxes from rendering
+import generate_renault_clio_v6_phase2_master_cad
+from generate_renault_clio_v6_phase2_master_cad import generate_renault_clio_v6_phase2_master
+
+# 1. Build Renault Clio V6 Phase 2 from clean slate in-memory
+print("[RENDER SCRIPT] Generating Renault Clio V6 Phase 2 in-memory...")
+generate_renault_clio_v6_phase2_master()
+
+# Ensure all doors and articulating parts are in resting closed position for assessment
+bpy.context.scene.frame_set(1)
 for obj in bpy.data.objects:
     if obj.name.startswith("HITBOX_"):
         obj.hide_render = True
+    if obj.animation_data:
+        if obj.animation_data.nla_tracks:
+            for track in obj.animation_data.nla_tracks:
+                track.mute = True
+        obj.animation_data.action = None
+    obj.rotation_euler = (0, 0, 0)
+bpy.context.view_layer.update()
 
 # Target output directories
 REPO_DIR = r"e:\Car_Automation\assets\screenshots\clio_v6_assessment"
-CONV_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\db1ded0e-da82-4d9a-9cde-e589de13d7ab"
+CONV_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\c92892f5-7cac-4196-9d9c-8538b401dfc6"
 os.makedirs(REPO_DIR, exist_ok=True)
 os.makedirs(CONV_DIR, exist_ok=True)
+
+# 2. Clean previous cameras/lights/ground
+for obj in list(bpy.data.objects):
+    if any(k in obj.name for k in ["Studio", "Assessment", "KeyLight", "FillLight", "RimLight", "Overhead"]):
+        bpy.data.objects.remove(obj, do_unlink=True)
 
 # 3. Studio World & Atmospheric Lighting
 world = bpy.context.scene.world
@@ -149,6 +165,6 @@ for name, loc, target, lens in angles:
     bpy.ops.render.render(write_still=True)
     if os.path.exists(out_file1):
         shutil.copy2(out_file1, out_file2)
-        print(f"[RENDERED] {name} -> {out_file1} ({os.path.getsize(out_file1)} bytes)")
+        print(f"  ✓ Rendered {name} -> {out_file1}")
 
-print("[COMPLETE] All 5 Renault Clio V6 Phase 2 assessment views rendered successfully.")
+print("[RENDER SCRIPT] All 5 Assessment views rendered successfully!")

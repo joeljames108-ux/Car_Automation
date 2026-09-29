@@ -21,16 +21,18 @@ gen_dir = r"E:\Car_Automation\scripts\blender\generators"
 if gen_dir not in sys.path:
     sys.path.append(gen_dir)
 
-if "generate_toyota_gr_yaris" in sys.modules:
-    del sys.modules["generate_toyota_gr_yaris"]
-import generate_toyota_gr_yaris
-from generate_toyota_gr_yaris import build_toyota_gr_yaris_master
+if "generate_toyota_gr_yaris_master_cad" in sys.modules:
+    del sys.modules["generate_toyota_gr_yaris_master_cad"]
+import generate_toyota_gr_yaris_master_cad
+from generate_toyota_gr_yaris_master_cad import generate_toyota_gr_yaris_master
 
-# Build Toyota GR Yaris from completely purged factory state
-build_toyota_gr_yaris_master()
+# Build Toyota GR Yaris Master Class-A CAD
+generate_toyota_gr_yaris_master()
 
-ARTIFACTS_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\acd43136-462b-4bcc-95d3-b92439716605"
-os.makedirs(ARTIFACTS_DIR, exist_ok=True)
+REPO_DIR = r"E:\Car_Automation\assets\screenshots\gr_yaris_assessment"
+CONV_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\c92892f5-7cac-4196-9d9c-8538b401dfc6"
+os.makedirs(REPO_DIR, exist_ok=True)
+os.makedirs(CONV_DIR, exist_ok=True)
 
 # Clean previous cameras/lights/ground
 for obj in list(bpy.data.objects):
@@ -137,14 +139,18 @@ def look_at(cam, target):
     rot_quat = direction.to_track_quat('-Z', 'Y')
     cam.rotation_euler = rot_quat.to_euler()
 
+import shutil
+
 for name, loc, target, lens in angles:
     cam_obj.location = Vector(loc)
     cam_data.lens = lens
     look_at(cam_obj, target)
 
-    out_file = os.path.join(ARTIFACTS_DIR, f"{name}.png")
+    out_file = os.path.join(REPO_DIR, f"{name}.png")
     scene.render.filepath = out_file
     bpy.ops.render.render(write_still=True)
-    print(f"[RENDERED] {name} -> {out_file} ({os.path.getsize(out_file)} bytes)")
+    conv_file = os.path.join(CONV_DIR, f"{name}.png")
+    shutil.copy2(out_file, conv_file)
+    print(f"[RENDERED] {name} -> {out_file} & {conv_file} ({os.path.getsize(out_file)} bytes)")
 
 print("[COMPLETE] All 5 Toyota GR Yaris assessment views rendered successfully.")

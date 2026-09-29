@@ -2,42 +2,47 @@
 =============================================================================
 RENDER FORD FOCUS RS MK3 (2010S HATCHBACK) ASSESSMENT VIEWS
 =============================================================================
-Renders high-fidelity beauty assessment shots of the generated Ford Focus RS Mk3:
-1. Front 3/4 Hero (Nitrous Blue, trapezoidal hexagonal grille, Bi-Xenon optics, chin splitter)
-2. Rear 3/4 (Towering pedestal RS rear roof wing, dual 100mm chrome exhausts, tunnel diffuser)
-3. Side Profile (19" forged RS 10-spoke wheels, Brembo blue calipers, kinetic hot hatch lines)
-4. Front Elevation (Upper RS grille, lower intercooler mouth, vertical brake ducts, fog lamps)
-5. Rear Elevation (Dual 100mm chrome exhaust tips, 4 diffuser strakes, wrap-around LED taillights)
+Renders high-fidelity beauty assessment shots of the Ford Focus RS Mk3:
+1. Front 3/4 Hero (Nitrous Blue, trapezoidal RS grille, Bi-Xenon optics, chin splitter)
+2. Rear 3/4 (Towering aero roof wing, 4-fin tunnel diffuser, dual 115mm chrome exhausts)
+3. Side Profile (19" forged RS wheels, Brembo blue calipers, kinetic beltline)
+4. Front Elevation (Trapezoidal upper grille, blue RS badge, intercooler mouth, brake ducts)
+5. Rear Elevation (Aerodynamic diffuser, F1 fog lamp, dual exhausts, RS roof wing)
 =============================================================================
 """
 
 import bpy
 import math
 import os
+import shutil
 import sys
 from mathutils import Vector, Euler
 
-gen_dir = r"E:\Car_Automation\scripts\blender\generators"
-if gen_dir not in sys.path:
-    sys.path.append(gen_dir)
+# Target output directories
+REPO_DIR = r"e:\Car_Automation\assets\screenshots\focus_rs_assessment"
+CONV_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\c92892f5-7cac-4196-9d9c-8538b401dfc6"
+os.makedirs(REPO_DIR, exist_ok=True)
+os.makedirs(CONV_DIR, exist_ok=True)
 
-if "generate_ford_focus_rs_mk3" in sys.modules:
-    del sys.modules["generate_ford_focus_rs_mk3"]
-import generate_ford_focus_rs_mk3
-from generate_ford_focus_rs_mk3 import build_ford_focus_rs_mk3_master
-
-# Build Ford Focus RS Mk3 from completely purged slate
-build_ford_focus_rs_mk3_master()
-
-ARTIFACTS_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\acd43136-462b-4bcc-95d3-b92439716605"
-os.makedirs(ARTIFACTS_DIR, exist_ok=True)
+# Ensure all doors and articulating parts are in resting closed position for assessment
+bpy.context.scene.frame_set(1)
+for obj in bpy.data.objects:
+    if obj.name.startswith("HITBOX_"):
+        obj.hide_render = True
+    if obj.animation_data:
+        if obj.animation_data.nla_tracks:
+            for track in obj.animation_data.nla_tracks:
+                track.mute = True
+        obj.animation_data.action = None
+    obj.rotation_euler = (0, 0, 0)
+bpy.context.view_layer.update()
 
 # Clean previous cameras/lights/ground
 for obj in list(bpy.data.objects):
     if any(k in obj.name for k in ["Studio", "Assessment", "KeyLight", "FillLight", "RimLight", "Overhead"]):
         bpy.data.objects.remove(obj, do_unlink=True)
 
-# Studio World & Lighting
+# Studio World & Atmospheric Lighting
 world = bpy.context.scene.world
 if not world:
     world = bpy.data.worlds.new("StudioWorld")
@@ -46,105 +51,104 @@ if not world:
 world.use_nodes = True
 bg_node = world.node_tree.nodes.get("Background")
 if bg_node:
-    bg_node.inputs["Color"].default_value = (0.05, 0.052, 0.058, 1.0)
+    bg_node.inputs["Color"].default_value = (0.038, 0.040, 0.046, 1.0)
     bg_node.inputs["Strength"].default_value = 0.85
 
-# Overhead Strip Softbox
+# Overhead Strip Softbox (Rim highlight on roof, hood, and spoiler)
 top_data = bpy.data.lights.new(name="Assessment_Overhead", type='AREA')
-top_data.energy = 2500
+top_data.energy = 2600
 top_data.shape = 'RECTANGLE'
 top_data.size = 2.4
-top_data.size_y = 6.2
+top_data.size_y = 6.4
 top_data.color = (1.0, 0.98, 0.96)
 top_obj = bpy.data.objects.new("Assessment_Overhead", top_data)
-top_obj.location = (0.0, 0.0, 4.4)
+top_obj.location = (0.0, 0.0, 4.5)
 bpy.context.scene.collection.objects.link(top_obj)
 
 # Key Light (Warm Classic Key)
 key_data = bpy.data.lights.new(name="Assessment_KeyLight", type='AREA')
 key_data.energy = 2400
-key_data.size = 5.5
+key_data.size = 6.0
 key_obj = bpy.data.objects.new("Assessment_KeyLight", key_data)
-key_obj.location = (5.0, 4.8, 3.6)
+key_obj.location = (5.2, 4.8, 3.6)
 key_obj.rotation_euler = Euler((math.radians(45), math.radians(15), math.radians(45)), 'XYZ')
 bpy.context.scene.collection.objects.link(key_obj)
 
 # Fill Light (Cool Soft Fill)
 fill_data = bpy.data.lights.new(name="Assessment_FillLight", type='AREA')
 fill_data.energy = 1400
-fill_data.size = 5.5
+fill_data.size = 6.0
 fill_data.color = (0.94, 0.96, 1.0)
 fill_obj = bpy.data.objects.new("Assessment_FillLight", fill_data)
-fill_obj.location = (-5.0, 4.0, 3.4)
+fill_obj.location = (-5.2, 4.0, 3.4)
 fill_obj.rotation_euler = Euler((math.radians(35), math.radians(-20), math.radians(-35)), 'XYZ')
 bpy.context.scene.collection.objects.link(fill_obj)
 
-# Rim Light (Roof Wing & C-Pillar Accent)
-rim_data = bpy.data.lights.new(name="Assessment_RimLight", type='SUN')
-rim_data.energy = 7.5
+# Rim/Kicker Light (Rear Quarter Separation)
+rim_data = bpy.data.lights.new(name="Assessment_RimLight", type='AREA')
+rim_data.energy = 2000
+rim_data.size = 4.5
+rim_data.color = (0.85, 0.92, 1.0)
 rim_obj = bpy.data.objects.new("Assessment_RimLight", rim_data)
-rim_obj.location = (0.0, -5.8, 3.4)
-rim_obj.rotation_euler = Euler((math.radians(120), 0, 0), 'XYZ')
+rim_obj.location = (-4.6, -4.8, 3.0)
+rim_obj.rotation_euler = Euler((math.radians(50), math.radians(20), math.radians(145)), 'XYZ')
 bpy.context.scene.collection.objects.link(rim_obj)
 
-# Dark Reflective Epoxy Showroom Floor
-bpy.ops.mesh.primitive_plane_add(size=30, location=(0, 0, 0))
-ground_obj = bpy.context.active_object
-ground_obj.name = "StudioGround"
-mat_ground = bpy.data.materials.new("Ground_Mat")
-mat_ground.use_nodes = True
-g_bsdf = mat_ground.node_tree.nodes.get("Principled BSDF")
-if g_bsdf:
-    g_bsdf.inputs["Base Color"].default_value = (0.02, 0.022, 0.025, 1.0)
-    g_bsdf.inputs["Metallic"].default_value = 0.35
-    g_bsdf.inputs["Roughness"].default_value = 0.08
-    if "Coat Weight" in g_bsdf.inputs:
-        g_bsdf.inputs["Coat Weight"].default_value = 0.95
-    elif "Clearcoat" in g_bsdf.inputs:
-        g_bsdf.inputs["Clearcoat"].default_value = 0.95
-ground_obj.data.materials.append(mat_ground)
+# Studio Ground Floor with subtle dark reflection
+bpy.ops.mesh.primitive_plane_add(size=35.0, location=(0, 0, 0))
+floor = bpy.context.active_object
+floor.name = "Assessment_Floor"
+floor_mat = bpy.data.materials.new("Assessment_FloorMat")
+floor_mat.use_nodes = True
+f_bsdf = floor_mat.node_tree.nodes.get("Principled BSDF")
+if f_bsdf:
+    f_bsdf.inputs["Base Color"].default_value = (0.018, 0.019, 0.022, 1.0)
+    f_bsdf.inputs["Roughness"].default_value = 0.28
+    f_bsdf.inputs["Metallic"].default_value = 0.35
+floor.data.materials.append(floor_mat)
 
-# Camera Setup
-cam_data = bpy.data.cameras.new("AssessmentCam")
-cam_data.lens = 50.0
-cam_data.clip_start = 0.1
-cam_data.clip_end = 100.0
-cam_obj = bpy.data.objects.new("AssessmentCam", cam_data)
-bpy.context.scene.collection.objects.link(cam_obj)
-bpy.context.scene.camera = cam_obj
-
-# Render Settings
+# Configure Render Engine
 scene = bpy.context.scene
 scene.render.engine = 'BLENDER_EEVEE_NEXT' if hasattr(bpy.types, 'RenderSettings') and 'BLENDER_EEVEE_NEXT' in [e.identifier for e in bpy.types.RenderSettings.bl_rna.properties['engine'].enum_items] else 'BLENDER_EEVEE'
-if hasattr(scene, "eevee"):
-    if hasattr(scene.eevee, "taa_render_samples"):
-        scene.eevee.taa_render_samples = 64
 scene.render.resolution_x = 1280
 scene.render.resolution_y = 720
+scene.render.resolution_percentage = 100
 scene.render.image_settings.file_format = 'PNG'
+scene.render.image_settings.color_mode = 'RGBA'
 
-# Angle definitions for Ford Focus RS Mk3 (L=4.390m, W=1.823m, H=1.472m)
-angles = [
-    ("focus_rs_front_three_quarter", (4.8,  4.8, 1.40), (0.0,  0.10, 0.65), 50.0),
-    ("focus_rs_rear_three_quarter",  (4.8, -4.8, 1.40), (0.0, -0.10, 0.68), 50.0),
-    ("focus_rs_side_profile",        (6.0,  0.0, 0.76), (0.0,  0.00, 0.66), 55.0),
-    ("focus_rs_front_elevation",     (0.0,  5.5, 0.70), (0.0,  0.15, 0.64), 50.0),
-    ("focus_rs_rear_elevation",      (0.0, -5.5, 0.70), (0.0, -0.15, 0.66), 50.0),
+# Camera definitions: (name, eye_pos, target_pos, fov_deg)
+center_car = Vector((0.0, 0.0, 0.65))
+views = [
+    ("focus_rs_front_three_quarter", Vector((5.8, 5.5, 2.00)), center_car + Vector((0, 0.2, 0.0)), 38.0),
+    ("focus_rs_rear_three_quarter",  Vector((-5.8, -5.5, 2.00)), center_car + Vector((0, -0.2, 0.0)), 38.0),
+    ("focus_rs_side_profile",        Vector((8.4, 0.0, 1.10)),   center_car, 32.0),
+    ("focus_rs_front_elevation",     Vector((0.0, 6.2, 1.10)),   center_car + Vector((0, 0.5, 0.0)), 32.0),
+    ("focus_rs_rear_elevation",      Vector((0.0, -6.2, 1.10)),  center_car + Vector((0, -0.5, 0.0)), 32.0),
 ]
 
-def look_at(cam, target):
-    direction = Vector(target) - cam.location
+cam_data = bpy.data.cameras.new(name="AssessmentCamera")
+cam_obj = bpy.data.objects.new("AssessmentCamera", cam_data)
+scene.collection.objects.link(cam_obj)
+scene.camera = cam_obj
+
+for view_name, eye, target, fov in views:
+    cam_obj.location = eye
+    direction = target - eye
     rot_quat = direction.to_track_quat('-Z', 'Y')
-    cam.rotation_euler = rot_quat.to_euler()
+    cam_obj.rotation_euler = rot_quat.to_euler()
+    cam_data.angle = math.radians(fov)
+    bpy.context.view_layer.update()
 
-for name, loc, target, lens in angles:
-    cam_obj.location = Vector(loc)
-    cam_data.lens = lens
-    look_at(cam_obj, target)
-
-    out_file = os.path.join(ARTIFACTS_DIR, f"{name}.png")
+    out_file = os.path.join(REPO_DIR, f"{view_name}.png")
     scene.render.filepath = out_file
+    print(f"[ASSESSMENT RENDER] Rendering {view_name} -> {out_file}...")
     bpy.ops.render.render(write_still=True)
-    print(f"[RENDERED] {name} -> {out_file} ({os.path.getsize(out_file)} bytes)")
 
-print("[COMPLETE] All 5 Ford Focus RS Mk3 assessment views rendered successfully.")
+    # Mirror to conversation artifact directory for immediate visual inspection
+    conv_file = os.path.join(CONV_DIR, f"{view_name}.png")
+    shutil.copy2(out_file, conv_file)
+    print(f"[ASSESSMENT RENDER] Mirrored to {conv_file}")
+
+print("================================================================================")
+print("FORD FOCUS RS MK3 ASSESSMENT VIEWS RENDERED SUCCESSFULLY")
+print("================================================================================")

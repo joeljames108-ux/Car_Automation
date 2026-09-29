@@ -21,15 +21,16 @@ gen_dir = r"E:\Car_Automation\scripts\blender\generators"
 if gen_dir not in sys.path:
     sys.path.append(gen_dir)
 
-if "generate_hyundai_n_vision_74" in sys.modules:
-    del sys.modules["generate_hyundai_n_vision_74"]
-import generate_hyundai_n_vision_74
-from generate_hyundai_n_vision_74 import build_hyundai_n_vision_74_master
+if "generate_hyundai_n_vision_74_master_cad" in sys.modules:
+    del sys.modules["generate_hyundai_n_vision_74_master_cad"]
+import generate_hyundai_n_vision_74_master_cad
+from generate_hyundai_n_vision_74_master_cad import generate_hyundai_n_vision_74_master
 
 # Build Hyundai N Vision 74 from completely purged factory state
-build_hyundai_n_vision_74_master()
+generate_hyundai_n_vision_74_master()
 
-ARTIFACTS_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\acd43136-462b-4bcc-95d3-b92439716605"
+
+ARTIFACTS_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\c92892f5-7cac-4196-9d9c-8538b401dfc6"
 os.makedirs(ARTIFACTS_DIR, exist_ok=True)
 
 # Clean previous cameras/lights/ground
@@ -136,6 +137,11 @@ def look_at(cam, target):
     direction = Vector(target) - cam.location
     rot_quat = direction.to_track_quat('-Z', 'Y')
     cam.rotation_euler = rot_quat.to_euler()
+
+# Ensure all collision hitboxes are completely hidden from camera renders
+for obj in bpy.data.objects:
+    if obj.name.startswith("HITBOX_"):
+        obj.hide_render = True
 
 for name, loc, target, lens in angles:
     cam_obj.location = Vector(loc)
