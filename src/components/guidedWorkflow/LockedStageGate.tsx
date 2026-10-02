@@ -12,12 +12,17 @@ import {
   Trophy,
   CheckCircle2,
   AlertCircle,
+  Unlock,
+  Factory,
+  Activity,
+  ShieldCheck,
 } from "lucide-react";
 import {
   WorkflowStage,
   WORKFLOW_STAGES_META,
   useGuidedEngineeringStore,
 } from "../../state/guidedEngineeringStore";
+import { useDeveloperModeStore } from "../../state/developerModeStore";
 
 interface LockedStageGateProps {
   targetStage: WorkflowStage;
@@ -36,6 +41,7 @@ export const LockedStageGate: React.FC<LockedStageGateProps> = ({
 }) => {
   const meta = WORKFLOW_STAGES_META[targetStage];
   const reqMeta = requiredStage ? WORKFLOW_STAGES_META[requiredStage] : null;
+  const store = useGuidedEngineeringStore();
 
   const getStageIcon = (stage: WorkflowStage, size = 28) => {
     switch (stage) {
@@ -43,6 +49,9 @@ export const LockedStageGate: React.FC<LockedStageGateProps> = ({
       case "vehicle": return <Car size={size} className="text-cyan-400" />;
       case "aero": return <Wind size={size} className="text-teal-400" />;
       case "interior": return <Sofa size={size} className="text-purple-400" />;
+      case "safety": return <ShieldCheck size={size} className="text-emerald-400" />;
+      case "simulation": return <Activity size={size} className="text-sky-400" />;
+      case "manufacturing": return <Factory size={size} className="text-amber-500" />;
       case "final_build": return <Trophy size={size} className="text-amber-400" />;
     }
   };
@@ -105,6 +114,52 @@ export const LockedStageGate: React.FC<LockedStageGateProps> = ({
           )}
         </div>
 
+        {/* If target is manufacturing: Display explicit 6-stage prerequisite checklist */}
+        {targetStage === "manufacturing" && (
+          <div className="rounded-2xl bg-slate-900/90 border border-amber-500/40 p-4 text-left space-y-3">
+            <div className="flex items-center justify-between text-xs font-mono font-bold text-amber-300 uppercase tracking-wide">
+              <span>REQUIRED UPSTREAM STAGES (6 OF 6)</span>
+              <span className="text-[10px] text-slate-400">All 6 must be configured</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-mono">
+              {[
+                { id: "engine" as WorkflowStage, num: 1, label: "Engine Designer", status: store.engineStatus },
+                { id: "vehicle" as WorkflowStage, num: 2, label: "Vehicle Studio", status: store.vehicleStatus },
+                { id: "aero" as WorkflowStage, num: 3, label: "Aero Studio", status: store.aeroStatus },
+                { id: "interior" as WorkflowStage, num: 4, label: "Interior Configurator", status: store.interiorStatus },
+                { id: "safety" as WorkflowStage, num: 5, label: "Safety Center", status: store.safetyStatus },
+                { id: "simulation" as WorkflowStage, num: 6, label: "Sim & Testing", status: store.simulationStatus },
+              ].map((step) => {
+                const isComplete = step.status === "configured" || step.status === "invalidated";
+                return (
+                  <button
+                    key={step.id}
+                    type="button"
+                    onClick={() => onGoToRequiredStage(step.id)}
+                    className={`flex items-center justify-between p-2 rounded-xl border transition-all text-left cursor-pointer ${
+                      isComplete
+                        ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/50"
+                        : "bg-rose-950/30 border-rose-500/40 text-rose-300 hover:bg-rose-900/40"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      {isComplete ? (
+                        <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      ) : (
+                        <AlertCircle size={14} className="text-rose-400 shrink-0" />
+                      )}
+                      <span className="font-bold">{step.num}. {step.label}</span>
+                    </div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">
+                      {isComplete ? "Ready" : "Pending"}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
           {reqMeta && (
@@ -124,6 +179,19 @@ export const LockedStageGate: React.FC<LockedStageGateProps> = ({
             className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/80 text-slate-300 hover:text-white font-mono text-xs tracking-wider transition-all cursor-pointer"
           >
             Review Step 1: ENGINE
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              useDeveloperModeStore.getState().setDevMode(true);
+              useDeveloperModeStore.getState().setOverride("ignoreWorkflowGating", true);
+            }}
+            className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 hover:text-white font-mono text-xs tracking-wider transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+            title="Bypass sequential workflow restriction via Developer Mode"
+          >
+            <Unlock size={14} />
+            <span>Dev Bypass</span>
           </button>
         </div>
       </div>

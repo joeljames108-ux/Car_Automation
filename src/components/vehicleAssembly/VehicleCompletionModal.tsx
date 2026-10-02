@@ -17,6 +17,7 @@ interface VehicleCompletionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onReset: () => void;
+  onNextToCreatorMenu?: () => void;
   stats: {
     hp: number;
     torque: number;
@@ -33,6 +34,7 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
   isOpen,
   onClose,
   onReset,
+  onNextToCreatorMenu,
   stats,
   enginePosition = "front",
   driveType = "rwd",
@@ -90,11 +92,22 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
             </button>
             <button
               onClick={onClose}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-mono text-xs font-extrabold hover:bg-amber-400 shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-base-800 text-slate-300 border border-slate-700 text-xs font-mono font-semibold hover:bg-base-750 transition-all cursor-pointer"
             >
-              <span>CONTINUE TO TUNING</span>
-              <ArrowRight size={14} />
+              <span>Return to Studio</span>
             </button>
+            {onNextToCreatorMenu && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onNextToCreatorMenu();
+                }}
+                className="flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-500 text-slate-950 font-mono font-black text-xs uppercase tracking-wider hover:from-emerald-300 hover:to-teal-300 transition-all shadow-[0_0_20px_rgba(52,211,153,0.5)] active:scale-95 cursor-pointer"
+              >
+                <span>NEXT → CREATOR MENU</span>
+                <ArrowRight size={14} strokeWidth={2.5} />
+              </button>
+            )}
           </div>
         </div>
 

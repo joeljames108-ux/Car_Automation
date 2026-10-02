@@ -12,6 +12,9 @@ import {
   ShieldAlert,
   Sparkles,
   RotateCcw,
+  Shield,
+  Activity,
+  Factory,
 } from "lucide-react";
 import {
   useGuidedEngineeringStore,
@@ -36,6 +39,9 @@ export const GuidedWorkflowStepper: React.FC<GuidedWorkflowStepperProps> = ({
     vehicleStatus,
     aeroStatus,
     interiorStatus,
+    safetyStatus,
+    simulationStatus,
+    manufacturingStatus,
     finalBuildStatus,
     activeWorkflowStage,
     canEnterStage,
@@ -43,7 +49,16 @@ export const GuidedWorkflowStepper: React.FC<GuidedWorkflowStepperProps> = ({
     resetAllStages,
   } = useGuidedEngineeringStore();
 
-  const stageOrder: WorkflowStage[] = ["engine", "vehicle", "aero", "interior", "final_build"];
+  const stageOrder: WorkflowStage[] = [
+    "engine",
+    "vehicle",
+    "aero",
+    "interior",
+    "safety",
+    "simulation",
+    "manufacturing",
+    "final_build",
+  ];
 
   const getStatus = (stage: WorkflowStage): ConfigurationStatus => {
     switch (stage) {
@@ -51,7 +66,11 @@ export const GuidedWorkflowStepper: React.FC<GuidedWorkflowStepperProps> = ({
       case "vehicle": return vehicleStatus;
       case "aero": return aeroStatus;
       case "interior": return interiorStatus;
+      case "safety": return safetyStatus;
+      case "simulation": return simulationStatus;
+      case "manufacturing": return manufacturingStatus;
       case "final_build": return finalBuildStatus;
+      default: return "unconfigured";
     }
   };
 
@@ -61,7 +80,11 @@ export const GuidedWorkflowStepper: React.FC<GuidedWorkflowStepperProps> = ({
       case "vehicle": return <Car size={size} />;
       case "aero": return <Wind size={size} />;
       case "interior": return <Sofa size={size} />;
+      case "safety": return <Shield size={size} />;
+      case "simulation": return <Activity size={size} />;
+      case "manufacturing": return <Factory size={size} />;
       case "final_build": return <Trophy size={size} />;
+      default: return <Sparkles size={size} />;
     }
   };
 

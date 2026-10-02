@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// Apex AI Knowledge Database
-// Maps every control label → tutorial explanation, impact areas, AI tip, & danger zone
+// Vehicle Engineering Knowledge Database
+// Maps every control label → tutorial explanation, impact areas, engineering tip, & danger zone
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type ImpactArea =

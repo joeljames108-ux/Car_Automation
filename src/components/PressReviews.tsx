@@ -8,6 +8,8 @@ import { Section, StatTile } from "./ui/Controls";
 import { RadarChart, HorseshoeGauge, BarCompare, Podium, RadialGauge } from "./ui/Charts";
 import { generateFullReview } from "../sim/reviews";
 import type { CategoryScore, MagazineReview, FullReview } from "../sim/reviews";
+import { useCampusStore } from "../state/campusStore";
+import { calculateCampusBonuses } from "../sim/campus/campusBonusEngine";
 
 type Tab = "overview" | "magazines" | "customers" | "longterm" | "influencers" | "comparison" | "awards" | "reliability";
 
@@ -117,13 +119,16 @@ function gradeToScore(g: string): number {
 
 export function PressReviews() {
   const { design, sim } = useDesign();
+  const { units } = useCampusStore();
   const [tab, setTab] = useState<Tab>("overview");
   const [seed, setSeed] = useState(0);
 
+  const campusBonuses = useMemo(() => calculateCampusBonuses(units), [units]);
+
   const review: FullReview = useMemo(
-    () => generateFullReview(design, sim),
+    () => generateFullReview(design, sim, campusBonuses),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [design, sim, seed]
+    [design, sim, seed, campusBonuses]
   );
 
   const s = review.summary;
@@ -162,6 +167,12 @@ export function PressReviews() {
             <Newspaper size={18} className="text-accent-400" />
             <h2 className="text-sm font-semibold text-slate-200">Press & Industry Reviews</h2>
             <span className="text-xs text-slate-500">— {design.name || "Unnamed Prototype"}</span>
+            {campusBonuses && campusBonuses.stylingPrestigeScore > 20 && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 font-mono font-bold flex items-center gap-1">
+                <Sparkles size={11} className="text-indigo-400" />
+                HQ Prestige: +{campusBonuses.stylingPrestigeScore} pts
+              </span>
+            )}
             <button
               onClick={() => setSeed((x) => x + 1)}
               className="ml-auto text-[10px] px-2 py-1 rounded-lg bg-base-800 border border-base-700 text-slate-400 hover:text-slate-200 transition-all"

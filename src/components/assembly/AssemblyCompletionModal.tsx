@@ -28,6 +28,7 @@ interface AssemblyCompletionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onReset: () => void;
+  onNextToCreationHub?: () => void;
   stats: {
     hp: number;
     torque: number;
@@ -43,6 +44,7 @@ export function AssemblyCompletionModal({
   isOpen,
   onClose,
   onReset,
+  onNextToCreationHub,
   stats,
   layout,
   engineConfig,
@@ -298,7 +300,7 @@ export function AssemblyCompletionModal({
         </div>
 
         {/* Bottom Modal Actions */}
-        <div className="flex items-center justify-between border-t border-base-800/90 pt-4">
+        <div className="flex items-center justify-between border-t border-base-800/90 pt-4 flex-wrap gap-2">
           <button
             onClick={() => {
               onReset();
@@ -309,12 +311,27 @@ export function AssemblyCompletionModal({
             <RotateCcw size={14} /> Disassemble Engine
           </button>
 
-          <button
-            onClick={onClose}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-sky-400 text-black text-xs font-mono font-extrabold hover:from-amber-300 hover:to-sky-300 transition-all shadow-[0_0_20px_rgba(34,211,238,0.4)] active:scale-95 cursor-pointer"
-          >
-            Return to Studio <ArrowRight size={14} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onClose}
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-base-800 text-slate-300 border border-slate-700 text-xs font-mono font-semibold hover:bg-base-750 transition-all cursor-pointer"
+            >
+              Return to Studio
+            </button>
+
+            {onNextToCreationHub && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onNextToCreationHub();
+                }}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 text-slate-950 font-mono font-black text-xs uppercase tracking-wider hover:from-amber-300 hover:to-orange-300 transition-all shadow-[0_0_25px_rgba(245,158,11,0.5)] active:scale-95 cursor-pointer"
+              >
+                <span>NEXT → TRANSMISSION SETUP</span>
+                <ArrowRight size={14} strokeWidth={2.5} />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>,

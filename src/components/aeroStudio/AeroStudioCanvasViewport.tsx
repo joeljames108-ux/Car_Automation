@@ -24,16 +24,23 @@ import {
   Focus,
   Crosshair,
   Compass,
+  ChevronDown,
+  Zap,
+  Flame,
+  CircleDot,
+  Gauge,
 } from "lucide-react";
 import {
   useAeroStudioStore,
   AERO_CAMERA_VIEWS,
   AeroComponentId,
   AeroCameraPresetId,
+  AeroStudioSubTab,
   CameraViewDef,
   resolveHostVehicleGlb,
 } from "../../state/aeroStudioStore";
 import { useModularVehicleBuilderStore } from "../../state/modularVehicleBuilderStore";
+import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 
 // Dedicated list of genuine modular aerodynamic additions (mounted to host vehicle hardpoints)
 const AERO_ATTACHMENT_GLB_ASSETS = [
@@ -51,6 +58,7 @@ export const AeroStudioCanvasViewport: React.FC = () => {
   // Store Subscriptions - Synchronized with Vehicle Studio
   const selectedComponent = useAeroStudioStore((s) => s.selectedComponent);
   const activeSubTab = useAeroStudioStore((s) => s.activeSubTab);
+  const setActiveSubTab = useAeroStudioStore((s) => s.setActiveSubTab);
   const activeCameraPreset = useAeroStudioStore((s) => s.activeCameraPreset);
   const setActiveCameraPreset = useAeroStudioStore((s) => s.setActiveCameraPreset);
   const config = useAeroStudioStore((s) => s.config);
@@ -933,150 +941,145 @@ export const AeroStudioCanvasViewport: React.FC = () => {
         </div>
       </div>
 
-      {/* Quick Camera Focus Floating Shortcuts at Viewport Bottom-Left */}
-      <div className="absolute bottom-3 left-3 flex items-center gap-1.5 p-1 rounded-xl bg-slate-900/80 backdrop-blur-md border border-slate-700/60 shadow-lg z-20">
-        <span className="text-[10px] font-mono uppercase text-slate-400 px-1.5">View:</span>
-        {/* Dynamic Contextual Camera Angles */}
-        {activeSubTab === "rearAero" ? (
-          <>
-            <button
-              onClick={() => setActiveCameraPreset("rearWingDefault")}
-              className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                activeCameraPreset === "rearWingDefault" || activeCameraPreset === "rearWing"
-                  ? "bg-cyan-500 text-slate-950 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              }`}
-            >
-              Elevated 3/4
-            </button>
-            <button
-              onClick={() => setActiveCameraPreset("rearWingAngleInspection")}
-              className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                activeCameraPreset === "rearWingAngleInspection"
-                  ? "bg-cyan-500 text-slate-950 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              }`}
-            >
-              Angle Inspection
-            </button>
-            <button
-              onClick={() => setActiveCameraPreset("rearWingProfile")}
-              className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                activeCameraPreset === "rearWingProfile"
-                  ? "bg-cyan-500 text-slate-950 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              }`}
-            >
-              Wing Profile
-            </button>
-            <button
-              onClick={() => setActiveCameraPreset("rearWingFullCar")}
-              className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                activeCameraPreset === "rearWingFullCar"
-                  ? "bg-cyan-500 text-slate-950 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              }`}
-            >
-              Full Car Rear
-            </button>
-          </>
-        ) : activeSubTab === "frontAero" ? (
-          <>
-            <button
-              onClick={() => setActiveCameraPreset("frontSplitterDefault")}
-              className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                activeCameraPreset === "frontSplitterDefault" || activeCameraPreset === "frontSplitter"
-                  ? "bg-cyan-500 text-slate-950 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              }`}
-            >
-              Splitter 3/4
-            </button>
-            <button
-              onClick={() => setActiveCameraPreset("frontSplitterLowCenter")}
-              className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                activeCameraPreset === "frontSplitterLowCenter"
-                  ? "bg-cyan-500 text-slate-950 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              }`}
-            >
-              Low Center
-            </button>
-            <button
-              onClick={() => setActiveCameraPreset("canardsClose")}
-              className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                activeCameraPreset === "canardsClose" || activeCameraPreset === "canards"
-                  ? "bg-cyan-500 text-slate-950 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              }`}
-            >
-              Canards Close
-            </button>
-          </>
-        ) : activeSubTab === "underbody" ? (
-          <>
-            <button
-              onClick={() => setActiveCameraPreset("diffuser")}
-              className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                activeCameraPreset === "diffuser"
-                  ? "bg-cyan-500 text-slate-950 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              }`}
-            >
-              Diffuser Exit
-            </button>
-            <button
-              onClick={() => setActiveCameraPreset("underbodyTunnels")}
-              className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                activeCameraPreset === "underbodyTunnels"
-                  ? "bg-cyan-500 text-slate-950 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              }`}
-            >
-              Venturi Tunnels
-            </button>
-            <button
-              onClick={() => setActiveCameraPreset("underbodyFloorDefault")}
-              className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                activeCameraPreset === "underbodyFloorDefault" || activeCameraPreset === "underbodyFloor"
-                  ? "bg-cyan-500 text-slate-950 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              }`}
-            >
-              Low Floor
-            </button>
-          </>
-        ) : (
-          (
-            [
-              { id: "vehicleOverview", label: "Full Car" },
-              { id: "frontSplitter", label: "Splitter" },
-              { id: "canards", label: "Canards" },
-              { id: "rearWing", label: "Rear Wing" },
-              { id: "diffuser", label: "Diffuser" },
-              { id: "activeWing", label: "Active" },
-            ] as const
-          ).map((v) => (
-            <button
-              key={v.id}
-              onClick={() => {
-                if (v.id === "vehicleOverview") {
-                  setActiveCameraPreset("vehicleOverview");
-                } else {
-                  setSelectedComponent(v.id as AeroComponentId);
-                }
+      {/* ── FLOATING BOTTOM OPTIONS DOCK (Matching Photo 1 & Photo 2) ── */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 max-w-[96vw] overflow-x-auto p-1 scrollbar-none pointer-events-auto">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-slate-100/95 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700/80 backdrop-blur-xl shadow-2xl select-none">
+          {/* 1. Subassembly Focus Dropdown */}
+          <div className="relative flex items-center">
+            <select
+              value={activeSubTab}
+              onChange={(e) => {
+                playHMIClickSound();
+                const tabId = e.target.value as AeroStudioSubTab;
+                setActiveSubTab(tabId);
+                if (tabId === "frontAero") triggerCameraFocus("frontSplitterDefault");
+                else if (tabId === "rearAero") triggerCameraFocus("rearWingDefault");
+                else if (tabId === "underbody") triggerCameraFocus("diffuser");
+                else if (tabId === "activeAero") triggerCameraFocus("rearWingAngleInspection");
+                else triggerCameraFocus("vehicleOverview");
               }}
-              className={`px-2 py-1 rounded-lg text-[11px] font-medium transition-all cursor-pointer ${
-                (v.id === "vehicleOverview" && viewAngleLabel.includes("Overview")) ||
-                selectedComponent === v.id
-                  ? "bg-cyan-500 text-slate-950 font-semibold shadow-sm"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
+              className="bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-[11px] font-bold pl-2.5 pr-7 py-1.5 rounded-xl border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 cursor-pointer appearance-none shadow-sm"
+            >
+              <option value="frontAero">Focus [Front Splitter & Canards]</option>
+              <option value="rearAero">Focus [Rear Wing & Spoiler]</option>
+              <option value="sideAero">Focus [Side Skirts & Rockers]</option>
+              <option value="underbody">Focus [Underbody & Venturi Diffuser]</option>
+              <option value="roofAero">Focus [Roof Aero & Shark Fin]</option>
+              <option value="activeAero">Focus [Active Aero DRS & Airbrake]</option>
+              <option value="coolingAero">Focus [Cooling Louvers & NACA]</option>
+              <option value="wheelAero">Focus [Wheel Turbofan Discs]</option>
+              <option value="aeroSummary">Focus [Aero Wind Tunnel Summary]</option>
+            </select>
+            <ChevronDown
+              size={12}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 dark:text-slate-400"
+            />
+          </div>
+
+          {/* 2. Camera View Pills */}
+          <div className="flex items-center bg-slate-200/90 dark:bg-slate-800/90 rounded-xl p-0.5 border border-slate-300 dark:border-slate-700 text-[10px] font-bold">
+            {[
+              { id: "vehicleOverview" as const, label: "OVERVIEW" },
+              { id: "frontSplitterDefault" as const, label: "FRONT" },
+              { id: "rearWingDefault" as const, label: "REAR" },
+              { id: "diffuser" as const, label: "DIFFUSER" },
+            ].map((cam) => (
+              <button
+                key={cam.id}
+                type="button"
+                onClick={() => {
+                  playHMIClickSound();
+                  triggerCameraFocus(cam.id);
+                }}
+                className={`px-2 py-1 rounded-lg uppercase transition-all cursor-pointer ${
+                  activeCameraPreset === cam.id
+                    ? "bg-slate-800 dark:bg-slate-700 text-cyan-400 shadow-sm font-black"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                }`}
+              >
+                {cam.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Quick Toggles: Flow Streamlines & Auto-Rotate */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => {
+                playHMIClickSound();
+                setShowStreamlines(!showStreamlines);
+              }}
+              title="Toggle Wind-Tunnel Streamlines"
+              className={`px-2 py-1 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
+                showStreamlines
+                  ? "bg-cyan-500/25 text-cyan-800 dark:text-cyan-300 border-cyan-400 shadow-sm"
+                  : "bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border-slate-300/80 dark:border-slate-700 hover:bg-slate-200/70"
               }`}
             >
-              {v.label}
+              💨 Flow
             </button>
-          ))
-        )}
+            <button
+              type="button"
+              onClick={() => {
+                playHMIClickSound();
+                setAutoRotate(!autoRotate);
+              }}
+              title="Toggle 360 Auto-Rotate"
+              className={`px-2 py-1 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
+                autoRotate
+                  ? "bg-blue-500/25 text-blue-800 dark:text-blue-300 border-blue-400 shadow-sm"
+                  : "bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border-slate-300/80 dark:border-slate-700 hover:bg-slate-200/70"
+              }`}
+            >
+              Rotate
+            </button>
+          </div>
+
+          {/* Vertical Divider */}
+          <div className="h-7 w-px bg-slate-300 dark:bg-slate-700 mx-0.5 hidden sm:block" />
+
+          {/* 3. Subassembly Option Action Cards (Photo 2 style!) */}
+          <div className="flex items-center gap-1">
+            {[
+              { id: "frontAero" as const, label: "Splitter", icon: Wind, focus: "frontSplitterDefault" as const },
+              { id: "rearAero" as const, label: "Wing", icon: Wind, focus: "rearWingDefault" as const },
+              { id: "sideAero" as const, label: "Skirts", icon: Layers, focus: "vehicleOverview" as const },
+              { id: "underbody" as const, label: "Diffuser", icon: Layers, focus: "diffuser" as const },
+              { id: "roofAero" as const, label: "Roof Fin", icon: Compass, focus: "vehicleOverview" as const },
+              { id: "activeAero" as const, label: "DRS Aero", icon: Zap, focus: "rearWingAngleInspection" as const },
+              { id: "coolingAero" as const, label: "Cooling", icon: Flame, focus: "vehicleOverview" as const },
+              { id: "wheelAero" as const, label: "Turbofan", icon: CircleDot, focus: "vehicleOverview" as const },
+              { id: "aeroSummary" as const, label: "Telemetry", icon: Gauge, focus: "vehicleOverview" as const },
+            ].map((tab) => {
+              const active = activeSubTab === tab.id;
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    playHMITabSound();
+                    setActiveSubTab(tab.id);
+                    triggerCameraFocus(tab.focus);
+                  }}
+                  title={tab.label}
+                  className={`flex flex-col items-center justify-center px-2 py-1 rounded-xl border transition-all cursor-pointer min-w-[44px] ${
+                    active
+                      ? "bg-cyan-500/25 text-cyan-800 dark:text-cyan-300 border-cyan-400 ring-2 ring-cyan-400/80 shadow-sm font-black"
+                      : "bg-white/80 dark:bg-slate-800/70 text-slate-700 dark:text-slate-300 border-slate-300/80 dark:border-slate-700/80 hover:bg-slate-200/70 dark:hover:bg-slate-700/70"
+                  }`}
+                >
+                  <Icon
+                    size={14}
+                    className={active ? "text-cyan-500" : "text-slate-500 dark:text-slate-400"}
+                  />
+                  <span className="text-[9px] mt-0.5 leading-tight truncate max-w-[50px]">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* Bottom Right Live Telemetry Quick Badge */}

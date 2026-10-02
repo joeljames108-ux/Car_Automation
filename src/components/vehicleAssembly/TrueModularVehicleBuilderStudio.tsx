@@ -375,11 +375,10 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
   return (
     <div className="space-y-5 animate-stage-transition-enter font-mono">
       {/* =====================================================================
-          TOP CHAIN BREADCRUMB
+          TOP SLIM STATUS & ARCHITECTURE SWITCHER
           ===================================================================== */}
-      <div className="panel p-3.5 rounded-2xl border border-slate-800 bg-slate-900/80 shadow-lg">
-        <div ref={breadcrumbRailRef} className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth">
-          <div className="flex items-center gap-1.5 flex-nowrap min-w-max">
+      <div className="flex items-center justify-between px-3 py-2 rounded-2xl border border-slate-700/60 bg-slate-900/80 shadow-md">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => {
@@ -387,44 +386,19 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
               clearArchitectureSelection();
               resetToFrontPage();
             }}
-            className="px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-[10px] font-bold text-slate-400 hover:text-slate-200 border border-slate-700/60 mr-1 cursor-pointer shrink-0"
+            className="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 text-xs font-bold border border-amber-500/30 transition-all cursor-pointer flex items-center gap-1.5"
           >
-            ← {activeBodySpec.name.toUpperCase()}
+            ← {activeBodySpec.name.toUpperCase()} ARCHITECTURE
           </button>
-
-          {ASSEMBLY_STAGES.map((st, idx) => {
-            const isCurrent = currentStage === st.id;
-            const isInstalled = installedStages.includes(st.id);
-
-            return (
-              <React.Fragment key={st.id}>
-                {idx > 0 && <ChevronRight size={12} className="text-slate-600 shrink-0" />}
-                <button
-                  type="button"
-                  onClick={() => {
-                    playHMIClickSound();
-                    setCurrentStage(st.id);
-                  }}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                    isCurrent
-                      ? "bg-amber-500/25 text-amber-300 border-2 border-amber-500/80 shadow-[0_0_15px_rgba(245,158,11,0.25)]"
-                      : isInstalled
-                      ? "bg-emerald-950/40 text-emerald-300 border border-emerald-500/40"
-                      : "bg-slate-900/60 text-slate-500 border border-slate-800 hover:text-slate-300"
-                  }`}
-                  data-breadcrumb-active={isCurrent ? "true" : undefined}
-                >
-                  {isInstalled ? (
-                    <CheckCircle2 size={12} className="text-emerald-400" />
-                  ) : (
-                    <CircleDot size={12} className={isCurrent ? "text-amber-400 animate-pulse" : "text-slate-600"} />
-                  )}
-                  <span>{st.label}</span>
-                </button>
-              </React.Fragment>
-            );
-          })}
-          </div>
+          <span className="text-[11px] text-slate-400 hidden sm:inline">
+            Cumulative Zero-Offset CAD Assembly
+          </span>
+        </div>
+        <div className="flex items-center gap-2 text-xs">
+          <span className="text-slate-400">STAGE:</span>
+          <span className="text-amber-400 font-extrabold uppercase">{activeStageDef.label}</span>
+          <span className="text-slate-600">·</span>
+          <span className="text-emerald-400 font-bold">{installedStages.length} of {ASSEMBLY_STAGES.length} Installed</span>
         </div>
       </div>
 

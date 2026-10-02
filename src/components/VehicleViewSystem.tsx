@@ -292,37 +292,40 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
 
     // Animation Render Loop
     let animId: number;
-    const animate = () => {
+    let lastHotspotUpdate = 0;
+    const animate = (now: number) => {
       animId = requestAnimationFrame(animate);
       controls.update();
 
-      // Project 3D Hotspot positions to 2D screen coordinates
+      // Project 3D Hotspot positions to 2D screen coordinates (throttled to ~15fps to avoid 60Hz React thrashing)
       if (camera && vehicleGroup && container) {
-        const screenCoords: Record<string, { x: number; y: number; visible: boolean }> = {};
-        const rect = container.getBoundingClientRect();
+        if (now - lastHotspotUpdate > 66) {
+          lastHotspotUpdate = now;
+          const screenCoords: Record<string, { x: number; y: number; visible: boolean }> = {};
 
-        COMPONENT_HOTSPOTS.forEach((spot) => {
-          // Convert 3D world pos
-          const v = new THREE.Vector3(spot.pos3d[0], spot.pos3d[2], -spot.pos3d[1]);
-          v.project(camera);
+          COMPONENT_HOTSPOTS.forEach((spot) => {
+            // Convert 3D world pos
+            const v = new THREE.Vector3(spot.pos3d[0], spot.pos3d[2], -spot.pos3d[1]);
+            v.project(camera);
 
-          // Check if behind camera
-          const isBehind = v.z > 1;
-          const x = ((v.x + 1) * width) / 2;
-          const y = ((-v.y + 1) * height) / 2;
+            // Check if behind camera
+            const isBehind = v.z > 1;
+            const x = ((v.x + 1) * width) / 2;
+            const y = ((-v.y + 1) * height) / 2;
 
-          screenCoords[spot.id] = {
-            x,
-            y,
-            visible: !isBehind && x >= 0 && x <= width && y >= 0 && y <= height,
-          };
-        });
-        setHotspotScreenPositions(screenCoords);
+            screenCoords[spot.id] = {
+              x,
+              y,
+              visible: !isBehind && x >= 0 && x <= width && y >= 0 && y <= height,
+            };
+          });
+          setHotspotScreenPositions(screenCoords);
+        }
       }
 
       renderer.render(scene, camera);
     };
-    animate();
+    animId = requestAnimationFrame(animate);
 
     // Resize Handler
     const handleResize = () => {

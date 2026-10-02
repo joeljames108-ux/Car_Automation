@@ -21,6 +21,7 @@ import {
   Copy,
   Check,
   ExternalLink,
+  ArrowRight,
 } from "lucide-react";
 import { SectionCard } from "../SectionCard";
 import {
@@ -47,6 +48,7 @@ interface FinishSummarySectionProps {
   };
   onShowCompletionModal: () => void;
   onResetFlow: () => void;
+  onNextToCreationHub?: () => void;
   className?: string;
 }
 
@@ -79,6 +81,7 @@ export function FinishSummarySection({
   currentTotalStats,
   onShowCompletionModal,
   onResetFlow,
+  onNextToCreationHub,
   className = "",
 }: FinishSummarySectionProps) {
   const [copied, setCopied] = useState(false);
@@ -149,6 +152,19 @@ Components Installed: ${installedComponents.length}`;
             <Sparkles size={14} />
             <span>Celebration Certificate</span>
           </button>
+
+          {onNextToCreationHub && (
+            <button
+              type="button"
+              onClick={onNextToCreationHub}
+              className="flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-mono font-black text-xs uppercase tracking-wider transition-all shadow-[0_0_25px_rgba(245,158,11,0.45)] cursor-pointer active:scale-95 transform hover:scale-[1.02]"
+              title="Proceed to Transmission Studio to configure transaxle"
+            >
+              <span>NEXT →</span>
+              <span className="text-[10px] font-bold text-slate-900/90">TRANSMISSION STUDIO</span>
+              <ArrowRight size={14} strokeWidth={2.5} />
+            </button>
+          )}
 
           <button
             type="button"
@@ -273,6 +289,35 @@ Components Installed: ${installedComponents.length}`;
           </table>
         </div>
       </SectionCard>
+
+      {/* Bottom Completion Callout with Next Action */}
+      {onNextToCreationHub && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-emerald-500/15 border-2 border-emerald-500/40 backdrop-blur-xl shadow-lg">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shadow-sm shrink-0">
+              <CheckCircle2 size={24} className="text-emerald-400" />
+            </div>
+            <div>
+              <div className="text-xs font-mono font-black text-emerald-300 uppercase tracking-wider flex items-center gap-2">
+                <span>ENGINE ARCHITECTURE COMPLETE</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              </div>
+              <div className="text-[11px] font-mono text-slate-300 mt-0.5">
+                All engine components bench-tested and certified. Next step: configure your 3D transmission transaxle to complete the Powertrain Division.
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={onNextToCreationHub}
+            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-8 py-3 rounded-xl bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-mono font-black text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_25px_rgba(245,158,11,0.45)] transition-all cursor-pointer transform hover:scale-[1.03] active:scale-[0.98]"
+          >
+            <span>NEXT → TRANSMISSION SETUP</span>
+            <ArrowRight size={16} strokeWidth={2.5} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

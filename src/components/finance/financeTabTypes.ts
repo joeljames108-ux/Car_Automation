@@ -1,0 +1,12 @@
+export type FinanceTabKey =
+  | "OVERVIEW"
+  | "INCOME"
+  | "EXPENSES"
+  | "RD_SPENDING"
+  | "ASSETS"
+  | "CONTRACTS"
+  | "WORKFORCE"
+  | "COST_PER_VEHICLE"
+  | "FORECAST"
+  | "REPUTATION"
+  | "INFLATION_REVISION";

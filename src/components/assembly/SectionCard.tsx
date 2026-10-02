@@ -30,51 +30,51 @@ const ACCENT_STYLES: Record<
   }
 > = {
   cyan: {
-    border: "border-amber-500/30 hover:border-amber-500/60",
-    glow: "from-amber-500/15",
-    iconBg: "bg-amber-500/20 border-amber-400/40 shadow-[0_0_12px_rgba(34,211,238,0.3)]",
-    iconText: "text-amber-300",
-    titleColor: "text-amber-100",
+    border: "border-amber-400/50 hover:border-amber-500/80",
+    glow: "from-amber-400/10",
+    iconBg: "bg-amber-100 border-amber-300 shadow-2xs",
+    iconText: "text-amber-800",
+    titleColor: "text-slate-900",
     topGlow: "bg-amber-500",
   },
   purple: {
-    border: "border-amber-500/30 hover:border-amber-500/60",
-    glow: "from-amber-500/15",
-    iconBg: "bg-amber-500/20 border-amber-400/40 shadow-[0_0_12px_rgba(192,132,252,0.3)]",
-    iconText: "text-amber-300",
-    titleColor: "text-amber-100",
-    topGlow: "bg-amber-500",
+    border: "border-indigo-300/60 hover:border-indigo-400/80",
+    glow: "from-indigo-400/10",
+    iconBg: "bg-indigo-100 border-indigo-300 shadow-2xs",
+    iconText: "text-indigo-800",
+    titleColor: "text-slate-900",
+    topGlow: "bg-indigo-500",
   },
   emerald: {
-    border: "border-emerald-500/30 hover:border-emerald-500/60",
-    glow: "from-emerald-500/15",
-    iconBg: "bg-emerald-500/20 border-emerald-400/40 shadow-[0_0_12px_rgba(52,211,153,0.3)]",
-    iconText: "text-emerald-300",
-    titleColor: "text-emerald-100",
+    border: "border-emerald-300/60 hover:border-emerald-400/80",
+    glow: "from-emerald-400/10",
+    iconBg: "bg-emerald-100 border-emerald-300 shadow-2xs",
+    iconText: "text-emerald-800",
+    titleColor: "text-slate-900",
     topGlow: "bg-emerald-500",
   },
   amber: {
-    border: "border-amber-500/30 hover:border-amber-500/60",
-    glow: "from-amber-500/15",
-    iconBg: "bg-amber-500/20 border-amber-400/40 shadow-[0_0_12px_rgba(251,191,36,0.3)]",
-    iconText: "text-amber-300",
-    titleColor: "text-amber-100",
+    border: "border-amber-300/60 hover:border-amber-400/80",
+    glow: "from-amber-400/10",
+    iconBg: "bg-amber-100 border-amber-300 shadow-2xs",
+    iconText: "text-amber-800",
+    titleColor: "text-slate-900",
     topGlow: "bg-amber-500",
   },
   blue: {
-    border: "border-amber-500/30 hover:border-amber-500/60",
-    glow: "from-amber-500/15",
-    iconBg: "bg-amber-500/20 border-amber-400/40 shadow-[0_0_12px_rgba(245,158,11,0.3)]",
-    iconText: "text-amber-300",
-    titleColor: "text-amber-100",
-    topGlow: "bg-amber-500",
+    border: "border-sky-300/60 hover:border-sky-400/80",
+    glow: "from-sky-400/10",
+    iconBg: "bg-sky-100 border-sky-300 shadow-2xs",
+    iconText: "text-sky-800",
+    titleColor: "text-slate-900",
+    topGlow: "bg-sky-500",
   },
   rose: {
-    border: "border-rose-500/30 hover:border-rose-500/60",
-    glow: "from-rose-500/15",
-    iconBg: "bg-rose-500/20 border-rose-400/40 shadow-[0_0_12px_rgba(251,113,133,0.3)]",
-    iconText: "text-rose-300",
-    titleColor: "text-rose-100",
+    border: "border-rose-300/60 hover:border-rose-400/80",
+    glow: "from-rose-400/10",
+    iconBg: "bg-rose-100 border-rose-300 shadow-2xs",
+    iconText: "text-rose-800",
+    titleColor: "text-slate-900",
     topGlow: "bg-rose-500",
   },
 };
@@ -93,11 +93,11 @@ export function SectionCard({
 
   return (
     <div
-      className={`relative rounded-2xl bg-gradient-to-b from-slate-900/90 via-slate-950/95 to-black/95 border ${styles.border} backdrop-blur-2xl p-4 md:p-5 shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-300 flex flex-col justify-between overflow-hidden group ${className}`}
+      className={`relative rounded-2xl bg-gradient-to-b from-[#faf8f5]/95 via-[#f6f2ea]/95 to-[#f1ede3]/95 border ${styles.border} backdrop-blur-2xl p-4 md:p-5 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-300 flex flex-col justify-between overflow-hidden group ${className}`}
     >
       {/* Top Laser Accent Light Line */}
       <div
-        className={`absolute top-0 left-6 right-6 h-[2px] ${styles.topGlow} opacity-70 blur-[1px] group-hover:opacity-100 group-hover:blur-[0.5px] transition-all duration-300`}
+        className={`absolute top-0 left-6 right-6 h-[2px] ${styles.topGlow} opacity-60 blur-[1px] group-hover:opacity-100 group-hover:blur-[0.5px] transition-all duration-300`}
       />
 
       {/* Subtle Corner Radial Ambient Glow */}
@@ -107,11 +107,11 @@ export function SectionCard({
 
       {/* ── CARD HEADER ── */}
       <div className="space-y-3 relative z-10">
-        <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+        <div className="flex items-center justify-between gap-2 border-b border-[#ded5c4] pb-2.5">
           <div className="flex items-center gap-2.5 min-w-0">
             {icon && (
               <div
-                className={`p-2 rounded-xl border ${styles.iconBg} ${styles.iconText} shadow-md shrink-0`}
+                className={`p-2 rounded-xl border ${styles.iconBg} ${styles.iconText} shadow-2xs shrink-0`}
               >
                 {icon}
               </div>
@@ -121,7 +121,7 @@ export function SectionCard({
                 {title}
               </h4>
               {subtitle && (
-                <p className="text-[10px] md:text-[11px] text-slate-400 font-mono mt-0.5 truncate">
+                <p className="text-[10px] md:text-[11px] text-slate-600 font-mono mt-0.5 truncate">
                   {subtitle}
                 </p>
               )}
@@ -137,7 +137,7 @@ export function SectionCard({
 
       {/* ── CARD FOOTER (IF ANY) ── */}
       {footer && (
-        <div className="mt-4 pt-3 border-t border-slate-800/80 text-xs font-mono relative z-10">{footer}</div>
+        <div className="mt-4 pt-3 border-t border-[#ded5c4] text-xs font-mono relative z-10">{footer}</div>
       )}
     </div>
   );

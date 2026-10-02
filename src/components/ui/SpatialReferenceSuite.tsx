@@ -4,7 +4,7 @@ import { ModernAnalogDial } from "./ModernAnalogDial";
 import { EngineeringLog } from "../EngineeringLog";
 import { CFDView } from "./CFDView";
 import { useDesign } from "../../state/DesignContext";
-import { HelpCircle, User, Bot, Box } from "lucide-react";
+import { HelpCircle, User, Box } from "lucide-react";
 
 function SpatialReferenceSuiteComponent() {
   const { design, sim } = useDesign();
@@ -408,34 +408,7 @@ function SpatialReferenceSuiteComponent() {
         </div>
       </div>
 
-      {/* Floating Bottom-Right Apex AI Button */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 16,
-          right: 24,
-          zIndex: 30,
-          background: "rgba(255, 252, 245, 0.85)",
-          backdropFilter: "blur(30px) saturate(210%)",
-          WebkitBackdropFilter: "blur(30px) saturate(210%)",
-          border: "1px solid rgba(255, 255, 255, 0.85)",
-          borderRadius: 20,
-          padding: "6px 14px",
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-          fontSize: 11,
-          fontWeight: 700,
-          color: "#1c1c1e",
-          boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
-        }}
-      >
-        <Bot size={14} style={{ color: "#007aff" }} />
-        <span>Apex AI</span>
-        <span style={{ background: "#ef4444", color: "#fff", borderRadius: "50%", width: 14, height: 14, fontSize: 9, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900 }}>
-          1
-        </span>
-      </div>
+
     </div>
   );
 }

@@ -83,8 +83,8 @@ const FEATURE_EXPLANATIONS: Record<
   },
   infotainmentSystem: {
     title: "Digital Audio & Telematics OS",
-    desc: "Processing unit for GPS navigation, Apex AI telemetry, and wireless smartphone integration.",
-    proTip: "Apex AI Studio runs live vehicle diagnostics and predictive lap time optimizer.",
+    desc: "Processing unit for GPS navigation, onboard telemetry, and wireless smartphone integration.",
+    proTip: "Onboard telematics runs live vehicle diagnostics and performance logging.",
   },
   climateControl: {
     title: "HVAC & Thermal Management System",
@@ -138,7 +138,7 @@ const OPTION_SUBTITLES: Record<FeatureKey, string[]> = {
   infotainmentSystem: [
     "4-speaker AM/FM audio package • 4 kg",
     "Cloud GPS & live traffic routing • 5 kg",
-    "Apex AI neural voice & telemetry • 6 kg",
+    "Advanced neural voice & telemetry • 6 kg",
   ],
   climateControl: [
     "Rotary 3-dial mechanical heater/AC • 3 kg",

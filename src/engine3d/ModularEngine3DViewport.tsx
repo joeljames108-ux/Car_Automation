@@ -37,7 +37,7 @@ export interface ModularEngine3DViewportProps {
 }
 
 export const ModularEngine3DViewport: React.FC<ModularEngine3DViewportProps> = ({
-  className = 'w-full h-full min-h-[400px]',
+  className = 'w-full h-full min-h-[250px]',
   installedComponents2D = [],
   selectedVariants2D,
   isExploded2D,

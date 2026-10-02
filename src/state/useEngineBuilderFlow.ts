@@ -14,6 +14,7 @@ import {
 } from "../sim/assemblyTypes";
 import { EngineConfig, SimResult } from "../sim/types";
 import { useAssemblyStore } from "./useAssemblyStore";
+import { useGuidedEngineeringStore } from "./guidedEngineeringStore";
 
 export interface UseEngineBuilderFlowProps {
   engineConfig: EngineConfig;
@@ -21,6 +22,7 @@ export interface UseEngineBuilderFlowProps {
   updateEngine: (updates: Partial<EngineConfig>) => void;
   updateVehicle?: (updates: any) => void;
   onShowCompletionModal?: () => void;
+  initialStage?: BuildStageId;
 }
 
 export interface StageInfo {
@@ -45,6 +47,7 @@ export function useEngineBuilderFlow({
   updateEngine,
   updateVehicle,
   onShowCompletionModal,
+  initialStage,
 }: UseEngineBuilderFlowProps) {
   // Underlying physics & robotic assembly state
   const assembly = useAssemblyStore(engineConfig);
@@ -54,10 +57,13 @@ export function useEngineBuilderFlow({
     engineConfig.layout === "electric" ? "electric" : "ice";
 
   const [powertrainMode, setPowertrainMode] = useState<PowertrainMode>(initialMode);
-  const [currentStage, setCurrentStage] = useState<BuildStageId>(
-    // If layout is fresh or user hasn't started, start at powertrain_select or block
-    assembly.installedComponents.length === 0 ? "powertrain_select" : "block"
-  );
+  const [currentStage, setCurrentStage] = useState<BuildStageId>(() => {
+    if (initialStage) return initialStage;
+    if (engineConfig.layout === "unconfigured") return "powertrain_select";
+    const storeStatus = useGuidedEngineeringStore.getState().engineStatus;
+    if (storeStatus === "unconfigured") return "powertrain_select";
+    return assembly.installedComponents.length === 0 ? "powertrain_select" : "block";
+  });
   const [skippedHybrid, setSkippedHybrid] = useState<boolean>(false);
   const [showHybridStage, setShowHybridStage] = useState<boolean>(
     engineConfig.hybridArchitecture !== "none" || engineConfig.layout === "hybrid"
@@ -69,6 +75,12 @@ export function useEngineBuilderFlow({
       setPowertrainMode("electric");
     } else if (engineConfig.layout !== "electric" && powertrainMode === "electric") {
       setPowertrainMode("ice");
+    }
+  }, [engineConfig.layout]);
+
+  useEffect(() => {
+    if (engineConfig.layout === "unconfigured") {
+      setCurrentStage("powertrain_select");
     }
   }, [engineConfig.layout]);
 
@@ -246,6 +258,8 @@ export function useEngineBuilderFlow({
       setPowertrainMode(mode);
       assembly.resetAssembly();
       setSkippedHybrid(false);
+      useGuidedEngineeringStore.getState().setPowertrainSelecting(false);
+      useGuidedEngineeringStore.getState().setStageStatus("engine", "configuring");
 
       if (mode === "electric") {
         updateEngine({
@@ -277,6 +291,7 @@ export function useEngineBuilderFlow({
     (stageId: BuildStageId) => {
       if (stageId === currentStage) return;
       if (!isStageUnlocked(stageId)) return;
+      useGuidedEngineeringStore.getState().setPowertrainSelecting(stageId === "powertrain_select");
       setCurrentStage(stageId);
     },
     [currentStage, isStageUnlocked]
@@ -285,6 +300,7 @@ export function useEngineBuilderFlow({
   // Action: Install current component stage
   const installCurrentStage = useCallback(() => {
     if (currentStage === "powertrain_select") {
+      useGuidedEngineeringStore.getState().setPowertrainSelecting(false);
       setCurrentStage(baseStageSequence[0]);
       return;
     }

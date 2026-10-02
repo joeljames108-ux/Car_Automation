@@ -13,7 +13,7 @@ This repository contains the **Modular Vehicle Assembly System & Car Automation 
 ### 2. Code Quality & Verification Standards
 - Maintain 100% clean TypeScript builds without type errors (`npx tsc --noEmit -p tsconfig.app.json`).
 - Ensure all unit test suites pass (`npx tsx src/sim/modularVehicle/runTests.ts`).
-- Use rich aesthetics with high-contrast Dark UI themes, glassmorphism, dynamic SVG rendering, and real-time physics feedback.
+- Use rich aesthetics with elegant **Light Theme** as the primary standard, enriched with harmonious soft light colors (warm cream/alabaster `#f6f4ee`, soft eucalyptus/sage `#eef3ec`, sky/ice blue `#edf4f9`, soft amber/champagne `#fef6e9`), crisp dark slate typography (`#0f172a`, `#1e293b`), dynamic SVG rendering, and real-time physics feedback. **NEVER use bleached, washed-out pure white everywhere, and NEVER force dark UI unless specifically requested.**
 
 ### 3. Procedural Automotive Blender Pipeline & 3D GLB Generation Standard (MANDATORY)
 - **ALWAYS USE BLENDER TO GENERATE 3D GLBs**: All 3D vehicle models, chassis, engines, suspensions, aerodynamics, cockpits, and components must be generated, textured, and exported via Blender (`scripts/blender/` using Blender 5.x LTS / Blender MCP).
@@ -186,6 +186,18 @@ This repository contains the **Modular Vehicle Assembly System & Car Automation 
     - Baked NLA opening actions (`Action_Door_L_Open`, `Action_Door_R_Open`).
   - **Scope Exclusion**:
     - Historical eras of Formula 1 and Hypercars are explicitly REMOVED from the exterior upgrade plan. Focus squarely on the core production fleet (Supercars, Sports Cars, Sedans, Coupes, Grand Tourers, GT3, etc.).
+
+### 7. Mandatory UI Theme Directive: Light Theme Preference with Soft Light Colors (ABSOLUTE DIRECTIVE)
+- **Primary Design Law**: The user strictly prefers a **Light Theme** as the default and permanent UI visual language.
+- **NEVER use bleached, washed-out, or plain pure `#ffffff` everywhere**: A sterile white hospital-ward aesthetic with low-contrast gray lines is strictly forbidden.
+- **Always use curated, harmonious soft light colors**:
+  - **Base Canvas & Panels**: Soft warm alabaster, linen, and warm cream (`#f6f4ee`, `#f8f6f0`, `#f1eee5`, `#efece2`).
+  - **Subsystem & Focus Cards**: Soft eucalyptus and sage greens (`#eef4ec`, `#e3ede0`, `#d8e6d4`).
+  - **Metric Tiles & Badges**: Soft ice/sky blues (`#e8f1f8`, `#dcebf5`), soft amber/champagne (`#fcf4e8`, `#f7e8ce`), soft lavender/periwinkle (`#eeeff8`, `#dfdff2`), and soft mint (`#e7f5eb`).
+  - **Borders & Dividers**: Distinct warm taupe, sage, and sand borders (`#ccd8c8`, `#d9d3c5`, `#cbd5e2`) with subtle depth and 1px crisp separation so nested tiles never bleed into one another.
+  - **Typography Contrast**: Deep, legible, sharp charcoal and slate typography (`#0f172a`, `#1e293b`, `#334155`), with bold font weights on headers, metric figures, and labels.
+  - **Progress & Stat Indicators**: High-contrast, vibrant saturated indicator fills (emerald, sky/cyan, amber/gold, violet) resting on distinctly tinted, clearly visible tracks (`#dbe5d8`, `#d8e2eb`, `#ebdcc4`).
+  - **Interactive Elements & Docks**: Luminous pearl-titanium frosted glass (`bg-[#f4f3ee]/95`, border `#d2cec3`) with vibrant, colored hover states.
 
 
 

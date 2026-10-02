@@ -5,7 +5,9 @@
 // ===================================================================
 
 import { AgentOrchestrator } from "./agentFramework";
-import { ChiefPowertrainAgent, RoboticAssemblyQAAgent, RaceStrategyAgent } from "./apexAgentEngine";
+import { ChiefPowertrainAgent } from "./domainAgents/chiefPowertrainAgent";
+import { RoboticAssemblyQAAgent } from "./domainAgents/roboticAssemblyQAAgent";
+import { RaceStrategyAgent } from "./domainAgents/raceStrategyAgent";
 import { AeroDynamicsAgent } from "./domainAgents/aeroDynamicsAgent";
 import { ThermalManagementAgent } from "./domainAgents/thermalManagementAgent";
 import { SuspensionDynamicsAgent } from "./domainAgents/suspensionDynamicsAgent";

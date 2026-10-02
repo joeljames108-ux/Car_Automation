@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   Search, Command, LayoutDashboard, Cog, Car, Paintbrush, Wind,
   Sofa, Factory, Monitor, ShieldCheck, Microscope, Activity,
-  FlaskConical, Flag, BarChart3, Warehouse, GitCompare, TrendingUp,
+  Flag, BarChart3, Warehouse, GitCompare, TrendingUp,
   Trophy, Cpu, Palette, Sparkles, X, ArrowRight, Navigation, Maximize2, Minimize2
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
@@ -27,7 +27,7 @@ interface CommandItem {
 }
 
 export function CommandPalette({ isOpen, onClose, onSelectStage, focusMode = false, onToggleFocusMode }: CommandPaletteProps) {
-  const { setDesign, setUiTheme, resetDesign } = useDesign();
+  const { setDesign, resetDesign } = useDesign();
   const { success, info } = useToast();
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -61,7 +61,6 @@ export function CommandPalette({ isOpen, onClose, onSelectStage, focusMode = fal
   const items: CommandItem[] = useMemo(() => {
     const list: CommandItem[] = [
       // Modules
-      { id: "mod_command", category: "Modules", title: "Command Center", subtitle: "Overview & Presets", icon: <LayoutDashboard size={16} />, action: () => onSelectStage("command") },
       { id: "mod_dyno_ecu", category: "Modules", title: "Dyno & ECU Studio", subtitle: "ECU Remapping & Dyno Sweep", icon: <Activity size={16} />, action: () => onSelectStage("dyno_ecu") },
       { id: "mod_track_battle", category: "Modules", title: "Track Battles Studio", subtitle: "Nürburgring & Spa Telemetry", icon: <Trophy size={16} />, action: () => onSelectStage("track_battle") },
       { id: "mod_track_layout", category: "Modules", title: "Track Layouts Studio", subtitle: "2D Vector Maps & Apex Telemetry", icon: <Navigation size={16} />, action: () => onSelectStage("track_layout") },
@@ -73,7 +72,6 @@ export function CommandPalette({ isOpen, onClose, onSelectStage, focusMode = fal
       { id: "mod_safety", category: "Modules", title: "Safety Center", subtitle: "Crash Tests & Ratings", icon: <ShieldCheck size={16} />, action: () => onSelectStage("safety") },
       { id: "mod_rd", category: "Modules", title: "R&D Innovation Lab", subtitle: "Tech Trees & Patents", icon: <Microscope size={16} />, action: () => onSelectStage("rd") },
       { id: "mod_simulation", category: "Modules", title: "Simulation Dashboard", subtitle: "0-60, Lap Time, MPG", icon: <Activity size={16} />, action: () => onSelectStage("simulation") },
-      { id: "mod_testing", category: "Modules", title: "Testing Lab", subtitle: "Dyno, Skidpad & Thermal", icon: <FlaskConical size={16} />, action: () => onSelectStage("testing") },
       { id: "mod_race", category: "Modules", title: "Race Simulator", subtitle: "Track Battle & telemetry", icon: <Flag size={16} />, action: () => onSelectStage("race") },
       { id: "mod_stats", category: "Modules", title: "Detailed Telemetry Stats", subtitle: "Full Engineering Data", icon: <BarChart3 size={16} />, action: () => onSelectStage("stats") },
       { id: "mod_garage", category: "Modules", title: "Vehicle Garage", subtitle: "Fleet & Saved Models", icon: <Warehouse size={16} />, action: () => onSelectStage("garage") },
@@ -82,9 +80,6 @@ export function CommandPalette({ isOpen, onClose, onSelectStage, focusMode = fal
       { id: "mod_motorsport", category: "Modules", title: "Motorsport Division", subtitle: "WEC, GT3 & F1 Racing", icon: <Trophy size={16} />, action: () => onSelectStage("motorsport") },
       { id: "mod_twin", category: "Modules", title: "Digital Twin", subtitle: "Real-time Telemetry Feed", icon: <Cpu size={16} />, action: () => onSelectStage("twin") },
 
-      // Themes
-      { id: "theme_3", category: "Themes", title: "Theme 3 — Nordic Light Glass", subtitle: "Minimalist Alabaster White", icon: <Palette size={16} />, action: () => { setUiTheme("theme3"); success("Theme Switched", "Activated Theme 3 — Nordic Light Glass"); } },
-      { id: "theme_4", category: "Themes", title: "UI 4 — Vision Glass UI", subtitle: "Spatial Liquid Glass Lounge", icon: <Palette size={16} />, action: () => { setUiTheme("theme4"); success("Theme Switched", "Activated UI 4 — Vision Glass"); } },
 
       // Actions
       { id: "act_reset", category: "Actions", title: "Reset Current Vehicle", subtitle: "Restore factory default specs", icon: <Sparkles size={16} />, action: () => { resetDesign(); info("Vehicle Reset", "Restored default engineering specs"); } },
@@ -112,7 +107,7 @@ export function CommandPalette({ isOpen, onClose, onSelectStage, focusMode = fal
     ];
 
     return list;
-  }, [onSelectStage, setDesign, setUiTheme, resetDesign, success, info, focusMode, onToggleFocusMode]);
+  }, [onSelectStage, setDesign, resetDesign, success, info, focusMode, onToggleFocusMode]);
 
   const filteredItems = useMemo(() => {
     if (!query.trim()) return items;

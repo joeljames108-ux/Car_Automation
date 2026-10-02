@@ -155,7 +155,7 @@ export function EngineBlockSection({
           icon={<Cog size={18} />}
           accent="cyan"
           badge={
-            <span className="text-[10px] font-mono text-amber-300 bg-slate-900/40 dark:bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(34,211,238,0.2)]">
+            <span className="text-[10px] font-mono text-amber-900 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full font-bold shadow-2xs">
               {kinematics.displacementLiters}L • {cylinders} CYL
             </span>
           }
@@ -164,10 +164,10 @@ export function EngineBlockSection({
             {/* Cylinder Bank Layout Grid */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider block">
+                <label className="text-[11px] font-mono font-bold text-slate-800 uppercase tracking-wider block">
                   Cylinder Bank Layout
                 </label>
-                <span className="text-[10px] font-mono text-slate-500">
+                <span className="text-[10px] font-mono text-slate-500 font-semibold">
                   {engineConfig.layout === "unconfigured" ? "V12" : (ENGINE_LAYOUTS[engineConfig.layout]?.label || "V12")}
                 </span>
               </div>
@@ -188,12 +188,12 @@ export function EngineBlockSection({
                       onClick={() => updateEngine({ layout })}
                       className={`relative py-2 px-2 text-[11px] font-mono font-bold flex flex-col items-center justify-center rounded-xl border transition-all duration-200 cursor-pointer text-center group ${
                         isSelected
-                          ? "bg-gradient-to-b from-amber-500/25 to-amber-950/80 text-amber-200 border-amber-400 shadow-[0_0_15px_rgba(34,211,238,0.35)] scale-[1.02]"
-                          : "bg-slate-900/40 dark:bg-slate-950/70 text-slate-300 dark:text-slate-400 border-slate-700/50 dark:border-slate-800 hover:text-amber-300 hover:border-amber-400/60 hover:bg-slate-800/50"
+                          ? "bg-gradient-to-b from-amber-100 to-amber-200/80 text-amber-950 border-amber-500 shadow-2xs scale-[1.02]"
+                          : "bg-white/90 text-slate-700 border-[#dfd6c8] hover:text-amber-900 hover:border-amber-400 hover:bg-amber-50/50"
                       }`}
                     >
                       <div className="flex items-center gap-1.5 mb-0.5">
-                        <span className={isSelected ? "text-amber-300" : "text-slate-500 group-hover:text-slate-300"}>
+                        <span className={isSelected ? "text-amber-700" : "text-slate-500 group-hover:text-amber-700"}>
                           {meta.icon}
                         </span>
                         <span className="truncate">{ENGINE_LAYOUTS[layout]?.label}</span>
@@ -208,26 +208,26 @@ export function EngineBlockSection({
             </div>
 
             {/* Live Kinematic Telemetry Bar */}
-            <div className="p-3 rounded-xl bg-slate-900/40 dark:bg-slate-950/80 border border-amber-500/20 space-y-2">
+            <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200/90 space-y-2">
               <div className="flex items-center justify-between text-[11px] font-mono">
-                <span className="text-slate-400 flex items-center gap-1">
-                  <Activity size={12} className="text-amber-400" /> Displacement:
+                <span className="text-slate-700 flex items-center gap-1 font-semibold">
+                  <Activity size={12} className="text-amber-700" /> Displacement:
                 </span>
-                <span className="text-amber-300 font-extrabold">
+                <span className="text-amber-950 font-black">
                   {kinematics.totalDisplacementCc.toLocaleString()} cc ({kinematics.displacementLiters}L)
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-[10px] font-mono pt-1 border-t border-slate-800/80">
+              <div className="grid grid-cols-2 gap-2 text-[10px] font-mono pt-1.5 border-t border-amber-200/80">
                 <div>
                   <span className="text-slate-500 block">B/S Ratio:</span>
-                  <span className={`font-bold ${kinematics.characterColor}`}>
+                  <span className={`font-bold ${kinematics.characterColor.replace("text-amber-300", "text-amber-800").replace("text-amber-400", "text-amber-800")}`}>
                     {kinematics.boreStrokeRatio} ({kinematics.character})
                   </span>
                 </div>
                 <div>
                   <span className="text-slate-500 block">R/S Ratio:</span>
-                  <span className="font-bold text-slate-300">
+                  <span className="font-bold text-slate-800">
                     {kinematics.rodStrokeRatio} ({kinematics.rodStrokeRatio >= 1.7 ? "Low Friction" : "High Torque"})
                   </span>
                 </div>
@@ -236,7 +236,7 @@ export function EngineBlockSection({
 
             {/* Quick Presets */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+              <label className="text-[10px] font-mono font-bold text-slate-700 uppercase tracking-wider block">
                 Geometry Presets
               </label>
               <div className="grid grid-cols-2 gap-1.5">
@@ -251,7 +251,7 @@ export function EngineBlockSection({
                         rodLength: preset.rod,
                       })
                     }
-                    className="py-1 px-2 text-[10px] font-mono text-slate-300 bg-slate-900/80 border border-slate-800 hover:border-amber-500/40 hover:text-amber-300 rounded-lg transition-all text-left flex items-center justify-between"
+                    className="py-1 px-2 text-[10px] font-mono text-slate-700 bg-white/90 border border-[#dfd6c8] hover:border-amber-400 hover:text-amber-900 hover:bg-amber-50/50 rounded-lg transition-all text-left flex items-center justify-between shadow-2xs"
                   >
                     <span>{preset.label}</span>
                     <span className="text-[9px] text-slate-500">{preset.bore}x{preset.stroke}</span>
@@ -261,7 +261,7 @@ export function EngineBlockSection({
             </div>
 
             {/* Bore & Stroke Sliders */}
-            <div className="space-y-2 pt-2 border-t border-slate-800/80">
+            <div className="space-y-2 pt-2 border-t border-[#ded5c4]">
               <Slider
                 label="Cylinder Bore"
                 value={bore}
@@ -306,7 +306,7 @@ export function EngineBlockSection({
           icon={<Layers size={18} />}
           accent="purple"
           badge={
-            <span className="text-[10px] font-mono text-amber-300 bg-slate-900/40 dark:bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
+            <span className="text-[10px] font-mono text-indigo-900 bg-indigo-100 border border-indigo-300 px-2 py-0.5 rounded-full font-bold shadow-2xs">
               {componentMeta?.variants.length || 4} ALLOY TIERS
             </span>
           }
@@ -325,11 +325,11 @@ export function EngineBlockSection({
         {/* CARD 3 (RIGHT): ENGINEERING DELTAS & SUMMARY */}
         <SectionCard
           title="Block Specification & Impact"
-          subtitle="Structural mass, live 2D schematic & engineering telemetry"
+          subtitle="Structural mass, performance deltas & engineering telemetry"
           icon={<Activity size={18} />}
           accent="emerald"
           badge={
-            <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(52,211,153,0.2)]">
+            <span className="text-[10px] font-mono text-emerald-900 bg-emerald-100 border border-emerald-300 px-2 py-0.5 rounded-full font-bold shadow-2xs">
               LIVE COMPUTED
             </span>
           }

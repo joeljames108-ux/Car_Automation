@@ -4,6 +4,7 @@ import {
 } from "./constants";
 import type { VehicleDesign, SimResult } from "./types";
 import { MultiPhysicsCouplingBus } from "./physics/multiPhysicsCouplingBus";
+import type { CampusBonusSummary } from "./campus/campusBonusEngine";
 
 export interface CategoryScore {
   key: string;
@@ -121,7 +122,11 @@ function gradeFor(score: number): string {
   return "F";
 }
 
-export function computeScores(design: VehicleDesign, sim: SimResult): ReviewScores {
+export function computeScores(
+  design: VehicleDesign,
+  sim: SimResult,
+  campusBonuses?: CampusBonusSummary
+): ReviewScores {
   const v = design.vehicle;
   const int = v.interior;
   const seat = SEAT_TYPES[int.seatType] ?? SEAT_TYPES.standard;
@@ -130,14 +135,17 @@ export function computeScores(design: VehicleDesign, sim: SimResult): ReviewScor
   const wheel = STEERING_WHEEL_TYPES[int.steeringWheel] ?? STEERING_WHEEL_TYPES.standard;
   const trans = TRANSMISSION_TYPES[v.transmission] ?? Object.values(TRANSMISSION_TYPES)[0];
   const susp = SUSPENSION_TYPES[v.suspensionFront] ?? Object.values(SUSPENSION_TYPES)[0];
+
+  const msportBonus = campusBonuses ? (campusBonuses.motorsportPerformanceIndex / 100) * 0.6 : 0;
+
   // PERFORMANCE
   const accelScore = clamp(10 - sim.accel0_100 / 1.0);
   const topSpeedScore = clamp(sim.topSpeed / 35);
-  const handlingScore = clamp(4 + sim.lateralG * 1.5);
+  const handlingScore = clamp(4 + sim.lateralG * 1.5 + msportBonus);
   const brakingScore = clamp(10 - sim.brakingDist / 4.5);
   const transmissionScore = clamp(8 - trans.shiftTime * 6 + trans.efficiency * 3);
-  const steeringScore = clamp(5 + (wheel.gripFactor - 0.6) * 6 + sim.lateralG * 0.5);
-  const suspensionScore = clamp(5 + susp.gripFactor * 4 + sim.lateralG * 0.6);
+  const steeringScore = clamp(5 + (wheel.gripFactor - 0.6) * 6 + sim.lateralG * 0.5 + msportBonus);
+  const suspensionScore = clamp(5 + susp.gripFactor * 4 + sim.lateralG * 0.6 + msportBonus);
   const engineScore = clamp(sim.peakPower / 80 + sim.thermalEfficiency * 4);
 
   // MULTI-PHYSICS CROSS-COUPLING
@@ -163,10 +171,15 @@ export function computeScores(design: VehicleDesign, sim: SimResult): ReviewScor
   const climate = clamp(6 + (int.climateControl ? 2 : 0) + int.ambientLighting * 1.5);
   const rearSeat = clamp(6 - (int.seatCount <= 2 ? 3 : 0) + (v.exterior.bodyType.includes("sedan") || v.exterior.bodyType.includes("suv") ? 2 : 0));
 
+  const qaBonus = campusBonuses ? ((campusBonuses.qualityAssuranceRating - 60) / 40) * 0.8 : 0;
+  const stylingBonus = campusBonuses ? ((campusBonuses.stylingPrestigeScore - 20) / 80) * 0.8 : 0;
+  const safeBonus = campusBonuses ? ((campusBonuses.safetyComplianceRating - 30) / 70) * 0.8 : 0;
+
   // INTERIOR
   const materialQuality = clamp(dash.luxuryFactor * 6 + seatMat.comfortFactor * 4);
-  const buildQuality = clamp((sim.manufacturing.qualityScore / 10) * 0.6 + mfgCoupling.fitAndFinishRating * 0.4);
-  const designScore = clamp(6 + dash.luxuryFactor * 3 + int.ambientLighting * 1.5);
+  const mfgQuality = sim.manufacturing?.qualityScore ?? 75;
+  const buildQuality = clamp((mfgQuality / 10) * 0.6 + mfgCoupling.fitAndFinishRating * 0.4 + qaBonus);
+  const designScore = clamp(6 + dash.luxuryFactor * 3 + int.ambientLighting * 1.5 + stylingBonus);
   const storage = clamp(5 + (v.exterior.bodyType.includes("wagon") || v.exterior.bodyType.includes("suv") ? 3 : 0));
   const visibility = clamp(7 - (v.aero.wingHeight > 250 ? 1.5 : 0) - (int.rollCage !== "none" ? 1 : 0));
 
@@ -178,17 +191,20 @@ export function computeScores(design: VehicleDesign, sim: SimResult): ReviewScor
   const voiceControl = clamp(4 + int.infotainmentSize * 0.3 + (int.hasNav ? 2 : 0));
 
   // SAFETY
-  const crashProtection = clamp(sim.testing.crashTest.overall / 10);
-  const adas = clamp(3 + (v.electronics.abs ? 2 : 0) + v.electronics.stabilityControl * 3 + v.electronics.tractionControl * 2);
-  const driverAssist = clamp(3 + v.electronics.stabilityControl * 3 + (v.electronics.launchControl ? 1 : 0) + v.electronics.tractionControl * 2);
-  const childSafety = clamp(4 + (v.exterior.bodyType.includes("sedan") || v.exterior.bodyType.includes("suv") || v.exterior.bodyType.includes("wagon") ? 3 : 0) + sim.testing.crashTest.sideScore / 15);
+  const crashOverall = sim.testing?.crashTest?.overall ?? 68;
+  const crashSide = sim.testing?.crashTest?.sideScore ?? 65;
+  const crashProtection = clamp(crashOverall / 10 + safeBonus);
+  const adas = clamp(3 + (v.electronics.abs ? 2 : 0) + v.electronics.stabilityControl * 3 + v.electronics.tractionControl * 2 + safeBonus);
+  const driverAssist = clamp(3 + v.electronics.stabilityControl * 3 + (v.electronics.launchControl ? 1 : 0) + v.electronics.tractionControl * 2 + safeBonus);
+  const childSafety = clamp(4 + (v.exterior.bodyType.includes("sedan") || v.exterior.bodyType.includes("suv") || v.exterior.bodyType.includes("wagon") ? 3 : 0) + crashSide / 15 + safeBonus);
 
   // OWNERSHIP
-  const reliabilityScore = clamp((sim.reliability * 10) * 0.6 + (mfgCoupling.overallReliabilityScorePct / 10) * 0.4);
-  const fuelEconomyScore = clamp(10 - sim.fuelEconomy * 0.9);
-  const serviceCost = clamp(10 - (sim.engineCost + mfgCoupling.projectedAnnualWarrantyCostPerUnit) / 12000);
-  const warranty = clamp(5 + sim.reliability * 4 - (sim.manufacturing.defectRate / 4));
-  const resale = clamp(4 + sim.reliability * 4 + (v.chassis === "carbon_tub" ? 1 : 0) - (sim.totalCost > 80000 ? 2 : 0));
+  const reliabilityScore = clamp(((sim.reliability ?? 0.8) * 10) * 0.6 + (mfgCoupling.overallReliabilityScorePct / 10) * 0.4);
+  const fuelEconomyScore = clamp(10 - (sim.fuelEconomy ?? 8) * 0.9);
+  const serviceCost = clamp(10 - ((sim.engineCost ?? 5000) + mfgCoupling.projectedAnnualWarrantyCostPerUnit) / 12000);
+  const defectRate = sim.manufacturing?.defectRate ?? 2.0;
+  const warranty = clamp(5 + (sim.reliability ?? 0.8) * 4 - (defectRate / 4));
+  const resale = clamp(4 + (sim.reliability ?? 0.8) * 4 + (v.chassis === "carbon_tub" ? 1 : 0) - ((sim.totalCost ?? 35000) > 80000 ? 2 : 0));
 
   // VALUE
   const priceScore = clamp(10 - sim.totalCost / 12000);
@@ -555,8 +571,12 @@ export function computeMarketDemand(summary: ReviewSummary, awards: IndustryAwar
   return "Very Low";
 }
 
-export function generateFullReview(design: VehicleDesign, sim: SimResult): FullReview {
-  const scores = computeScores(design, sim);
+export function generateFullReview(
+  design: VehicleDesign,
+  sim: SimResult,
+  campusBonuses?: CampusBonusSummary
+): FullReview {
+  const scores = computeScores(design, sim, campusBonuses);
   const summary = computeSummary(scores);
   const magazines = generateMagazineReviews(design, sim, scores, summary);
   const customerReviews = generateCustomerReviews(design, sim, summary);

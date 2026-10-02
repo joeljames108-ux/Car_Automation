@@ -1,0 +1,1005 @@
+{
+  "timestamp": "2026-10-01 22:14:20",
+  "total_units": 14,
+  "total_levels_per_unit": 8,
+  "expected_total_glbs": 112,
+  "present_glbs": 112,
+  "missing_glbs": 0,
+  "total_size_bytes": 133049160,
+  "units": {
+    "UNIT_01": {
+      "unit_key": "UNIT_01",
+      "unit_name": "Central Corporate HQ",
+      "prefix": "hq_01_corporate",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_01_corporate_l0.glb",
+          "exists": true,
+          "size_bytes": 127020,
+          "size_kb": 124.0
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_01_corporate_l1.glb",
+          "exists": true,
+          "size_bytes": 467892,
+          "size_kb": 456.9
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_01_corporate_l2.glb",
+          "exists": true,
+          "size_bytes": 337676,
+          "size_kb": 329.8
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_01_corporate_l3.glb",
+          "exists": true,
+          "size_bytes": 1229588,
+          "size_kb": 1200.8
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_01_corporate_l4.glb",
+          "exists": true,
+          "size_bytes": 1774292,
+          "size_kb": 1732.7
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_01_corporate_l5.glb",
+          "exists": true,
+          "size_bytes": 2582300,
+          "size_kb": 2521.8
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_01_corporate_l6.glb",
+          "exists": true,
+          "size_bytes": 3670372,
+          "size_kb": 3584.3
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_01_corporate_l7.glb",
+          "exists": true,
+          "size_bytes": 3966792,
+          "size_kb": 3873.8
+        }
+      }
+    },
+    "UNIT_02": {
+      "unit_key": "UNIT_02",
+      "unit_name": "Powertrain & EV HQ",
+      "prefix": "hq_02_powertrain",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_02_powertrain_l0.glb",
+          "exists": true,
+          "size_bytes": 76388,
+          "size_kb": 74.6
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_02_powertrain_l1.glb",
+          "exists": true,
+          "size_bytes": 364360,
+          "size_kb": 355.8
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_02_powertrain_l2.glb",
+          "exists": true,
+          "size_bytes": 491256,
+          "size_kb": 479.7
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_02_powertrain_l3.glb",
+          "exists": true,
+          "size_bytes": 579004,
+          "size_kb": 565.4
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_02_powertrain_l4.glb",
+          "exists": true,
+          "size_bytes": 675132,
+          "size_kb": 659.3
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_02_powertrain_l5.glb",
+          "exists": true,
+          "size_bytes": 1245328,
+          "size_kb": 1216.1
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_02_powertrain_l6.glb",
+          "exists": true,
+          "size_bytes": 1529880,
+          "size_kb": 1494.0
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_02_powertrain_l7.glb",
+          "exists": true,
+          "size_bytes": 2772068,
+          "size_kb": 2707.1
+        }
+      }
+    },
+    "UNIT_03": {
+      "unit_key": "UNIT_03",
+      "unit_name": "Aerodynamics HQ & Wind Tunnel",
+      "prefix": "hq_03_aero",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_03_aero_l0.glb",
+          "exists": true,
+          "size_bytes": 53944,
+          "size_kb": 52.7
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_03_aero_l1.glb",
+          "exists": true,
+          "size_bytes": 402872,
+          "size_kb": 393.4
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_03_aero_l2.glb",
+          "exists": true,
+          "size_bytes": 583776,
+          "size_kb": 570.1
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_03_aero_l3.glb",
+          "exists": true,
+          "size_bytes": 853956,
+          "size_kb": 833.9
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_03_aero_l4.glb",
+          "exists": true,
+          "size_bytes": 1150796,
+          "size_kb": 1123.8
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_03_aero_l5.glb",
+          "exists": true,
+          "size_bytes": 1515356,
+          "size_kb": 1479.8
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_03_aero_l6.glb",
+          "exists": true,
+          "size_bytes": 1912544,
+          "size_kb": 1867.7
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_03_aero_l7.glb",
+          "exists": true,
+          "size_bytes": 2238016,
+          "size_kb": 2185.6
+        }
+      }
+    },
+    "UNIT_04": {
+      "unit_key": "UNIT_04",
+      "unit_name": "Vehicle Design & Styling Studio",
+      "prefix": "hq_04_design",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_04_design_l0.glb",
+          "exists": true,
+          "size_bytes": 166716,
+          "size_kb": 162.8
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_04_design_l1.glb",
+          "exists": true,
+          "size_bytes": 382456,
+          "size_kb": 373.5
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_04_design_l2.glb",
+          "exists": true,
+          "size_bytes": 464404,
+          "size_kb": 453.5
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_04_design_l3.glb",
+          "exists": true,
+          "size_bytes": 694328,
+          "size_kb": 678.1
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_04_design_l4.glb",
+          "exists": true,
+          "size_bytes": 825340,
+          "size_kb": 806.0
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_04_design_l5.glb",
+          "exists": true,
+          "size_bytes": 1044240,
+          "size_kb": 1019.8
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_04_design_l6.glb",
+          "exists": true,
+          "size_bytes": 1618720,
+          "size_kb": 1580.8
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_04_design_l7.glb",
+          "exists": true,
+          "size_bytes": 1957136,
+          "size_kb": 1911.3
+        }
+      }
+    },
+    "UNIT_05": {
+      "unit_key": "UNIT_05",
+      "unit_name": "Chassis & Dynamics HQ",
+      "prefix": "hq_05_chassis",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_05_chassis_l0.glb",
+          "exists": true,
+          "size_bytes": 52680,
+          "size_kb": 51.4
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_05_chassis_l1.glb",
+          "exists": true,
+          "size_bytes": 568640,
+          "size_kb": 555.3
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_05_chassis_l2.glb",
+          "exists": true,
+          "size_bytes": 717724,
+          "size_kb": 700.9
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_05_chassis_l3.glb",
+          "exists": true,
+          "size_bytes": 980076,
+          "size_kb": 957.1
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_05_chassis_l4.glb",
+          "exists": true,
+          "size_bytes": 1369792,
+          "size_kb": 1337.7
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_05_chassis_l5.glb",
+          "exists": true,
+          "size_bytes": 1602804,
+          "size_kb": 1565.2
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_05_chassis_l6.glb",
+          "exists": true,
+          "size_bytes": 1796764,
+          "size_kb": 1754.7
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_05_chassis_l7.glb",
+          "exists": true,
+          "size_bytes": 2364456,
+          "size_kb": 2309.0
+        }
+      }
+    },
+    "UNIT_06": {
+      "unit_key": "UNIT_06",
+      "unit_name": "Interior & Ergonomics HQ",
+      "prefix": "hq_06_interior",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_06_interior_l0.glb",
+          "exists": true,
+          "size_bytes": 48752,
+          "size_kb": 47.6
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_06_interior_l1.glb",
+          "exists": true,
+          "size_bytes": 336544,
+          "size_kb": 328.7
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_06_interior_l2.glb",
+          "exists": true,
+          "size_bytes": 647840,
+          "size_kb": 632.7
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_06_interior_l3.glb",
+          "exists": true,
+          "size_bytes": 814412,
+          "size_kb": 795.3
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_06_interior_l4.glb",
+          "exists": true,
+          "size_bytes": 1099576,
+          "size_kb": 1073.8
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_06_interior_l5.glb",
+          "exists": true,
+          "size_bytes": 1365576,
+          "size_kb": 1333.6
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_06_interior_l6.glb",
+          "exists": true,
+          "size_bytes": 2001712,
+          "size_kb": 1954.8
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_06_interior_l7.glb",
+          "exists": true,
+          "size_bytes": 2342320,
+          "size_kb": 2287.4
+        }
+      }
+    },
+    "UNIT_07": {
+      "unit_key": "UNIT_07",
+      "unit_name": "Testing & Validation Center",
+      "prefix": "hq_07_testing",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_07_testing_l0.glb",
+          "exists": true,
+          "size_bytes": 63368,
+          "size_kb": 61.9
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_07_testing_l1.glb",
+          "exists": true,
+          "size_bytes": 444272,
+          "size_kb": 433.9
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_07_testing_l2.glb",
+          "exists": true,
+          "size_bytes": 663708,
+          "size_kb": 648.2
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_07_testing_l3.glb",
+          "exists": true,
+          "size_bytes": 864036,
+          "size_kb": 843.8
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_07_testing_l4.glb",
+          "exists": true,
+          "size_bytes": 1492492,
+          "size_kb": 1457.5
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_07_testing_l5.glb",
+          "exists": true,
+          "size_bytes": 1817300,
+          "size_kb": 1774.7
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_07_testing_l6.glb",
+          "exists": true,
+          "size_bytes": 2027040,
+          "size_kb": 1979.5
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_07_testing_l7.glb",
+          "exists": true,
+          "size_bytes": 2486028,
+          "size_kb": 2427.8
+        }
+      }
+    },
+    "UNIT_08": {
+      "unit_key": "UNIT_08",
+      "unit_name": "Motorsport & Works Team HQ",
+      "prefix": "hq_08_motorsport",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_08_motorsport_l0.glb",
+          "exists": true,
+          "size_bytes": 63344,
+          "size_kb": 61.9
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_08_motorsport_l1.glb",
+          "exists": true,
+          "size_bytes": 368604,
+          "size_kb": 360.0
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_08_motorsport_l2.glb",
+          "exists": true,
+          "size_bytes": 540336,
+          "size_kb": 527.7
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_08_motorsport_l3.glb",
+          "exists": true,
+          "size_bytes": 829816,
+          "size_kb": 810.4
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_08_motorsport_l4.glb",
+          "exists": true,
+          "size_bytes": 1300356,
+          "size_kb": 1269.9
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_08_motorsport_l5.glb",
+          "exists": true,
+          "size_bytes": 1665556,
+          "size_kb": 1626.5
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_08_motorsport_l6.glb",
+          "exists": true,
+          "size_bytes": 2001748,
+          "size_kb": 1954.8
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_08_motorsport_l7.glb",
+          "exists": true,
+          "size_bytes": 2598228,
+          "size_kb": 2537.3
+        }
+      }
+    },
+    "UNIT_09": {
+      "unit_key": "UNIT_09",
+      "unit_name": "Commercial & Heavy Vehicles HQ",
+      "prefix": "hq_09_commercial",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_09_commercial_l0.glb",
+          "exists": true,
+          "size_bytes": 56576,
+          "size_kb": 55.2
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_09_commercial_l1.glb",
+          "exists": true,
+          "size_bytes": 446436,
+          "size_kb": 436.0
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_09_commercial_l2.glb",
+          "exists": true,
+          "size_bytes": 578728,
+          "size_kb": 565.2
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_09_commercial_l3.glb",
+          "exists": true,
+          "size_bytes": 824256,
+          "size_kb": 804.9
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_09_commercial_l4.glb",
+          "exists": true,
+          "size_bytes": 1130756,
+          "size_kb": 1104.3
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_09_commercial_l5.glb",
+          "exists": true,
+          "size_bytes": 1497560,
+          "size_kb": 1462.5
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_09_commercial_l6.glb",
+          "exists": true,
+          "size_bytes": 1995992,
+          "size_kb": 1949.2
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_09_commercial_l7.glb",
+          "exists": true,
+          "size_bytes": 2399512,
+          "size_kb": 2343.3
+        }
+      }
+    },
+    "UNIT_10": {
+      "unit_key": "UNIT_10",
+      "unit_name": "Manufacturing Plant Complex",
+      "prefix": "hq_10_factory",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_10_factory_l0.glb",
+          "exists": true,
+          "size_bytes": 99636,
+          "size_kb": 97.3
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_10_factory_l1.glb",
+          "exists": true,
+          "size_bytes": 354220,
+          "size_kb": 345.9
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_10_factory_l2.glb",
+          "exists": true,
+          "size_bytes": 607416,
+          "size_kb": 593.2
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_10_factory_l3.glb",
+          "exists": true,
+          "size_bytes": 926300,
+          "size_kb": 904.6
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_10_factory_l4.glb",
+          "exists": true,
+          "size_bytes": 1557344,
+          "size_kb": 1520.8
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_10_factory_l5.glb",
+          "exists": true,
+          "size_bytes": 2044396,
+          "size_kb": 1996.5
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_10_factory_l6.glb",
+          "exists": true,
+          "size_bytes": 2430780,
+          "size_kb": 2373.8
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_10_factory_l7.glb",
+          "exists": true,
+          "size_bytes": 2826980,
+          "size_kb": 2760.7
+        }
+      }
+    },
+    "UNIT_11": {
+      "unit_key": "UNIT_11",
+      "unit_name": "Supplier & Procurement HQ",
+      "prefix": "hq_11_procurement",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_11_procurement_l0.glb",
+          "exists": true,
+          "size_bytes": 54276,
+          "size_kb": 53.0
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_11_procurement_l1.glb",
+          "exists": true,
+          "size_bytes": 504280,
+          "size_kb": 492.5
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_11_procurement_l2.glb",
+          "exists": true,
+          "size_bytes": 653660,
+          "size_kb": 638.3
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_11_procurement_l3.glb",
+          "exists": true,
+          "size_bytes": 686632,
+          "size_kb": 670.5
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_11_procurement_l4.glb",
+          "exists": true,
+          "size_bytes": 1594876,
+          "size_kb": 1557.5
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_11_procurement_l5.glb",
+          "exists": true,
+          "size_bytes": 1827436,
+          "size_kb": 1784.6
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_11_procurement_l6.glb",
+          "exists": true,
+          "size_bytes": 1947924,
+          "size_kb": 1902.3
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_11_procurement_l7.glb",
+          "exists": true,
+          "size_bytes": 2218912,
+          "size_kb": 2166.9
+        }
+      }
+    },
+    "UNIT_12": {
+      "unit_key": "UNIT_12",
+      "unit_name": "Quality & Reliability Assurance",
+      "prefix": "hq_12_quality",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_12_quality_l0.glb",
+          "exists": true,
+          "size_bytes": 112348,
+          "size_kb": 109.7
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_12_quality_l1.glb",
+          "exists": true,
+          "size_bytes": 385816,
+          "size_kb": 376.8
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_12_quality_l2.glb",
+          "exists": true,
+          "size_bytes": 640964,
+          "size_kb": 625.9
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_12_quality_l3.glb",
+          "exists": true,
+          "size_bytes": 923572,
+          "size_kb": 901.9
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_12_quality_l4.glb",
+          "exists": true,
+          "size_bytes": 1097224,
+          "size_kb": 1071.5
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_12_quality_l5.glb",
+          "exists": true,
+          "size_bytes": 1359316,
+          "size_kb": 1327.5
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_12_quality_l6.glb",
+          "exists": true,
+          "size_bytes": 1661556,
+          "size_kb": 1622.6
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_12_quality_l7.glb",
+          "exists": true,
+          "size_bytes": 2220336,
+          "size_kb": 2168.3
+        }
+      }
+    },
+    "UNIT_13": {
+      "unit_key": "UNIT_13",
+      "unit_name": "Safety & Crash Test Center",
+      "prefix": "hq_13_safety",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_13_safety_l0.glb",
+          "exists": true,
+          "size_bytes": 136404,
+          "size_kb": 133.2
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_13_safety_l1.glb",
+          "exists": true,
+          "size_bytes": 484972,
+          "size_kb": 473.6
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_13_safety_l2.glb",
+          "exists": true,
+          "size_bytes": 693992,
+          "size_kb": 677.7
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_13_safety_l3.glb",
+          "exists": true,
+          "size_bytes": 1061356,
+          "size_kb": 1036.5
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_13_safety_l4.glb",
+          "exists": true,
+          "size_bytes": 1604920,
+          "size_kb": 1567.3
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_13_safety_l5.glb",
+          "exists": true,
+          "size_bytes": 1777524,
+          "size_kb": 1735.9
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_13_safety_l6.glb",
+          "exists": true,
+          "size_bytes": 2153276,
+          "size_kb": 2102.8
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_13_safety_l7.glb",
+          "exists": true,
+          "size_bytes": 2573044,
+          "size_kb": 2512.7
+        }
+      }
+    },
+    "UNIT_14": {
+      "unit_key": "UNIT_14",
+      "unit_name": "Marketing, Sales & Heritage Museum",
+      "prefix": "hq_14_marketing",
+      "levels": {
+        "0": {
+          "level": 0,
+          "tier": "empty_plot",
+          "filename": "hq_14_marketing_l0.glb",
+          "exists": true,
+          "size_bytes": 54180,
+          "size_kb": 52.9
+        },
+        "1": {
+          "level": 1,
+          "tier": "office",
+          "filename": "hq_14_marketing_l1.glb",
+          "exists": true,
+          "size_bytes": 430888,
+          "size_kb": 420.8
+        },
+        "2": {
+          "level": 2,
+          "tier": "department",
+          "filename": "hq_14_marketing_l2.glb",
+          "exists": true,
+          "size_bytes": 610772,
+          "size_kb": 596.5
+        },
+        "3": {
+          "level": 3,
+          "tier": "center",
+          "filename": "hq_14_marketing_l3.glb",
+          "exists": true,
+          "size_bytes": 859940,
+          "size_kb": 839.8
+        },
+        "4": {
+          "level": 4,
+          "tier": "advanced_hq",
+          "filename": "hq_14_marketing_l4.glb",
+          "exists": true,
+          "size_bytes": 1529880,
+          "size_kb": 1494.0
+        },
+        "5": {
+          "level": 5,
+          "tier": "world_class_hq",
+          "filename": "hq_14_marketing_l5.glb",
+          "exists": true,
+          "size_bytes": 1824640,
+          "size_kb": 1781.9
+        },
+        "6": {
+          "level": 6,
+          "tier": "innovation_campus",
+          "filename": "hq_14_marketing_l6.glb",
+          "exists": true,
+          "size_bytes": 2106192,
+          "size_kb": 2056.8
+        },
+        "7": {
+          "level": 7,
+          "tier": "hypermodern_campus",
+          "filename": "hq_14_marketing_l7.glb",
+          "exists": true,
+          "size_bytes": 2391316,
+          "size_kb": 2335.3
+        }
+      }
+    }
+  }
+}

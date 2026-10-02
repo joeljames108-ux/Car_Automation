@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useId, type ReactNode } from "react";
-import { Bot, AlertTriangle, Zap } from "lucide-react";
+import { Info, AlertTriangle, Zap } from "lucide-react";
 import { getApexKnowledge, getImpactBadges, type ApexKnowledgeEntry } from "../../sim/apexKnowledge";
 import { GlassFilter } from "./LiquidGlass";
 
@@ -95,11 +95,11 @@ export function ApexTooltip({ label, entry: overrideEntry, children }: ApexToolt
           {/* Header */}
           <div className="apex-tooltip-header">
             <div className="apex-tooltip-bot-icon">
-              <Bot size={13} />
+              <Info size={13} />
             </div>
             <div className="apex-tooltip-title">
-              <span className="apex-tooltip-label">Apex AI — {label}</span>
-              <span className="apex-tooltip-sub">Tutorial Guide</span>
+              <span className="apex-tooltip-label">Engineering Guide — {label}</span>
+              <span className="apex-tooltip-sub">Technical Reference</span>
             </div>
           </div>
 

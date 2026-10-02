@@ -17,6 +17,7 @@ import React, { useEffect, useRef, useState, memo } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import {
+  ArrowLeft,
   Cog,
   Sliders,
   Eye,
@@ -46,6 +47,7 @@ import type {
 } from "../../sim/assemblyTypes";
 import { MaterialGradePicker } from "../assembly/MaterialGradePicker";
 import { InstallButton } from "../assembly/InstallButton";
+import { useGuidedEngineeringStore } from "../../state/guidedEngineeringStore";
 import {
   buildTransaxleGroup,
   updateTransaxleExplodedView,
@@ -89,6 +91,8 @@ export interface Transmission3DStudioProps {
   onInstall?: () => void;
   onSkipAnimation?: () => void;
   onNext?: () => void;
+  onBackToMenu?: () => void;
+  onSelectStage?: (stage: string) => void;
 }
 
 const DEFAULT_GEAR_RATIOS: Record<TransmissionArchitecture, GearRatioConfig> = {
@@ -115,6 +119,8 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
   onInstall,
   onSkipAnimation,
   onNext,
+  onBackToMenu,
+  onSelectStage,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -347,11 +353,37 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
     }
   };
 
+  const { transmissionStatus, setTransmissionStatus } = useGuidedEngineeringStore();
+
+  const handleConfirmTransmission = () => {
+    setTransmissionStatus("configured");
+    if (onBackToMenu) {
+      onBackToMenu();
+    } else if (onSelectStage) {
+      onSelectStage("powertrain_studio_select");
+    }
+  };
+
   return (
     <div className="flex flex-col w-full space-y-4 font-mono text-slate-100 select-none">
       {/* Top Header & Architecture Selector Bar */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 p-3.5 rounded-2xl bg-slate-950/85 border border-amber-500/30 backdrop-blur-xl shadow-2xl">
         <div className="flex items-center gap-3">
+          {(onBackToMenu || onSelectStage) && (
+            <button
+              type="button"
+              onClick={() => {
+                if (onBackToMenu) onBackToMenu();
+                else if (onSelectStage) onSelectStage("powertrain_studio_select");
+              }}
+              className="group inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700/80 hover:border-amber-400 font-mono font-bold text-xs shadow-xs transition-all cursor-pointer active:scale-95 shrink-0"
+              title="Return to Studio Selection"
+            >
+              <ArrowLeft size={13} className="text-amber-400 group-hover:-translate-x-0.5 transition-transform" />
+              <span>Back</span>
+            </button>
+          )}
+
           <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <Cog size={22} className="animate-spin-slow" />
           </div>
@@ -368,27 +400,39 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
           </div>
         </div>
 
-        {/* 5 Architecture Type Selection Buttons */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900/80 border border-slate-800 overflow-x-auto">
-          {[
-            { id: "dct_7", label: "7-Speed DCT" },
-            { id: "manual_6", label: "6-Speed Manual" },
-            { id: "seq_7", label: "GT3 Sequential" },
-            { id: "single_speed", label: "EV e-Axle" },
-            { id: "cvt", label: "CVT Pulley" },
-          ].map((arch) => (
-            <button
-              key={arch.id}
-              onClick={() => handleArchChange(arch.id as TransmissionArchitecture)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
-                archType === arch.id
-                  ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
-              }`}
-            >
-              {arch.label}
-            </button>
-          ))}
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* 5 Architecture Type Selection Buttons */}
+          <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900/80 border border-slate-800 overflow-x-auto">
+            {[
+              { id: "dct_7", label: "7-Speed DCT" },
+              { id: "manual_6", label: "6-Speed Manual" },
+              { id: "seq_7", label: "GT3 Sequential" },
+              { id: "single_speed", label: "EV e-Axle" },
+              { id: "cvt", label: "CVT Pulley" },
+            ].map((arch) => (
+              <button
+                key={arch.id}
+                onClick={() => handleArchChange(arch.id as TransmissionArchitecture)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  archType === arch.id
+                    ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                }`}
+              >
+                {arch.label}
+              </button>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={handleConfirmTransmission}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-mono font-black text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer active:scale-95 shrink-0"
+            title="Confirm and lock transmission configuration"
+          >
+            <CheckCircle2 size={15} />
+            <span>Confirm Transaxle</span>
+          </button>
         </div>
       </div>
 
@@ -789,6 +833,39 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Standalone Homologation & Confirm Action Banner */}
+      {!isEmbedded && (
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-emerald-950/70 via-slate-900/90 to-teal-950/70 border border-emerald-500/40 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 shadow-sm shrink-0">
+              <CheckCircle2 size={22} />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-emerald-300 uppercase tracking-wide flex items-center gap-2">
+                <span>LOCK & HOMOLOGATE 3D TRANSAXLE</span>
+                {transmissionStatus === "configured" && (
+                  <span className="text-[10px] px-2 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    CALIBRATED
+                  </span>
+                )}
+              </div>
+              <div className="text-[11px] text-slate-300 font-sans mt-0.5">
+                Save {archType.toUpperCase()} gear ratios and LSD lock to complete the Powertrain Division and advance to Chassis & Body.
+              </div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleConfirmTransmission}
+            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-400 hover:from-emerald-300 hover:to-teal-300 text-slate-950 font-mono font-black text-xs uppercase tracking-wider transition-all cursor-pointer active:scale-95 shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 shrink-0"
+          >
+            <span>CONFIRM & RETURN TO GATEWAY</span>
+            <ChevronRight size={16} />
+          </button>
+        </div>
+      )}
 
       {/* Embedded Stage 14 Installation Action Button */}
       {isEmbedded && onInstall && (

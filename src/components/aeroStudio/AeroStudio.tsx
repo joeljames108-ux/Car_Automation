@@ -9,50 +9,17 @@
 import React from "react";
 import {
   Wind,
-  Sliders,
-  Gauge,
-  Zap,
-  Flame,
-  Layers,
-  Shield,
-  Activity,
-  ChevronRight,
-  Sparkles,
   Car,
-  Compass,
-  CircleDot,
   Radio,
   Check,
+  ChevronLeft,
+  ArrowRight,
 } from "lucide-react";
-import {
-  useAeroStudioStore,
-  AeroStudioSubTab,
-  VEHICLE_ARCHITECTURES,
-  VehicleArchitecture,
-} from "../../state/aeroStudioStore";
+import { useAeroStudioStore } from "../../state/aeroStudioStore";
 import { useModularVehicleBuilderStore } from "../../state/modularVehicleBuilderStore";
 import { useGuidedEngineeringStore } from "../../state/guidedEngineeringStore";
 import { AeroStudioCanvasViewport } from "./AeroStudioCanvasViewport";
 import { AeroControlDeck } from "./AeroControlDeck";
-
-interface SubTabItem {
-  id: AeroStudioSubTab;
-  label: string;
-  icon: React.ReactNode;
-  badge?: string;
-}
-
-const SUB_TABS: SubTabItem[] = [
-  { id: "frontAero", label: "Front Aero", icon: <Wind size={14} />, badge: "Splitter & Dive Planes" },
-  { id: "rearAero", label: "Rear Aero", icon: <Wind size={14} />, badge: "Dual Swan-Neck Wing" },
-  { id: "sideAero", label: "Side Aero", icon: <Layers size={14} />, badge: "Skirts & Rockers" },
-  { id: "underbody", label: "Underbody", icon: <Layers size={14} />, badge: "Venturi Diffuser" },
-  { id: "roofAero", label: "Roof Aero", icon: <Compass size={14} />, badge: "LMP1 Shark Fin" },
-  { id: "activeAero", label: "Active Aero", icon: <Zap size={14} />, badge: "DRS & Airbrake" },
-  { id: "coolingAero", label: "Cooling Aero", icon: <Flame size={14} />, badge: "Louvers & NACA" },
-  { id: "wheelAero", label: "Wheel Aero", icon: <CircleDot size={14} />, badge: "Turbofan Discs" },
-  { id: "aeroSummary", label: "Aero Summary", icon: <Gauge size={14} />, badge: "Wind Tunnel Telemetry" },
-];
 
 interface AeroStudioProps {
   onSelectStage?: (stage: string) => void;
@@ -60,13 +27,17 @@ interface AeroStudioProps {
 
 export const AeroStudio: React.FC<AeroStudioProps> = ({ onSelectStage }) => {
   const { aeroStatus, markStageComplete, setActiveWorkflowStage } = useGuidedEngineeringStore();
-  const activeSubTab = useAeroStudioStore((s) => s.activeSubTab);
-  const setActiveSubTab = useAeroStudioStore((s) => s.setActiveSubTab);
   const physics = useAeroStudioStore((s) => s.physics);
   const config = useAeroStudioStore((s) => s.config);
   const vehicleVariant = useAeroStudioStore((s) => s.vehicleVariant);
-  const setVehicleVariant = useAeroStudioStore((s) => s.setVehicleVariant);
   const modularModel = useModularVehicleBuilderStore((s) => s.selectedModel);
+
+  const handleNextToCreatorMenu = () => {
+    markStageComplete("aero");
+    if (onSelectStage) {
+      onSelectStage("create_vehicle_hub");
+    }
+  };
 
   return (
     <div className="w-full min-h-screen bg-[#05070a] text-slate-100 p-4 md:p-6 flex flex-col gap-5">
@@ -156,52 +127,31 @@ export const AeroStudio: React.FC<AeroStudioProps> = ({ onSelectStage }) => {
         </div>
 
         {onSelectStage && (
-          <button
-            type="button"
-            onClick={() => {
-              markStageComplete("aero");
-              setActiveWorkflowStage("interior");
-              onSelectStage("interior");
-            }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <Check size={15} strokeWidth={3} />
-            <span>COMPLETE AERO & ADVANCE TO INTERIOR →</span>
-          </button>
+          <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={() => onSelectStage("create_vehicle_hub")}
+              className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:border-amber-400/50 text-slate-300 hover:text-amber-300 font-mono font-bold text-xs tracking-wider uppercase transition-all cursor-pointer"
+              title="Return to Creator Menu"
+            >
+              <ChevronLeft size={14} />
+              <span>← CREATOR MENU</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleNextToCreatorMenu}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
+              title="Complete Aerodynamics and return to Creator Menu"
+            >
+              <Check size={15} strokeWidth={3} />
+              <span>NEXT → CREATOR MENU</span>
+              <ArrowRight size={15} strokeWidth={2.5} />
+            </button>
+          </div>
         )}
       </div>
 
-      {/* Sub-Tab Navigation Header */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-slate-800">
-        {SUB_TABS.map((tab) => {
-          const isActive = activeSubTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveSubTab(tab.id)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
-                isActive
-                  ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border-cyan-500/50 shadow-[0_0_16px_rgba(0,240,255,0.2)]"
-                  : "bg-slate-900/60 text-slate-400 border-slate-800/80 hover:bg-slate-800 hover:text-slate-200"
-              }`}
-            >
-              {tab.icon}
-              <span>{tab.label}</span>
-              {tab.badge && (
-                <span
-                  className={`text-[9px] font-mono px-1.5 py-0.2 rounded ${
-                    isActive ? "bg-cyan-900/60 text-cyan-200" : "bg-slate-800 text-slate-500"
-                  }`}
-                >
-                  {tab.badge}
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* 3D Viewport with Three.js WebGL and live Blender GLBs */}
+      {/* 3D Viewport with Three.js WebGL and live Blender GLBs & Floating Options Dock (Photo 1 & 2) */}
       <div className="w-full">
         <AeroStudioCanvasViewport />
       </div>

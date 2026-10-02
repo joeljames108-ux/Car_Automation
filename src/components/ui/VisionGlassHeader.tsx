@@ -14,8 +14,6 @@ interface VisionGlassHeaderProps {
   onReset: () => void;
   onSearch: () => void;
   onAdvanceMonth: () => void;
-  uiTheme?: "theme3" | "theme4";
-  onSetUiTheme?: (theme: "theme3" | "theme4") => void;
   focusMode?: boolean;
   onToggleFocusMode?: () => void;
 }
@@ -23,7 +21,7 @@ interface VisionGlassHeaderProps {
 function VisionGlassHeaderComponent({
   month, totalRevenue, units,
   onSetUnits, onSave, onLoad, onReset, onSearch, onAdvanceMonth,
-  uiTheme = "theme4", onSetUiTheme, focusMode = false, onToggleFocusMode,
+  focusMode = false, onToggleFocusMode,
 }: VisionGlassHeaderProps) {
   const [time, setTime] = useState(new Date());
   const [hovered, setHovered] = useState<string | null>(null);
@@ -163,22 +161,6 @@ function VisionGlassHeaderComponent({
             +1 Mo
           </button>
         </div>
-
-        {/* AI status indicator */}
-        <div
-          aria-label="Apex AI agent active"
-          style={{
-            display: "flex", alignItems: "center", gap: 4,
-            background: "rgba(147, 51, 234, 0.08)",
-            border: "1px solid rgba(147, 51, 234, 0.20)",
-            borderRadius: 8, padding: "3px 8px",
-            fontSize: 9, fontWeight: 700, color: "#7e22ce",
-            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8)",
-          }}
-        >
-          <Sparkles size={10} style={{ color: "#9333ea" }} aria-hidden="true" />
-          <span>AI ON</span>
-        </div>
       </div>
 
       {/* ── RIGHT: Actions cluster ── */}
@@ -300,32 +282,6 @@ function VisionGlassHeaderComponent({
           </button>
         )}
 
-        {/* Theme Indicator & Quick Toggle */}
-        {onSetUiTheme && (
-          <button
-            type="button"
-            onClick={() => onSetUiTheme(uiTheme === "theme4" ? "theme3" : "theme4")}
-            title={uiTheme === "theme4" ? "Active: UI 4 (Vision Glass) — Click to switch to Theme 3" : "Active: Theme 3 — Click to switch to UI 4 (Vision Glass)"}
-            aria-label="Toggle UI theme"
-            className="spring-press focus-visible:outline-none focus-ring-emil active:scale-95"
-            style={{
-              display: "flex", alignItems: "center", gap: 5,
-              padding: "4px 8px", borderRadius: 8,
-              fontSize: 9, fontWeight: 700,
-              color: "#1c1c1e",
-              background: "rgba(0,122,255,0.08)",
-              border: "1px solid rgba(0,122,255,0.20)",
-              cursor: "pointer",
-              transition: "all 0.16s cubic-bezier(0.16, 1, 0.3, 1)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8)",
-            }}
-          >
-            <Sparkles size={11} style={{ color: "#007aff" }} aria-hidden="true" />
-            <span style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif", letterSpacing: "0.2px" }}>
-              {uiTheme === "theme4" ? "SWITCH TO THEME 3" : "UI 4 (VISION GLASS)"}
-            </span>
-          </button>
-        )}
 
 
         {/* User avatar */}

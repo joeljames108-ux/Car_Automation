@@ -1,4 +1,5 @@
 import { useGuidedEngineeringStore } from "../../state/guidedEngineeringStore";
+import { useDeveloperModeStore } from "../../state/developerModeStore";
 import { emptyDesign } from "../constants";
 import { simulate } from "../engine";
 
@@ -24,6 +25,7 @@ function assert(condition: boolean, testName: string) {
 // TEST 1: Initial Launch Zero-State Requirements
 // -----------------------------------------------------------------------------
 console.log("--- 1. Testing Initial Launch Zero-State Defaults ---");
+useDeveloperModeStore.getState().resetToPlayerMode();
 const initialDesign = emptyDesign();
 assert(initialDesign.engine.layout === "unconfigured", "Default engine layout is 'unconfigured'");
 assert(initialDesign.vehicle.platform === "unconfigured", "Default vehicle platform is 'unconfigured'");
@@ -130,6 +132,27 @@ assert(useGuidedEngineeringStore.getState().aeroStatus === "invalidated", "Modif
 assert(useGuidedEngineeringStore.getState().finalBuildStatus === "invalidated", "Modifying engine marks final_build as 'invalidated'");
 // Invalidation still allows navigation for re-tuning
 assert(store.canEnterStage("vehicle").allowed === true, "Vehicle can still be entered to recalculate after engine modification");
+
+// -----------------------------------------------------------------------------
+// TEST 8: Developer Mode Progression Bypass Verification
+// -----------------------------------------------------------------------------
+console.log("\n--- 8. Testing Developer Mode Progression Bypass ---");
+store.resetAllStages();
+// In normal player mode, vehicle should be locked initially
+assert(store.canEnterStage("vehicle").allowed === false, "Vehicle strictly locked in player mode when unconfigured");
+
+// Enable developer mode with workflow gating override
+useDeveloperModeStore.getState().unlockAll();
+assert(store.canEnterStage("engine").allowed === true, "Dev Mode: Engine accessible");
+assert(store.canEnterStage("vehicle").allowed === true, "Dev Mode: Vehicle accessible without prior stage");
+assert(store.canEnterStage("aero").allowed === true, "Dev Mode: Aero accessible without prior stage");
+assert(store.canEnterStage("interior").allowed === true, "Dev Mode: Interior accessible without prior stage");
+assert(store.canEnterStage("final_build").allowed === true, "Dev Mode: Final Build accessible without prior stage");
+assert(store.canEnterStage("final_build").devBypassed === true, "Dev Mode: Flagged as devBypassed");
+
+// Verify that resetting developer mode immediately restores authentic player gating
+useDeveloperModeStore.getState().resetToPlayerMode();
+assert(store.canEnterStage("vehicle").allowed === false, "Resetting Dev Mode instantly restores strict player gating");
 
 // -----------------------------------------------------------------------------
 // SUMMARY

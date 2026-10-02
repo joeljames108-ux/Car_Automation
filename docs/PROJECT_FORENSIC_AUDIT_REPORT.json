@@ -1,62 +1,62 @@
 {
-  "auditTimestamp": "2026-09-29T19:11:32.580Z",
+  "auditTimestamp": "2026-10-02T17:38:17.953Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
-  "rootDirectory": "E:\\Car_Automation",
-  "totalSourceFiles": 1211,
-  "totalCodeLines": 293794,
-  "totalCommentLines": 27641,
-  "totalBlankLines": 34810,
-  "totalSizeBytes": 15538907,
+  "rootDirectory": "E:\\projects\\THE PROJECT\\Car_Automation",
+  "totalSourceFiles": 1500,
+  "totalCodeLines": 373020,
+  "totalCommentLines": 33758,
+  "totalBlankLines": 42509,
+  "totalSizeBytes": 19347707,
   "subsystemBreakdown": {
     "simulation_core": {
-      "fileCount": 282,
-      "codeLines": 61907,
-      "sizeBytes": 3726290
+      "fileCount": 422,
+      "codeLines": 101899,
+      "sizeBytes": 5572074
     },
     "engine_assembly": {
       "fileCount": 75,
-      "codeLines": 20992,
-      "sizeBytes": 1052130
+      "codeLines": 21037,
+      "sizeBytes": 1053708
     },
     "modular_vehicle": {
       "fileCount": 105,
-      "codeLines": 31574,
-      "sizeBytes": 1635860
+      "codeLines": 31680,
+      "sizeBytes": 1643321
     },
     "exterior_3d": {
       "fileCount": 324,
-      "codeLines": 75781,
-      "sizeBytes": 3845869
+      "codeLines": 75782,
+      "sizeBytes": 3847159
     },
     "rendering_engine": {
-      "fileCount": 16,
-      "codeLines": 6116,
-      "sizeBytes": 311027
+      "fileCount": 18,
+      "codeLines": 7415,
+      "sizeBytes": 375273
     },
     "state_management": {
-      "fileCount": 33,
-      "codeLines": 10985,
-      "sizeBytes": 464038
+      "fileCount": 51,
+      "codeLines": 19343,
+      "sizeBytes": 834344
     },
     "ai_agent_framework": {
-      "fileCount": 37,
-      "codeLines": 4283,
-      "sizeBytes": 206520
+      "fileCount": 33,
+      "codeLines": 2694,
+      "sizeBytes": 129274
     },
     "ui_components": {
-      "fileCount": 242,
-      "codeLines": 66929,
-      "sizeBytes": 3469669
+      "fileCount": 304,
+      "codeLines": 89190,
+      "sizeBytes": 4627989
     },
     "asset_pipeline": {
-      "fileCount": 1,
-      "codeLines": 72,
-      "sizeBytes": 3445
+      "fileCount": 3,
+      "codeLines": 472,
+      "sizeBytes": 22901
     },
     "testing_verification": {
-      "fileCount": 86,
-      "codeLines": 13903,
-      "sizeBytes": 760158
+      "fileCount": 155,
+      "codeLines": 22256,
+      "sizeBytes": 1177763
     },
     "documentation_audit": {
       "fileCount": 10,
@@ -65,27 +65,27 @@
     }
   },
   "dependencyGraph": {
-    "totalNodes": 1211,
-    "totalEdges": 2215,
+    "totalNodes": 1500,
+    "totalEdges": 2855,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
       "simulation_core": {
-        "simulation_core": 118,
+        "simulation_core": 328,
         "engine_assembly": 0,
         "modular_vehicle": 1,
         "exterior_3d": 6,
         "rendering_engine": 0,
-        "state_management": 7,
+        "state_management": 35,
         "ai_agent_framework": 0,
-        "ui_components": 8,
+        "ui_components": 5,
         "asset_pipeline": 1,
         "testing_verification": 0,
         "documentation_audit": 0
       },
       "engine_assembly": {
         "simulation_core": 5,
-        "engine_assembly": 113,
+        "engine_assembly": 115,
         "modular_vehicle": 0,
         "exterior_3d": 2,
         "rendering_engine": 2,
@@ -97,14 +97,14 @@
         "documentation_audit": 0
       },
       "modular_vehicle": {
-        "simulation_core": 87,
+        "simulation_core": 88,
         "engine_assembly": 5,
         "modular_vehicle": 40,
         "exterior_3d": 63,
         "rendering_engine": 0,
-        "state_management": 15,
+        "state_management": 16,
         "ai_agent_framework": 1,
-        "ui_components": 9,
+        "ui_components": 6,
         "asset_pipeline": 1,
         "testing_verification": 0,
         "documentation_audit": 0
@@ -123,25 +123,25 @@
         "documentation_audit": 0
       },
       "rendering_engine": {
-        "simulation_core": 16,
+        "simulation_core": 20,
         "engine_assembly": 0,
         "modular_vehicle": 1,
         "exterior_3d": 14,
         "rendering_engine": 0,
-        "state_management": 9,
+        "state_management": 11,
         "ai_agent_framework": 0,
-        "ui_components": 10,
-        "asset_pipeline": 2,
+        "ui_components": 12,
+        "asset_pipeline": 3,
         "testing_verification": 0,
         "documentation_audit": 0
       },
       "state_management": {
-        "simulation_core": 27,
+        "simulation_core": 48,
         "engine_assembly": 4,
         "modular_vehicle": 6,
         "exterior_3d": 11,
         "rendering_engine": 0,
-        "state_management": 9,
+        "state_management": 38,
         "ai_agent_framework": 2,
         "ui_components": 0,
         "asset_pipeline": 0,
@@ -149,38 +149,38 @@
         "documentation_audit": 0
       },
       "ai_agent_framework": {
-        "simulation_core": 10,
-        "engine_assembly": 0,
-        "modular_vehicle": 0,
-        "exterior_3d": 0,
-        "rendering_engine": 0,
-        "state_management": 3,
-        "ai_agent_framework": 57,
-        "ui_components": 1,
-        "asset_pipeline": 0,
-        "testing_verification": 0,
-        "documentation_audit": 0
-      },
-      "ui_components": {
-        "simulation_core": 254,
-        "engine_assembly": 7,
-        "modular_vehicle": 5,
-        "exterior_3d": 14,
-        "rendering_engine": 9,
-        "state_management": 103,
-        "ai_agent_framework": 6,
-        "ui_components": 303,
-        "asset_pipeline": 2,
-        "testing_verification": 0,
-        "documentation_audit": 0
-      },
-      "asset_pipeline": {
-        "simulation_core": 0,
+        "simulation_core": 2,
         "engine_assembly": 0,
         "modular_vehicle": 0,
         "exterior_3d": 0,
         "rendering_engine": 0,
         "state_management": 0,
+        "ai_agent_framework": 55,
+        "ui_components": 0,
+        "asset_pipeline": 0,
+        "testing_verification": 0,
+        "documentation_audit": 0
+      },
+      "ui_components": {
+        "simulation_core": 313,
+        "engine_assembly": 5,
+        "modular_vehicle": 5,
+        "exterior_3d": 13,
+        "rendering_engine": 12,
+        "state_management": 228,
+        "ai_agent_framework": 0,
+        "ui_components": 350,
+        "asset_pipeline": 4,
+        "testing_verification": 0,
+        "documentation_audit": 0
+      },
+      "asset_pipeline": {
+        "simulation_core": 3,
+        "engine_assembly": 0,
+        "modular_vehicle": 0,
+        "exterior_3d": 0,
+        "rendering_engine": 0,
+        "state_management": 3,
         "ai_agent_framework": 0,
         "ui_components": 0,
         "asset_pipeline": 0,
@@ -188,14 +188,14 @@
         "documentation_audit": 0
       },
       "testing_verification": {
-        "simulation_core": 209,
+        "simulation_core": 304,
         "engine_assembly": 8,
         "modular_vehicle": 15,
         "exterior_3d": 151,
         "rendering_engine": 0,
-        "state_management": 14,
+        "state_management": 48,
         "ai_agent_framework": 8,
-        "ui_components": 13,
+        "ui_components": 10,
         "asset_pipeline": 0,
         "testing_verification": 57,
         "documentation_audit": 4
@@ -224,19 +224,21 @@
       "src/components/assembly/telemetry/CombustionDynoHUD.tsx",
       "src/components/assembly/telemetry/EVBatteryThermalAnalytics.tsx",
       "src/components/assembly/telemetry/TransmissionDynoTelemetry.tsx",
+      "src/components/guidedWorkflow/GuidedWorkflowStepper.tsx",
       "src/components/hypercar/3d/_gen_part1.ts",
       "src/components/interior/AnimatedStepperValue.tsx",
       "src/components/interior/dashboardPricingEngine.ts",
       "src/components/interior/MaterialSwatchWall.tsx",
       "src/components/interior/MaterialTexturePreview.tsx",
       "src/components/powertrain/PowertrainDynoStudio.tsx",
+      "src/components/TelemetryPulse.tsx",
       "src/components/ui/cinematic/CinematicScrollViewport.tsx",
       "src/components/ui/ComparisonDeltaTile.tsx",
       "src/components/ui/GlassSlider.tsx",
       "src/components/ui/KineticCanvasBackground.tsx",
       "src/components/ui/ModernAnalogClock.tsx",
       "src/components/ui/StageErrorBoundary.tsx",
-      "src/components/ui/ViewportPerformance.tsx",
+      "src/components/ui/VisionGlassHeader.tsx",
       "src/components/ui/ZoomableGlassCard.tsx",
       "src/components/vehicleAssembly/chassis/AluminumSpaceframeRenderer.tsx",
       "src/components/vehicleAssembly/chassis/CarbonTubRenderer.tsx",
@@ -247,6 +249,8 @@
       "src/components/vehicleAssembly/chassis/TitaniumTubRenderer.tsx",
       "src/components/vehicleAssembly/chassis/TubularSpaceframeRenderer.tsx",
       "src/components/vehicleAssembly/utils/assemblyAudioEngine.ts",
+      "src/components/__tests__/gameClockEngine.test.ts",
+      "src/components/__tests__/manufacturingDesigner.test.ts",
       "src/engine3d/animations/engineRuntimeAnimations.ts",
       "src/engine3d/generators/boltFastenerSystem.ts",
       "src/engine3d/generators/engineBlockSculptor.ts",
@@ -351,20 +355,45 @@
       "src/sim/bodyArchitectureMatrix/matrix.ts",
       "src/sim/bodyArchitectureMatrix/types.ts",
       "src/sim/brakes/brakeThermalSolver.ts",
+      "src/sim/campus/railwayTerminalEngine.ts",
+      "src/sim/campus/__tests__/campusBeautification.test.ts",
+      "src/sim/campus/__tests__/railwayTerminalEngine.test.ts",
       "src/sim/competitorTypes.ts",
       "src/sim/constants/chassisConstants.ts",
       "src/sim/constants/engineConstants.ts",
       "src/sim/constants/platformConstants.ts",
+      "src/sim/digitalTwin/warrantyAndResaleEngine.ts",
+      "src/sim/digitalTwin/__tests__/warrantyAndResale.test.ts",
       "src/sim/economy/customerLifecycleAndDealerNetwork.ts",
+      "src/sim/economy/historical/index.ts",
+      "src/sim/economy/historical/__tests__/masterLookup.test.ts",
+      "src/sim/economy/historical/__tests__/phase10Vehicles.test.ts",
+      "src/sim/economy/historical/__tests__/phase11Motorsport.test.ts",
+      "src/sim/economy/historical/__tests__/phase12NPC.test.ts",
+      "src/sim/economy/historical/__tests__/phase13RevisionEngine.test.ts",
+      "src/sim/economy/historical/__tests__/phase1Backbone.test.ts",
+      "src/sim/economy/historical/__tests__/phase2Commodities.test.ts",
+      "src/sim/economy/historical/__tests__/phase3Energy.test.ts",
+      "src/sim/economy/historical/__tests__/phase4Materials.test.ts",
+      "src/sim/economy/historical/__tests__/phase5Components.test.ts",
+      "src/sim/economy/historical/__tests__/phase7Factory.test.ts",
+      "src/sim/economy/historical/__tests__/phase8Logistics.test.ts",
+      "src/sim/economy/historical/__tests__/phase9Corporate.test.ts",
+      "src/sim/economy/__tests__/forecastAndHedging.test.ts",
+      "src/sim/economy/__tests__/historicalInflationData.test.ts",
+      "src/sim/economy/__tests__/semiAnnualPriceRevision.test.ts",
       "src/sim/electronicsData.ts",
       "src/sim/f1/physics/f1DynamicsSimulationEngine.ts",
       "src/sim/f1/types/f1Enums.ts",
       "src/sim/f1/types/f1Interfaces.ts",
       "src/sim/f1/types/f1Types.ts",
+      "src/sim/factory/__tests__/factorySkillEngine.test.ts",
       "src/sim/hypercar/hypercarDynamicsSimulationEngine.ts",
       "src/sim/hypercar/types/hypercarTypes.ts",
       "src/sim/interior/__tests__/interiorDashboardConfigTests.test.ts",
       "src/sim/laptime/gen1.js",
+      "src/sim/marketing/autoShowAndPressReviewEngine.ts",
+      "src/sim/marketing/__tests__/autoShowAndPressReview.test.ts",
       "src/sim/metallurgyDatabase.ts",
       "src/sim/modularVehicle/index.ts",
       "src/sim/modularVehicle/runTransmissionTests.ts",
@@ -372,6 +401,8 @@
       "src/sim/modularVehicle/runV8PowertrainTests.ts",
       "src/sim/modularVehicle/verifyStorytelling3D.ts",
       "src/sim/motorsport/homologationAndBopEngine.ts",
+      "src/sim/motorsport/winOnSundayBoostEngine.ts",
+      "src/sim/motorsport/__tests__/winOnSundayBoost.test.ts",
       "src/sim/performance/lapTimeOptimizer.ts",
       "src/sim/physics/activeAeroWingFlexDynamics.ts",
       "src/sim/physics/activeTorqueVectoringDynamics.ts",
@@ -412,30 +443,43 @@
       "src/sim/racing/raceStrategyEngine.ts",
       "src/sim/racing/trackBarModel.ts",
       "src/sim/racing/tracks/globalRaceTrackCatalog.ts",
+      "src/sim/rdSubsystemData.ts",
       "src/sim/rdTypes.ts",
+      "src/sim/safety/homologationAndRecallsEngine.ts",
+      "src/sim/safety/__tests__/homologationAndRecalls.test.ts",
+      "src/sim/supplyChain/macroShockAndJITEngine.ts",
+      "src/sim/supplyChain/__tests__/macroShockAndJIT.test.ts",
       "src/sim/suspension/suspensionComplianceSolver.ts",
       "src/sim/telemetry/lapTimePredictor.ts",
       "src/sim/telemetry/sectorTimingSystem.ts",
       "src/sim/telemetry/trackBattlesTelemetryEngine.ts",
+      "src/sim/testing/climateAndDurabilityEngine.ts",
+      "src/sim/testing/__tests__/climateAndDurability.test.ts",
       "src/sim/tires/tireThermalNetwork.ts",
       "src/sim/track/worldCircuitDatabaseComplete.ts",
+      "src/sim/trade/hqWarehouseEngine.ts",
       "src/sim/types/chassis.ts",
       "src/sim/types/exterior.ts",
       "src/sim/weather/weatherEngineComplete.ts",
+      "src/sim/workforce/__tests__/chiefEngineersAndBurnout.test.ts",
+      "src/sim/workforce/__tests__/keyPersonnel.test.ts",
+      "src/sim/workforce/__tests__/talentRecruitment.test.ts",
+      "src/sim/workforce/__tests__/workforceCampusMapping.test.ts",
       "src/state/instrumentClusterStore.ts",
       "src/state/useHiggsfieldStore.ts",
+      "src/stores/campusStore.ts",
       "src/utils/throttleRaycaster.ts",
       "src/vite-env.d.ts"
     ],
     "highCentralityHubs": [
       {
         "modulePath": "src/utils/hmiSoundSynth.ts",
-        "inDegree": 85,
+        "inDegree": 86,
         "outDegree": 0
       },
       {
         "modulePath": "src/sim/types.ts",
-        "inDegree": 66,
+        "inDegree": 68,
         "outDegree": 0
       },
       {
@@ -444,24 +488,34 @@
         "outDegree": 58
       },
       {
-        "modulePath": "src/components/ui/Controls.tsx",
-        "inDegree": 40,
-        "outDegree": 2
-      },
-      {
-        "modulePath": "src/state/DesignContext.tsx",
-        "inDegree": 36,
-        "outDegree": 4
+        "modulePath": "src/state/simulationClockStore.ts",
+        "inDegree": 48,
+        "outDegree": 0
       },
       {
         "modulePath": "src/sim/assemblyTypes.ts",
-        "inDegree": 38,
+        "inDegree": 37,
         "outDegree": 1
+      },
+      {
+        "modulePath": "src/state/DesignContext.tsx",
+        "inDegree": 34,
+        "outDegree": 4
       },
       {
         "modulePath": "src/components/assembly/EngineBuilderFlow.tsx",
         "inDegree": 0,
-        "outDegree": 36
+        "outDegree": 37
+      },
+      {
+        "modulePath": "src/components/ui/Controls.tsx",
+        "inDegree": 35,
+        "outDegree": 2
+      },
+      {
+        "modulePath": "src/sim/economy/__tests__/companyEconomyReputation.test.ts",
+        "inDegree": 0,
+        "outDegree": 35
       },
       {
         "modulePath": "src/sim/__tests__/masterPhaseExpansionTests.ts",
@@ -469,18 +523,28 @@
         "outDegree": 35
       },
       {
-        "modulePath": "src/sim/agents/agentFramework.ts",
-        "inDegree": 32,
-        "outDegree": 1
-      },
-      {
         "modulePath": "src/sim/interior/masterInteriorTypes.ts",
         "inDegree": 32,
         "outDegree": 1
       },
       {
+        "modulePath": "src/sim/agents/agentFramework.ts",
+        "inDegree": 31,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/economy/monthlyTickOrchestrator.ts",
+        "inDegree": 3,
+        "outDegree": 29
+      },
+      {
+        "modulePath": "src/state/companyFinanceStore.ts",
+        "inDegree": 26,
+        "outDegree": 6
+      },
+      {
         "modulePath": "src/sim/constants.ts",
-        "inDegree": 32,
+        "inDegree": 31,
         "outDegree": 0
       },
       {
@@ -519,14 +583,29 @@
         "outDegree": 1
       },
       {
+        "modulePath": "src/sim/campus/campusTypes.ts",
+        "inDegree": 28,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/state/campusStore.ts",
+        "inDegree": 21,
+        "outDegree": 7
+      },
+      {
+        "modulePath": "src/sim/agents/registerDefaultAgents.ts",
+        "inDegree": 0,
+        "outDegree": 26
+      },
+      {
         "modulePath": "src/exterior3d/export/universalGlbExporter.ts",
         "inDegree": 25,
         "outDegree": 0
       },
       {
-        "modulePath": "src/sim/agents/registerDefaultAgents.ts",
-        "inDegree": 0,
-        "outDegree": 24
+        "modulePath": "src/engine3d/assets/glbAssetLoader.ts",
+        "inDegree": 5,
+        "outDegree": 19
       },
       {
         "modulePath": "src/state/CompanyContext.tsx",
@@ -534,9 +613,9 @@
         "outDegree": 3
       },
       {
-        "modulePath": "src/engine3d/assets/glbAssetLoader.ts",
-        "inDegree": 4,
-        "outDegree": 19
+        "modulePath": "src/sim/workforce/workforceTypes.ts",
+        "inDegree": 23,
+        "outDegree": 0
       },
       {
         "modulePath": "src/sim/digitalTwin/masterDigitalTwinOrchestrator.ts",
@@ -549,9 +628,19 @@
         "outDegree": 21
       },
       {
+        "modulePath": "src/state/developerModeStore.ts",
+        "inDegree": 22,
+        "outDegree": 0
+      },
+      {
         "modulePath": "src/components/vehicleAssembly/scene/ModularAssemblySceneGraph.ts",
         "inDegree": 16,
         "outDegree": 5
+      },
+      {
+        "modulePath": "src/state/guidedEngineeringStore.ts",
+        "inDegree": 20,
+        "outDegree": 1
       },
       {
         "modulePath": "src/components/vehicleAssembly/ModularVehicle3DViewport.tsx",
@@ -564,6 +653,11 @@
         "outDegree": 0
       },
       {
+        "modulePath": "src/engine3d/store/useEngine3DStore.ts",
+        "inDegree": 16,
+        "outDegree": 4
+      },
+      {
         "modulePath": "src/sim/f1/state/f1ConstructorStore.ts",
         "inDegree": 17,
         "outDegree": 3
@@ -574,9 +668,14 @@
         "outDegree": 19
       },
       {
-        "modulePath": "src/engine3d/store/useEngine3DStore.ts",
-        "inDegree": 15,
-        "outDegree": 4
+        "modulePath": "src/components/finance/FinancePage.tsx",
+        "inDegree": 0,
+        "outDegree": 19
+      },
+      {
+        "modulePath": "src/state/tradeStore.ts",
+        "inDegree": 11,
+        "outDegree": 8
       },
       {
         "modulePath": "src/engine3d/generators/engineBlockGenerator.ts",
@@ -584,9 +683,24 @@
         "outDegree": 10
       },
       {
+        "modulePath": "src/components/campus/CampusMapMasterView.tsx",
+        "inDegree": 1,
+        "outDegree": 16
+      },
+      {
         "modulePath": "src/exterior3d/generators/sculptedBodyPanelsGenerator.ts",
         "inDegree": 6,
         "outDegree": 11
+      },
+      {
+        "modulePath": "src/sim/trade/tradeTypes.ts",
+        "inDegree": 17,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/state/factoryStore.ts",
+        "inDegree": 12,
+        "outDegree": 5
       },
       {
         "modulePath": "src/components/f1/F1ConstructorWorkshop.tsx",
@@ -599,14 +713,34 @@
         "outDegree": 16
       },
       {
+        "modulePath": "src/sim/economy/historical/masterLookup.ts",
+        "inDegree": 0,
+        "outDegree": 16
+      },
+      {
+        "modulePath": "src/state/reputationStore.ts",
+        "inDegree": 15,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/App.tsx",
+        "inDegree": 1,
+        "outDegree": 14
+      },
+      {
         "modulePath": "src/engine3d/ModularEngine3DViewport.tsx",
-        "inDegree": 4,
+        "inDegree": 3,
         "outDegree": 12
       },
       {
         "modulePath": "src/sim/modularVehicle/__tests__/edgeCaseBoundaryTests.ts",
         "inDegree": 1,
         "outDegree": 14
+      },
+      {
+        "modulePath": "src/state/rdTreeStore.ts",
+        "inDegree": 12,
+        "outDegree": 3
       },
       {
         "modulePath": "src/exterior3d/generators/completePhase9MasterHypercarAssembly.ts",
@@ -619,7 +753,7 @@
         "outDegree": 1
       },
       {
-        "modulePath": "src/sim/engine/masterEngineTypes.ts",
+        "modulePath": "src/sim/economy/historical/economicCalendar.ts",
         "inDegree": 14,
         "outDegree": 0
       },
@@ -629,19 +763,24 @@
         "outDegree": 11
       },
       {
-        "modulePath": "src/state/guidedEngineeringStore.ts",
-        "inDegree": 14,
-        "outDegree": 0
-      },
-      {
-        "modulePath": "src/App.tsx",
-        "inDegree": 1,
-        "outDegree": 12
+        "modulePath": "src/state/contractsStore.ts",
+        "inDegree": 10,
+        "outDegree": 4
       },
       {
         "modulePath": "src/exterior3d/generators/masterVehicle3DAssembler.ts",
         "inDegree": 1,
         "outDegree": 12
+      },
+      {
+        "modulePath": "src/sim/economy/historical/cpiBackbone.ts",
+        "inDegree": 12,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/factory/factoryTypes.ts",
+        "inDegree": 13,
+        "outDegree": 0
       },
       {
         "modulePath": "src/sim/modularVehicle/generateExpandedCockpitGlbAssets.ts",
@@ -654,12 +793,12 @@
         "outDegree": 12
       },
       {
-        "modulePath": "src/components/CommandCenter.tsx",
+        "modulePath": "src/components/racing/RaceEngineeringDashboard.tsx",
         "inDegree": 0,
         "outDegree": 12
       },
       {
-        "modulePath": "src/components/racing/RaceEngineeringDashboard.tsx",
+        "modulePath": "src/components/workforce/WorkforceHub.tsx",
         "inDegree": 0,
         "outDegree": 12
       },
@@ -667,6 +806,11 @@
         "modulePath": "src/exterior3d/geometry/car3dGeometryGenerator.ts",
         "inDegree": 4,
         "outDegree": 8
+      },
+      {
+        "modulePath": "src/sim/campus/campusRegistry.ts",
+        "inDegree": 11,
+        "outDegree": 1
       },
       {
         "modulePath": "src/sim/hypercar/state/hypercarAssemblyStore.ts",
@@ -679,9 +823,9 @@
         "outDegree": 11
       },
       {
-        "modulePath": "src/state/modularVehicleBuilderStore.ts",
-        "inDegree": 11,
-        "outDegree": 1
+        "modulePath": "src/state/workforceStore.ts",
+        "inDegree": 10,
+        "outDegree": 2
       },
       {
         "modulePath": "src/components/interior/InteractiveDashboardCanvasViewport.tsx",
@@ -689,9 +833,19 @@
         "outDegree": 10
       },
       {
+        "modulePath": "src/components/ManufacturingDesigner.tsx",
+        "inDegree": 0,
+        "outDegree": 11
+      },
+      {
         "modulePath": "src/components/motorsport/TeamCard.tsx",
         "inDegree": 10,
         "outDegree": 1
+      },
+      {
+        "modulePath": "src/components/rd/RDTreeCanvas.tsx",
+        "inDegree": 1,
+        "outDegree": 10
       },
       {
         "modulePath": "src/exterior3d/export/generatePhase8ExteriorGlbSuite.ts",
@@ -699,9 +853,9 @@
         "outDegree": 10
       },
       {
-        "modulePath": "src/sim/engine/masterEngineStateEngine.ts",
-        "inDegree": 8,
-        "outDegree": 3
+        "modulePath": "src/sim/engine.ts",
+        "inDegree": 5,
+        "outDegree": 6
       },
       {
         "modulePath": "src/sim/f1/state/f1AssemblyStore.ts",
@@ -719,6 +873,11 @@
         "outDegree": 10
       },
       {
+        "modulePath": "src/state/modularVehicleBuilderStore.ts",
+        "inDegree": 10,
+        "outDegree": 1
+      },
+      {
         "modulePath": "src/components/f1/F1ConstructorMasterApp.tsx",
         "inDegree": 0,
         "outDegree": 10
@@ -729,14 +888,19 @@
         "outDegree": 10
       },
       {
-        "modulePath": "src/components/ui/LineChart.tsx",
-        "inDegree": 10,
-        "outDegree": 0
+        "modulePath": "src/components/mainMenu/contracts/TieredContractBoard.tsx",
+        "inDegree": 2,
+        "outDegree": 8
       },
       {
         "modulePath": "src/components/vehicleAssembly/VehicleConstructionStudio.tsx",
         "inDegree": 0,
         "outDegree": 10
+      },
+      {
+        "modulePath": "src/engine3d/scene/Engine3DScene.tsx",
+        "inDegree": 1,
+        "outDegree": 9
       },
       {
         "modulePath": "src/exterior3d/aerodynamics/parametricVehicleAeroCompositeCad.ts",
@@ -764,9 +928,9 @@
         "outDegree": 2
       },
       {
-        "modulePath": "src/sim/engine.ts",
-        "inDegree": 4,
-        "outDegree": 6
+        "modulePath": "src/sim/economy/monthlyTickTypes.ts",
+        "inDegree": 1,
+        "outDegree": 9
       },
       {
         "modulePath": "src/sim/modularVehicle/modularVehicleConstructionTestRunner.ts",
@@ -784,17 +948,22 @@
         "outDegree": 9
       },
       {
-        "modulePath": "src/components/VehicleDesigner.tsx",
+        "modulePath": "src/state/gameClockEngine.ts",
+        "inDegree": 10,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/components/campus/BuildingInspectorDrawer.tsx",
         "inDegree": 1,
         "outDegree": 8
       },
       {
-        "modulePath": "src/components/__tests__/improvedSkillsComponents.test.ts",
-        "inDegree": 0,
-        "outDegree": 9
+        "modulePath": "src/components/mainMenu/SubPageLayout.tsx",
+        "inDegree": 8,
+        "outDegree": 1
       },
       {
-        "modulePath": "src/engine3d/scene/Engine3DScene.tsx",
+        "modulePath": "src/components/VehicleDesigner.tsx",
         "inDegree": 1,
         "outDegree": 8
       },
@@ -819,6 +988,16 @@
         "outDegree": 8
       },
       {
+        "modulePath": "src/sim/campus/__tests__/campusDataLayer.test.ts",
+        "inDegree": 0,
+        "outDegree": 9
+      },
+      {
+        "modulePath": "src/sim/economy/historical/energyPrices.ts",
+        "inDegree": 7,
+        "outDegree": 2
+      },
+      {
         "modulePath": "src/sim/interior/masterBespokeInteriorSuite.ts",
         "inDegree": 1,
         "outDegree": 8
@@ -834,9 +1013,14 @@
         "outDegree": 0
       },
       {
-        "modulePath": "src/components/agents/AIEngineeringPresets.tsx",
-        "inDegree": 4,
-        "outDegree": 4
+        "modulePath": "src/sim/workforce/__tests__/workforceFoundation.test.ts",
+        "inDegree": 0,
+        "outDegree": 9
+      },
+      {
+        "modulePath": "src/state/reputationEngine.ts",
+        "inDegree": 9,
+        "outDegree": 0
       },
       {
         "modulePath": "src/components/assembly/assemblyUIHelpers.tsx",
@@ -864,7 +1048,7 @@
         "outDegree": 8
       },
       {
-        "modulePath": "src/components/vehicleAssembly/ModularGltfShowcaseStudio.tsx",
+        "modulePath": "src/components/RDCenter.tsx",
         "inDegree": 0,
         "outDegree": 8
       },
@@ -894,9 +1078,54 @@
         "outDegree": 8
       },
       {
+        "modulePath": "src/sim/campus/campusEvents.ts",
+        "inDegree": 7,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/campus/campusPlotCoordinates.ts",
+        "inDegree": 7,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/campus/constructionQueue.ts",
+        "inDegree": 5,
+        "outDegree": 3
+      },
+      {
+        "modulePath": "src/sim/economy/commodityMarketEngine.ts",
+        "inDegree": 5,
+        "outDegree": 3
+      },
+      {
+        "modulePath": "src/sim/economy/companyValuation.ts",
+        "inDegree": 7,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/economy/historical/wageBackbone.ts",
+        "inDegree": 7,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/engine/masterEngineTypes.ts",
+        "inDegree": 8,
+        "outDegree": 0
+      },
+      {
         "modulePath": "src/sim/masterVehicleState/masterVehicleTypes.ts",
         "inDegree": 5,
         "outDegree": 3
+      },
+      {
+        "modulePath": "src/sim/rdTreeTypes.ts",
+        "inDegree": 8,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/components/ui/LineChart.tsx",
+        "inDegree": 7,
+        "outDegree": 0
       },
       {
         "modulePath": "src/exterior3d/generators/interior/hyperFidelityInteriorCadEngine.ts",
@@ -907,6 +1136,26 @@
         "modulePath": "src/exterior3d/manifests/chassis50Manifest.ts",
         "inDegree": 6,
         "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/campus/campusBonusEngine.ts",
+        "inDegree": 6,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/economy/financialForecastEngine.ts",
+        "inDegree": 4,
+        "outDegree": 3
+      },
+      {
+        "modulePath": "src/sim/economy/vehicleProductionRegistry.ts",
+        "inDegree": 5,
+        "outDegree": 2
+      },
+      {
+        "modulePath": "src/sim/engine/masterEngineStateEngine.ts",
+        "inDegree": 4,
+        "outDegree": 3
       },
       {
         "modulePath": "src/sim/interior/masterInteriorStateEngine.ts",
@@ -934,11 +1183,6 @@
         "outDegree": 0
       },
       {
-        "modulePath": "src/components/ui/PowerTorqueCurveChart.tsx",
-        "inDegree": 5,
-        "outDegree": 1
-      },
-      {
         "modulePath": "src/engine3d/attachmentMaps/v12AttachmentMap.ts",
         "inDegree": 5,
         "outDegree": 1
@@ -959,17 +1203,32 @@
         "outDegree": 1
       },
       {
+        "modulePath": "src/sim/campus/factoryProgressionEngine.ts",
+        "inDegree": 5,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/economy/employeeEconomicsEngine.ts",
+        "inDegree": 5,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/economy/eraProgressionEngine.ts",
+        "inDegree": 6,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/economy/historicalInflationData.ts",
+        "inDegree": 6,
+        "outDegree": 0
+      },
+      {
         "modulePath": "src/sim/f1/season/f1Calendar.ts",
         "inDegree": 6,
         "outDegree": 0
       },
       {
         "modulePath": "src/sim/hypercar/modular/hypercarSockets.ts",
-        "inDegree": 6,
-        "outDegree": 0
-      },
-      {
-        "modulePath": "src/sim/utils/formatLap.ts",
         "inDegree": 6,
         "outDegree": 0
       },
@@ -992,11 +1251,6 @@
         "modulePath": "src/components/assembly/sounds.ts",
         "inDegree": 4,
         "outDegree": 1
-      },
-      {
-        "modulePath": "src/components/ToastSystem.tsx",
-        "inDegree": 5,
-        "outDegree": 0
       },
       {
         "modulePath": "src/components/ui/Charts.tsx",
@@ -1027,11 +1281,6 @@
         "modulePath": "src/exterior3d/generators/matrixLaserProjectionOpticsGlbGenerator.ts",
         "inDegree": 5,
         "outDegree": 0
-      },
-      {
-        "modulePath": "src/exterior3d/geometry/parametricHardpointSolver.ts",
-        "inDegree": 4,
-        "outDegree": 1
       },
       {
         "modulePath": "src/exterior3d/geometry/parametricWidebodyAeroAerofoilCad.ts",
@@ -1087,6 +1336,21 @@
         "modulePath": "src/sim/economy/globalAutomotiveEconomySolver.ts",
         "inDegree": 5,
         "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/economy/loanFinancingEngine.ts",
+        "inDegree": 4,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/economy/logisticsCostEngine.ts",
+        "inDegree": 4,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/economy/reputationEconomicBridge.ts",
+        "inDegree": 4,
+        "outDegree": 1
       },
       {
         "modulePath": "src/sim/engine/desmodromicCamlessValvetrainSolver.ts",
@@ -1154,9 +1418,34 @@
         "outDegree": 0
       },
       {
+        "modulePath": "src/sim/trade/supplierRegistry.ts",
+        "inDegree": 4,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/trade/tradeContractEngine.ts",
+        "inDegree": 4,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/utils/formatLap.ts",
+        "inDegree": 5,
+        "outDegree": 0
+      },
+      {
         "modulePath": "src/sim/vehicleArchitecture/vehicleArchitectureTypes.ts",
         "inDegree": 5,
         "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/workforce/employeeIdGenerator.ts",
+        "inDegree": 4,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/workforce/skillMatrixEngine.ts",
+        "inDegree": 4,
+        "outDegree": 1
       },
       {
         "modulePath": "src/exterior3d/generators/brakeCaliperGenerator.ts",
@@ -1214,6 +1503,31 @@
         "outDegree": 0
       },
       {
+        "modulePath": "src/sim/economy/balanceSheet.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/economy/financialDangerDetector.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/economy/marketingEngine.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/economy/monthlyEventGenerator.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/economy/variableExpenseEngine.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
         "modulePath": "src/sim/electronics/flyingCapacitorMultiLevelInverterSolver.ts",
         "inDegree": 4,
         "outDegree": 0
@@ -1249,16 +1563,6 @@
         "outDegree": 0
       },
       {
-        "modulePath": "src/sim/supplyChain/rawMaterialsMarket.ts",
-        "inDegree": 4,
-        "outDegree": 0
-      },
-      {
-        "modulePath": "src/sim/supplyChain/supplierRegistry.ts",
-        "inDegree": 4,
-        "outDegree": 0
-      },
-      {
         "modulePath": "src/sim/suspension/activeElectroHydraulicRollControl.ts",
         "inDegree": 4,
         "outDegree": 0
@@ -1282,6 +1586,11 @@
         "modulePath": "src/sim/weather/raceWeatherSystem.ts",
         "inDegree": 4,
         "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/workforce/specializationRegistry.ts",
+        "inDegree": 4,
+        "outDegree": 0
       }
     ]
   },
@@ -1291,6 +1600,14 @@
       {
         "componentName": "AeroStudioCanvasViewport",
         "filePath": "src/components/aeroStudio/AeroStudioCanvasViewport.tsx",
+        "usesAntialias": true,
+        "usesShadowMap": true,
+        "pixelRatioCapped": true,
+        "toneMappingType": "ACESFilmicToneMapping"
+      },
+      {
+        "componentName": "Campus3DMapViewport",
+        "filePath": "src/components/campus/Campus3DMapViewport.tsx",
         "usesAntialias": true,
         "usesShadowMap": true,
         "pixelRatioCapped": true,
@@ -1441,6 +1758,13 @@
         "filePath": "src/components/aeroStudio/AeroStudioCanvasViewport.tsx"
       },
       {
+        "loaderClass": "CampusModelLoader",
+        "supportsDraco": false,
+        "supportsKtx2": false,
+        "supportsMeshopt": false,
+        "filePath": "src/components/campus/CampusModelLoader.ts"
+      },
+      {
         "loaderClass": "dashboardAssetManager",
         "supportsDraco": false,
         "supportsKtx2": false,
@@ -1504,6 +1828,13 @@
         "filePath": "src/engine3d/scene/ComponentMesh3D.tsx"
       },
       {
+        "loaderClass": "ModularEngineAssembly",
+        "supportsDraco": false,
+        "supportsKtx2": false,
+        "supportsMeshopt": false,
+        "filePath": "src/engine3d/scene/ModularEngineAssembly.tsx"
+      },
+      {
         "loaderClass": "EngineInitializationHUD",
         "supportsDraco": false,
         "supportsKtx2": false,
@@ -1564,6 +1895,9 @@
       "src/audit/renderingPipelineAudit.ts",
       "src/components/aeroStudio/AeroStudioCanvasViewport.tsx",
       "src/components/assembly/sections/ev/EVCellModulesSection.tsx",
+      "src/components/campus/BuildingPlacementEngine.ts",
+      "src/components/campus/Campus3DMapViewport.tsx",
+      "src/components/campus/CampusModelLoader.ts",
       "src/components/chassis/Suspension3DStudioViewport.tsx",
       "src/components/exterior/HyperFidelityExteriorStudioCustomizer.tsx",
       "src/components/exterior/UltraFidelityExteriorStudioWorkbench.tsx",
@@ -1822,6 +2156,8 @@
       "src/audit/renderingPipelineAudit.ts",
       "src/components/aeroStudio/AeroStudioCanvasViewport.tsx",
       "src/components/assembly/sections/ev/EVCellModulesSection.tsx",
+      "src/components/campus/Campus3DMapViewport.tsx",
+      "src/components/campus/CampusCameraController.ts",
       "src/components/chassis/Suspension3DStudioViewport.tsx",
       "src/components/exterior/HyperFidelityExteriorStudioCustomizer.tsx",
       "src/components/exterior/Phase8AeroKinematicsExteriorStudio.tsx",
@@ -1876,6 +2212,7 @@
       "src/audit/renderingPipelineAudit.ts",
       "src/components/aeroStudio/AeroStudioCanvasViewport.tsx",
       "src/components/assembly/sections/ev/EVCellModulesSection.tsx",
+      "src/components/campus/Campus3DMapViewport.tsx",
       "src/components/chassis/Suspension3DStudioViewport.tsx",
       "src/components/exterior/HyperFidelityExteriorStudioCustomizer.tsx",
       "src/components/exterior/Phase8AeroKinematicsExteriorStudio.tsx",
@@ -1955,19 +2292,21 @@
       "src/components/assembly/telemetry/CombustionDynoHUD.tsx",
       "src/components/assembly/telemetry/EVBatteryThermalAnalytics.tsx",
       "src/components/assembly/telemetry/TransmissionDynoTelemetry.tsx",
+      "src/components/guidedWorkflow/GuidedWorkflowStepper.tsx",
       "src/components/hypercar/3d/_gen_part1.ts",
       "src/components/interior/AnimatedStepperValue.tsx",
       "src/components/interior/dashboardPricingEngine.ts",
       "src/components/interior/MaterialSwatchWall.tsx",
       "src/components/interior/MaterialTexturePreview.tsx",
       "src/components/powertrain/PowertrainDynoStudio.tsx",
+      "src/components/TelemetryPulse.tsx",
       "src/components/ui/cinematic/CinematicScrollViewport.tsx",
       "src/components/ui/ComparisonDeltaTile.tsx",
       "src/components/ui/GlassSlider.tsx",
       "src/components/ui/KineticCanvasBackground.tsx",
       "src/components/ui/ModernAnalogClock.tsx",
       "src/components/ui/StageErrorBoundary.tsx",
-      "src/components/ui/ViewportPerformance.tsx",
+      "src/components/ui/VisionGlassHeader.tsx",
       "src/components/ui/ZoomableGlassCard.tsx",
       "src/components/vehicleAssembly/chassis/AluminumSpaceframeRenderer.tsx",
       "src/components/vehicleAssembly/chassis/CarbonTubRenderer.tsx",
@@ -1978,6 +2317,8 @@
       "src/components/vehicleAssembly/chassis/TitaniumTubRenderer.tsx",
       "src/components/vehicleAssembly/chassis/TubularSpaceframeRenderer.tsx",
       "src/components/vehicleAssembly/utils/assemblyAudioEngine.ts",
+      "src/components/__tests__/gameClockEngine.test.ts",
+      "src/components/__tests__/manufacturingDesigner.test.ts",
       "src/engine3d/animations/engineRuntimeAnimations.ts",
       "src/engine3d/generators/boltFastenerSystem.ts",
       "src/engine3d/generators/engineBlockSculptor.ts",
@@ -2080,20 +2421,45 @@
       "src/sim/benchmarks/_build.js",
       "src/sim/bodyArchitectureMatrix/matrix.ts",
       "src/sim/brakes/brakeThermalSolver.ts",
+      "src/sim/campus/railwayTerminalEngine.ts",
+      "src/sim/campus/__tests__/campusBeautification.test.ts",
+      "src/sim/campus/__tests__/railwayTerminalEngine.test.ts",
       "src/sim/competitorTypes.ts",
       "src/sim/constants/chassisConstants.ts",
       "src/sim/constants/engineConstants.ts",
       "src/sim/constants/platformConstants.ts",
+      "src/sim/digitalTwin/warrantyAndResaleEngine.ts",
+      "src/sim/digitalTwin/__tests__/warrantyAndResale.test.ts",
       "src/sim/economy/customerLifecycleAndDealerNetwork.ts",
+      "src/sim/economy/historical/index.ts",
+      "src/sim/economy/historical/__tests__/masterLookup.test.ts",
+      "src/sim/economy/historical/__tests__/phase10Vehicles.test.ts",
+      "src/sim/economy/historical/__tests__/phase11Motorsport.test.ts",
+      "src/sim/economy/historical/__tests__/phase12NPC.test.ts",
+      "src/sim/economy/historical/__tests__/phase13RevisionEngine.test.ts",
+      "src/sim/economy/historical/__tests__/phase1Backbone.test.ts",
+      "src/sim/economy/historical/__tests__/phase2Commodities.test.ts",
+      "src/sim/economy/historical/__tests__/phase3Energy.test.ts",
+      "src/sim/economy/historical/__tests__/phase4Materials.test.ts",
+      "src/sim/economy/historical/__tests__/phase5Components.test.ts",
+      "src/sim/economy/historical/__tests__/phase7Factory.test.ts",
+      "src/sim/economy/historical/__tests__/phase8Logistics.test.ts",
+      "src/sim/economy/historical/__tests__/phase9Corporate.test.ts",
+      "src/sim/economy/__tests__/forecastAndHedging.test.ts",
+      "src/sim/economy/__tests__/historicalInflationData.test.ts",
+      "src/sim/economy/__tests__/semiAnnualPriceRevision.test.ts",
       "src/sim/electronicsData.ts",
       "src/sim/f1/physics/f1DynamicsSimulationEngine.ts",
       "src/sim/f1/types/f1Enums.ts",
       "src/sim/f1/types/f1Interfaces.ts",
       "src/sim/f1/types/f1Types.ts",
+      "src/sim/factory/__tests__/factorySkillEngine.test.ts",
       "src/sim/hypercar/hypercarDynamicsSimulationEngine.ts",
       "src/sim/hypercar/types/hypercarTypes.ts",
       "src/sim/interior/__tests__/interiorDashboardConfigTests.test.ts",
       "src/sim/laptime/gen1.js",
+      "src/sim/marketing/autoShowAndPressReviewEngine.ts",
+      "src/sim/marketing/__tests__/autoShowAndPressReview.test.ts",
       "src/sim/metallurgyDatabase.ts",
       "src/sim/modularVehicle/index.ts",
       "src/sim/modularVehicle/runTransmissionTests.ts",
@@ -2101,6 +2467,8 @@
       "src/sim/modularVehicle/runV8PowertrainTests.ts",
       "src/sim/modularVehicle/verifyStorytelling3D.ts",
       "src/sim/motorsport/homologationAndBopEngine.ts",
+      "src/sim/motorsport/winOnSundayBoostEngine.ts",
+      "src/sim/motorsport/__tests__/winOnSundayBoost.test.ts",
       "src/sim/performance/lapTimeOptimizer.ts",
       "src/sim/physics/activeAeroWingFlexDynamics.ts",
       "src/sim/physics/activeTorqueVectoringDynamics.ts",
@@ -2141,25 +2509,38 @@
       "src/sim/racing/raceStrategyEngine.ts",
       "src/sim/racing/trackBarModel.ts",
       "src/sim/racing/tracks/globalRaceTrackCatalog.ts",
+      "src/sim/rdSubsystemData.ts",
       "src/sim/rdTypes.ts",
+      "src/sim/safety/homologationAndRecallsEngine.ts",
+      "src/sim/safety/__tests__/homologationAndRecalls.test.ts",
+      "src/sim/supplyChain/macroShockAndJITEngine.ts",
+      "src/sim/supplyChain/__tests__/macroShockAndJIT.test.ts",
       "src/sim/suspension/suspensionComplianceSolver.ts",
       "src/sim/telemetry/lapTimePredictor.ts",
       "src/sim/telemetry/sectorTimingSystem.ts",
       "src/sim/telemetry/trackBattlesTelemetryEngine.ts",
+      "src/sim/testing/climateAndDurabilityEngine.ts",
+      "src/sim/testing/__tests__/climateAndDurability.test.ts",
       "src/sim/tires/tireThermalNetwork.ts",
       "src/sim/track/worldCircuitDatabaseComplete.ts",
+      "src/sim/trade/hqWarehouseEngine.ts",
       "src/sim/types/chassis.ts",
       "src/sim/types/exterior.ts",
       "src/sim/weather/weatherEngineComplete.ts",
+      "src/sim/workforce/__tests__/chiefEngineersAndBurnout.test.ts",
+      "src/sim/workforce/__tests__/keyPersonnel.test.ts",
+      "src/sim/workforce/__tests__/talentRecruitment.test.ts",
+      "src/sim/workforce/__tests__/workforceCampusMapping.test.ts",
       "src/state/instrumentClusterStore.ts",
       "src/state/useHiggsfieldStore.ts",
+      "src/stores/campusStore.ts",
       "src/utils/throttleRaycaster.ts",
       "src/vite-env.d.ts"
     ],
     "largeFilesExceeding500Lines": [
       {
         "filePath": "src/App.tsx",
-        "lineCount": 718
+        "lineCount": 549
       },
       {
         "filePath": "src/components/aeroStudio/AeroControlDeck.tsx",
@@ -2167,15 +2548,7 @@
       },
       {
         "filePath": "src/components/aeroStudio/AeroStudioCanvasViewport.tsx",
-        "lineCount": 1111
-      },
-      {
-        "filePath": "src/components/AIAssistant.tsx",
-        "lineCount": 920
-      },
-      {
-        "filePath": "src/components/ApexAIStudio.tsx",
-        "lineCount": 685
+        "lineCount": 1114
       },
       {
         "filePath": "src/components/assembly/engineAudioEngine.ts",
@@ -2183,39 +2556,51 @@
       },
       {
         "filePath": "src/components/assembly/EngineBuilderFlow.tsx",
-        "lineCount": 693
+        "lineCount": 702
       },
       {
         "filePath": "src/components/assembly/EngineWorkshopPanel.tsx",
         "lineCount": 565
       },
       {
-        "filePath": "src/components/assembly/iso3d/PhotorealisticVehicleBlueprint.tsx",
-        "lineCount": 533
-      },
-      {
         "filePath": "src/components/assembly/MaterialGradePicker.tsx",
         "lineCount": 665
       },
       {
-        "filePath": "src/components/chassis/Suspension3DStudioViewport.tsx",
-        "lineCount": 776
+        "filePath": "src/components/campus/BuildingInspectorDrawer.tsx",
+        "lineCount": 926
       },
       {
-        "filePath": "src/components/CommandCenter.tsx",
-        "lineCount": 809
+        "filePath": "src/components/campus/Campus3DMapViewport.tsx",
+        "lineCount": 1280
+      },
+      {
+        "filePath": "src/components/campus/CampusAnalyticsModal.tsx",
+        "lineCount": 961
+      },
+      {
+        "filePath": "src/components/campus/CampusMapMasterView.tsx",
+        "lineCount": 538
+      },
+      {
+        "filePath": "src/components/campus/RailwayTerminalDrawer.tsx",
+        "lineCount": 564
+      },
+      {
+        "filePath": "src/components/chassis/Suspension3DStudioViewport.tsx",
+        "lineCount": 762
       },
       {
         "filePath": "src/components/Competitors.tsx",
         "lineCount": 557
       },
       {
-        "filePath": "src/components/EngineDesigner.tsx",
-        "lineCount": 603
+        "filePath": "src/components/dev/DeveloperControlModal.tsx",
+        "lineCount": 835
       },
       {
-        "filePath": "src/components/engineStudio/ModularEngineStudioWorkbench.tsx",
-        "lineCount": 1618
+        "filePath": "src/components/EngineDesigner.tsx",
+        "lineCount": 527
       },
       {
         "filePath": "src/components/exterior/Phase8AeroKinematicsExteriorStudio.tsx",
@@ -2248,6 +2633,14 @@
       {
         "filePath": "src/components/f1/racing/F1LiveRaceSimulator.tsx",
         "lineCount": 710
+      },
+      {
+        "filePath": "src/components/factory/FactoryHeroCards.tsx",
+        "lineCount": 610
+      },
+      {
+        "filePath": "src/components/finance/InflationTrendsTab.tsx",
+        "lineCount": 737
       },
       {
         "filePath": "src/components/hypercar/3d/HypercarModularAssemblyViewport.tsx",
@@ -2314,20 +2707,52 @@
         "lineCount": 817
       },
       {
+        "filePath": "src/components/mainMenu/contracts/TieredContractBoard.tsx",
+        "lineCount": 780
+      },
+      {
+        "filePath": "src/components/mainMenu/MainMenu.tsx",
+        "lineCount": 900
+      },
+      {
+        "filePath": "src/components/mainMenu/pages/ReputationPage.tsx",
+        "lineCount": 1288
+      },
+      {
+        "filePath": "src/components/manufacturing/InHouseProductionPanel.tsx",
+        "lineCount": 593
+      },
+      {
+        "filePath": "src/components/ManufacturingDesigner.tsx",
+        "lineCount": 535
+      },
+      {
         "filePath": "src/components/MotorsportDivision.tsx",
         "lineCount": 729
       },
       {
         "filePath": "src/components/PressReviews.tsx",
-        "lineCount": 565
+        "lineCount": 576
       },
       {
         "filePath": "src/components/racing/RaceEngineeringDashboard.tsx",
         "lineCount": 559
       },
       {
+        "filePath": "src/components/rd/RDDepartmentSelect.tsx",
+        "lineCount": 529
+      },
+      {
         "filePath": "src/components/RDCenter.tsx",
-        "lineCount": 649
+        "lineCount": 545
+      },
+      {
+        "filePath": "src/components/SaveLoadDialog.tsx",
+        "lineCount": 674
+      },
+      {
+        "filePath": "src/components/StatRail.tsx",
+        "lineCount": 830
       },
       {
         "filePath": "src/components/TrackDiagramModal.tsx",
@@ -2338,8 +2763,12 @@
         "lineCount": 502
       },
       {
+        "filePath": "src/components/trade/TradePage.tsx",
+        "lineCount": 1695
+      },
+      {
         "filePath": "src/components/transmissionStudio/Transmission3DStudio.tsx",
-        "lineCount": 815
+        "lineCount": 892
       },
       {
         "filePath": "src/components/ui/CFDView.tsx",
@@ -2354,8 +2783,20 @@
         "lineCount": 686
       },
       {
+        "filePath": "src/components/ui/loading/stageLoadingData.ts",
+        "lineCount": 1162
+      },
+      {
+        "filePath": "src/components/ui/loading/StageLoadingSchematics.tsx",
+        "lineCount": 1261
+      },
+      {
         "filePath": "src/components/ui/ModernAnalogDial.tsx",
         "lineCount": 520
+      },
+      {
+        "filePath": "src/components/ui/StageLoadingSkeleton.tsx",
+        "lineCount": 523
       },
       {
         "filePath": "src/components/vehicleAssembly/MasterVehicleStudio.tsx",
@@ -2371,7 +2812,7 @@
       },
       {
         "filePath": "src/components/vehicleAssembly/ModularVehicleCanvasViewport.tsx",
-        "lineCount": 1342
+        "lineCount": 1464
       },
       {
         "filePath": "src/components/vehicleAssembly/scene/ModularAssemblySceneGraph.ts",
@@ -2383,7 +2824,7 @@
       },
       {
         "filePath": "src/components/vehicleAssembly/TrueModularVehicleBuilderStudio.tsx",
-        "lineCount": 1302
+        "lineCount": 1276
       },
       {
         "filePath": "src/components/vehicleAssembly/typeSelection/ArchitectureEraPicker.tsx",
@@ -2403,7 +2844,11 @@
       },
       {
         "filePath": "src/components/VehicleViewSystem.tsx",
-        "lineCount": 1267
+        "lineCount": 1270
+      },
+      {
+        "filePath": "src/components/workforce/WorkforceHub.tsx",
+        "lineCount": 971
       },
       {
         "filePath": "src/engine3d/animations/EngineGlbAnimator.ts",
@@ -2642,14 +3087,6 @@
         "lineCount": 555
       },
       {
-        "filePath": "src/sim/agents/apexAgentEngine.ts",
-        "lineCount": 537
-      },
-      {
-        "filePath": "src/sim/ai/apexPromptEngine.ts",
-        "lineCount": 561
-      },
-      {
         "filePath": "src/sim/apexKnowledge.ts",
         "lineCount": 778
       },
@@ -2662,8 +3099,52 @@
         "lineCount": 2503
       },
       {
+        "filePath": "src/sim/campus/campusBeautificationEngine.ts",
+        "lineCount": 1023
+      },
+      {
+        "filePath": "src/sim/campus/campusRegistry.ts",
+        "lineCount": 1194
+      },
+      {
+        "filePath": "src/sim/campus/railwayTerminalEngine.ts",
+        "lineCount": 662
+      },
+      {
+        "filePath": "src/sim/campus/subDepartmentTree.ts",
+        "lineCount": 1157
+      },
+      {
         "filePath": "src/sim/constants.ts",
         "lineCount": 1533
+      },
+      {
+        "filePath": "src/sim/economy/contractCatalogData.ts",
+        "lineCount": 3810
+      },
+      {
+        "filePath": "src/sim/economy/contractLifecycleEngine.ts",
+        "lineCount": 537
+      },
+      {
+        "filePath": "src/sim/economy/historical/automotiveComponents.ts",
+        "lineCount": 550
+      },
+      {
+        "filePath": "src/sim/economy/historicalInflationData.ts",
+        "lineCount": 635
+      },
+      {
+        "filePath": "src/sim/economy/masterEconomicRegistry.ts",
+        "lineCount": 1825
+      },
+      {
+        "filePath": "src/sim/economy/monthlyTickOrchestrator.ts",
+        "lineCount": 984
+      },
+      {
+        "filePath": "src/sim/economy/__tests__/companyEconomyReputation.test.ts",
+        "lineCount": 760
       },
       {
         "filePath": "src/sim/engine/advancedEngineTelemetrySolver.ts",
@@ -2679,7 +3160,7 @@
       },
       {
         "filePath": "src/sim/engine.ts",
-        "lineCount": 1543
+        "lineCount": 1567
       },
       {
         "filePath": "src/sim/exteriorAssemblyTypes.ts",
@@ -2690,12 +3171,20 @@
         "lineCount": 543
       },
       {
+        "filePath": "src/sim/factory/factoryCapacityEngine.ts",
+        "lineCount": 511
+      },
+      {
         "filePath": "src/sim/hypercar/modular/hypercarComponentRegistry.ts",
         "lineCount": 523
       },
       {
         "filePath": "src/sim/interior/masterInteriorStateEngine.ts",
         "lineCount": 542
+      },
+      {
+        "filePath": "src/sim/manufacturing/manufacturingSystemEngine.ts",
+        "lineCount": 657
       },
       {
         "filePath": "src/sim/masterVehicleState/masterVehicleStateEngine.ts",
@@ -2774,12 +3263,24 @@
         "lineCount": 691
       },
       {
+        "filePath": "src/sim/rdSubsystemData.ts",
+        "lineCount": 1613
+      },
+      {
+        "filePath": "src/sim/rdTreeData.ts",
+        "lineCount": 2416
+      },
+      {
         "filePath": "src/sim/reviews.ts",
-        "lineCount": 571
+        "lineCount": 591
       },
       {
         "filePath": "src/sim/suspension/suspensionKinematicComplianceSolver.ts",
         "lineCount": 653
+      },
+      {
+        "filePath": "src/sim/trade/hqWarehouseEngine.ts",
+        "lineCount": 559
       },
       {
         "filePath": "src/sim/types.ts",
@@ -2806,8 +3307,28 @@
         "lineCount": 843
       },
       {
+        "filePath": "src/state/campusStore.ts",
+        "lineCount": 790
+      },
+      {
+        "filePath": "src/state/companyFinanceStore.ts",
+        "lineCount": 584
+      },
+      {
+        "filePath": "src/state/contractsStore.ts",
+        "lineCount": 847
+      },
+      {
+        "filePath": "src/state/devConsoleStore.ts",
+        "lineCount": 786
+      },
+      {
         "filePath": "src/state/exteriorAssemblyPresets.ts",
         "lineCount": 972
+      },
+      {
+        "filePath": "src/state/factoryStore.ts",
+        "lineCount": 948
       },
       {
         "filePath": "src/state/instrumentClusterStore.ts",
@@ -2822,17 +3343,33 @@
         "lineCount": 713
       },
       {
+        "filePath": "src/state/reputationEngine.ts",
+        "lineCount": 1297
+      },
+      {
+        "filePath": "src/state/reputationStore.ts",
+        "lineCount": 526
+      },
+      {
         "filePath": "src/state/storytelling3DStore.ts",
-        "lineCount": 661
+        "lineCount": 757
+      },
+      {
+        "filePath": "src/state/tradeStore.ts",
+        "lineCount": 606
+      },
+      {
+        "filePath": "src/state/workforceStore.ts",
+        "lineCount": 906
       }
     ],
-    "missingTypeAnnotationCount": 326,
+    "missingTypeAnnotationCount": 341,
     "todoCommentCount": 0,
     "fixmeCommentCount": 0,
-    "testCoverageRatioPct": 22,
+    "testCoverageRatioPct": 33,
     "recommendations": [
-      "Modularize 167 monolithic files (>500 lines) into focused subsystem domain modules.",
-      "Replace 326 loose 'any' type annotations with strict TypeScript generic/interface types.",
+      "Modularize 206 monolithic files (>500 lines) into focused subsystem domain modules.",
+      "Replace 341 loose 'any' type annotations with strict TypeScript generic/interface types.",
       "Maintain 100% deterministic transform snap repeatability across all 36 chassis sockets.",
       "Ensure all 3D assets implement strict level of detail (LOD 1-6) polygon and texture budgets."
     ]

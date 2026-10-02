@@ -3,11 +3,12 @@
 // Sequential 1-Page Assembly Pipeline with Stage Orchestration & Smooth Flow
 // ===================================================================
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useEffect } from "react";
 import {
   useEngineBuilderFlow,
   UseEngineBuilderFlowProps,
 } from "../../state/useEngineBuilderFlow";
+import { useGuidedEngineeringStore } from "../../state/guidedEngineeringStore";
 import { StickyEngineDiagram } from "./StickyEngineDiagram";
 import { SectionNavigationBar } from "./SectionNavigationBar";
 import { PowertrainSelector } from "./PowertrainSelector";
@@ -54,6 +55,9 @@ import { ComponentId, MaterialGrade, getAssemblyComponents } from "../../sim/ass
 
 interface EngineBuilderFlowProps extends UseEngineBuilderFlowProps {
   onOpenLightbox?: () => void;
+  onStageChange?: (stage: string) => void;
+  onNextToCreationHub?: () => void;
+  onBackToCreatorMenu?: () => void;
   className?: string;
 }
 
@@ -64,6 +68,10 @@ export function EngineBuilderFlow({
   updateVehicle,
   onShowCompletionModal,
   onOpenLightbox,
+  onStageChange,
+  onNextToCreationHub,
+  onBackToCreatorMenu,
+  initialStage,
   className = "",
 }: EngineBuilderFlowProps) {
   const flow = useEngineBuilderFlow({
@@ -72,61 +80,60 @@ export function EngineBuilderFlow({
     updateEngine,
     updateVehicle,
     onShowCompletionModal,
+    initialStage,
   });
 
   const sectionContainerRef = useRef<HTMLDivElement | null>(null);
   const isEV = flow.powertrainMode === "electric";
   const componentsList = useMemo(() => getAssemblyComponents(engineConfig), [engineConfig]);
 
+  // Synchronize active flow stage to parent (e.g. EngineDesigner)
+  useEffect(() => {
+    onStageChange?.(flow.currentStage);
+    useGuidedEngineeringStore.getState().setPowertrainSelecting(flow.currentStage === "powertrain_select");
+  }, [flow.currentStage, onStageChange]);
+
   // Helper to retrieve meta for a component
   const getCompMeta = (id: ComponentId) => componentsList.find((c) => c.id === id);
 
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div className={`${flow.currentStage === "powertrain_select" ? "w-full overflow-hidden" : "space-y-4"} ${className}`}>
       {/* ========================================================================= */}
-      {/* 1. STICKY TOP ENGINE 3D ISO DIAGRAM                                       */}
+      {/* 1. STICKY TOP ENGINE 3D ISO DIAGRAM WITH FLOATING OPTIONS BAR (Photo 1 & 2)*/}
+      {/* (Only visible after user selects ICE or EV architecture and enters assembly) */}
       {/* ========================================================================= */}
-      <StickyEngineDiagram
-        powertrainMode={flow.powertrainMode}
-        currentStage={flow.currentStage}
-        currentStageMeta={flow.currentStageMeta}
-        installedComponents={flow.assembly.installedComponents}
-        activeComponentId={flow.assembly.activeComponentId}
-        phase={flow.assembly.phase}
-        hoveredComponentId={flow.assembly.hoveredComponentId}
-        isExplodedView={flow.assembly.isExplodedView}
-        isAssemblyComplete={flow.assembly.isAssemblyComplete}
-        engineConfig={engineConfig}
-        selectedVariants={flow.assembly.selectedVariants}
-        flowProgressPercentage={flow.flowProgressPercentage}
-        onAdvancePhase={flow.assembly.advancePhase}
-        onCompleteInstall={flow.handleInstallComplete}
-        onSkipAnimation={flow.assembly.skipCurrentAnimation}
-        onHoverComponent={flow.assembly.setHoveredComponentId}
-        onSelectComponent={(id) => {
-          if (id) flow.navigateToStage(id);
-        }}
-        onOpenLightbox={onOpenLightbox}
-      />
+      {flow.currentStage !== "powertrain_select" && (
+        <StickyEngineDiagram
+          powertrainMode={flow.powertrainMode}
+          currentStage={flow.currentStage}
+          currentStageMeta={flow.currentStageMeta}
+          stagesList={flow.stagesList}
+          onNavigateToStage={flow.navigateToStage}
+          installedComponents={flow.assembly.installedComponents}
+          activeComponentId={flow.assembly.activeComponentId}
+          phase={flow.assembly.phase}
+          hoveredComponentId={flow.assembly.hoveredComponentId}
+          isExplodedView={flow.assembly.isExplodedView}
+          onToggleExplodedView={flow.assembly.toggleExplodedView}
+          isAssemblyComplete={flow.assembly.isAssemblyComplete}
+          engineConfig={engineConfig}
+          selectedVariants={flow.assembly.selectedVariants}
+          flowProgressPercentage={flow.flowProgressPercentage}
+          onAdvancePhase={flow.assembly.advancePhase}
+          onCompleteInstall={flow.handleInstallComplete}
+          onSkipAnimation={flow.assembly.skipCurrentAnimation}
+          onHoverComponent={flow.assembly.setHoveredComponentId}
+          onSelectComponent={(id) => {
+            if (id) flow.navigateToStage(id);
+          }}
+          onOpenLightbox={onOpenLightbox}
+        />
+      )}
 
       {/* ========================================================================= */}
-      {/* 2. HORIZONTAL SECTION NAVIGATION BAR                                      */}
+      {/* 2. DYNAMIC ACTIVE SECTION CONFIGURATOR (Directly Beneath 3D GLB Viewport) */}
       {/* ========================================================================= */}
-      <SectionNavigationBar
-        powertrainMode={flow.powertrainMode}
-        currentStage={flow.currentStage}
-        stagesList={flow.stagesList}
-        flowProgressPercentage={flow.flowProgressPercentage}
-        onNavigateToStage={flow.navigateToStage}
-        onInstallCurrentStage={flow.installCurrentStage}
-        isInstalling={flow.isCurrentStageInstalling}
-        canInstallCurrent={flow.assembly.canInstall(flow.currentStage as ComponentId)}
-      />
-
-      {/* ========================================================================= */}
-      {/* 3. DYNAMIC ACTIVE SECTION CONTENT CONTAINER                               */}
-      {/* ========================================================================= */}
-      <div ref={sectionContainerRef} className="w-full pt-1">
+      <div ref={sectionContainerRef} className={`w-full ${flow.currentStage === "powertrain_select" ? "" : "pt-1"}`}>
         
         {/* ── STAGE 0: POWERTRAIN SELECTION ── */}
         {flow.currentStage === "powertrain_select" && (
@@ -134,6 +141,7 @@ export function EngineBuilderFlow({
             currentMode={flow.powertrainMode}
             engineConfig={engineConfig}
             onSelectPowertrain={flow.selectPowertrain}
+            onBackToCreatorMenu={onBackToCreatorMenu || onNextToCreationHub}
           />
         )}
 
@@ -684,6 +692,7 @@ export function EngineBuilderFlow({
             currentTotalStats={flow.assembly.currentStats}
             onShowCompletionModal={() => onShowCompletionModal?.()}
             onResetFlow={flow.resetFlow}
+            onNextToCreationHub={onNextToCreationHub}
           />
         )}
       </div>

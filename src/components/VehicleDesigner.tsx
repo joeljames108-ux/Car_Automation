@@ -8,6 +8,7 @@ import {
   ChevronRight,
   ChevronLeft,
   Check,
+  ArrowRight,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { useGuidedEngineeringStore } from "../state/guidedEngineeringStore";
@@ -53,6 +54,14 @@ export function VehicleDesigner({ initialSubTab = "modular_builder", onSelectSta
     if (item) {
       playHMIClickSound();
       setDesign(item.generator());
+    }
+  };
+
+  const handleNextToCreatorMenu = () => {
+    playHMIClickSound();
+    markStageComplete("vehicle");
+    if (onSelectStage) {
+      onSelectStage("create_vehicle_hub");
     }
   };
 
@@ -155,32 +164,26 @@ export function VehicleDesigner({ initialSubTab = "modular_builder", onSelectSta
           })}
 
           {onSelectStage && (
-            <div className="ml-auto flex items-center gap-2">
+            <div className="ml-auto flex items-center gap-2 flex-wrap">
               <button
                 onClick={() => {
                   playHMIClickSound();
-                  setActiveWorkflowStage("engine");
-                  onSelectStage("engine");
+                  onSelectStage("create_vehicle_hub");
                 }}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold border border-slate-600/60 bg-slate-800/60 text-slate-300 hover:border-amber-400/50 hover:text-amber-300 transition-all cursor-pointer"
-                title="Go back to Engine to edit configuration"
+                title="Return to Creator Menu"
               >
                 <ChevronLeft size={14} />
-                <span>ENGINE</span>
+                <span>CREATOR MENU</span>
               </button>
               <button
-                onClick={() => {
-                  playHMIClickSound();
-                  markStageComplete("vehicle");
-                  setActiveWorkflowStage("aero");
-                  onSelectStage("aero_studio");
-                }}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 hover:from-emerald-400 hover:to-green-500 transition-all shadow-md cursor-pointer"
-                title="Mark Vehicle complete and advance to Aero Studio"
+                onClick={handleNextToCreatorMenu}
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 text-slate-950 hover:from-emerald-400 hover:to-teal-400 transition-all shadow-md cursor-pointer"
+                title="Mark Vehicle complete and return to Creator Menu"
               >
                 <Check size={14} strokeWidth={3} />
-                <span>COMPLETE VEHICLE & PROCEED TO AERO</span>
-                <ChevronRight size={14} />
+                <span>NEXT → CREATOR MENU</span>
+                <ArrowRight size={14} />
               </button>
             </div>
           )}
@@ -222,35 +225,31 @@ export function VehicleDesigner({ initialSubTab = "modular_builder", onSelectSta
           </div>
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
           {onSelectStage && (
             <button
               type="button"
               onClick={() => {
                 playHMIClickSound();
-                setActiveWorkflowStage("engine");
-                onSelectStage("engine");
+                onSelectStage("create_vehicle_hub");
               }}
-              className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-600/50 bg-slate-800/50 hover:border-amber-400/50 text-slate-300 hover:text-amber-300 font-mono font-bold text-xs tracking-wider uppercase transition-all cursor-pointer"
-              title="Go back to Engine to edit configuration"
+              className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-600/50 bg-slate-800/50 hover:border-amber-400/50 text-slate-300 hover:text-amber-300 font-mono font-bold text-xs tracking-wider uppercase transition-all cursor-pointer"
+              title="Return to Creator Menu"
             >
               <ChevronLeft size={14} />
-              <span>← ENGINE</span>
+              <span>← CREATOR MENU</span>
             </button>
           )}
           {onSelectStage && (
             <button
               type="button"
-              onClick={() => {
-                playHMIClickSound();
-                markStageComplete("vehicle");
-                setActiveWorkflowStage("aero");
-                onSelectStage("aero_studio");
-              }}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
+              onClick={handleNextToCreatorMenu}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
+              title="Complete vehicle architecture and return to Creator Menu"
             >
               <Check size={15} strokeWidth={3} />
-              <span>COMPLETE VEHICLE & ADVANCE TO AERO →</span>
+              <span>NEXT → CREATOR MENU</span>
+              <ArrowRight size={15} strokeWidth={2.5} />
             </button>
           )}
         </div>
@@ -283,6 +282,7 @@ export function VehicleDesigner({ initialSubTab = "modular_builder", onSelectSta
         onReset={vehAssembly.resetAssembly}
         stats={vehAssembly.currentStats}
         vehicleConfig={v}
+        onNextToCreatorMenu={handleNextToCreatorMenu}
       />
     </div>
   );

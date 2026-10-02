@@ -8,6 +8,7 @@
 // ============================================================================
 
 import { create } from "zustand";
+import { AccessManager } from "../sim/accessManager";
 
 export type ConfigurationStatus =
   | "unconfigured"
@@ -20,12 +21,16 @@ export type WorkflowStage =
   | "vehicle"
   | "aero"
   | "interior"
+  | "safety"
+  | "simulation"
+  | "manufacturing"
   | "final_build";
 
 export interface StageGateResult {
   allowed: boolean;
   reason?: string;
   requiredStage?: WorkflowStage;
+  devBypassed?: boolean;
 }
 
 export interface WorkflowStageMeta {
@@ -80,28 +85,65 @@ export const WORKFLOW_STAGES_META: Record<WorkflowStage, WorkflowStageMeta> = {
     tagline: "Dashboard, Displays, Seats & Electronics",
     appStageId: "interior",
   },
+  safety: {
+    id: "safety",
+    stageNumber: 5,
+    label: "SAFETY CENTER",
+    buildStoryTitle: "Occupant & Crash Safety",
+    buildStorySubtitle: "Active Dynamics, Passive Cage & Crash Rigidity",
+    shortTitle: "Safety & Homologation",
+    tagline: "Crash Structure, Crumple Zones & Euro-NCAP Testing",
+    appStageId: "safety",
+  },
+  simulation: {
+    id: "simulation",
+    stageNumber: 6,
+    label: "SIM & TESTING",
+    buildStoryTitle: "Dynamic Validation",
+    buildStorySubtitle: "Virtual Homologation & Benchmark Analytics",
+    shortTitle: "Simulation & Telemetry",
+    tagline: "Dyno Pulls, Track Laps & Performance Certification",
+    appStageId: "simulation",
+  },
+  manufacturing: {
+    id: "manufacturing",
+    stageNumber: 7,
+    label: "MANUFACTURE",
+    buildStoryTitle: "Series Production",
+    buildStorySubtitle: "In-House Plant & Contract Outsourcing",
+    shortTitle: "Production & Assembly",
+    tagline: "Assembly Lines, Shift Scheduling & Supply Logistics",
+    appStageId: "manufacturing",
+  },
   final_build: {
     id: "final_build",
-    stageNumber: 5,
+    stageNumber: 8,
     label: "FINAL BUILD",
     buildStoryTitle: "Complete Machine",
     buildStorySubtitle: "Homologated Assembly, Telemetry & Validation",
     shortTitle: "Assembly & Telemetry",
     tagline: "Complete 3D Car, BOM & Virtual Homologation",
-    appStageId: "final_build",
+    appStageId: "simulation",
   },
 };
 
 interface GuidedEngineeringState {
   // Stage Statuses
   engineStatus: ConfigurationStatus;
+  transmissionStatus: ConfigurationStatus;
   vehicleStatus: ConfigurationStatus;
   aeroStatus: ConfigurationStatus;
   interiorStatus: ConfigurationStatus;
+  safetyStatus: ConfigurationStatus;
+  simulationStatus: ConfigurationStatus;
+  manufacturingStatus: ConfigurationStatus;
   finalBuildStatus: ConfigurationStatus;
 
   // Active Stage
   activeWorkflowStage: WorkflowStage;
+
+  // Powertrain Architecture Selection Status
+  isPowertrainSelecting: boolean;
 
   // Navigation & Permission Checks
   canEnterStage: (targetStage: WorkflowStage) => StageGateResult;
@@ -109,6 +151,9 @@ interface GuidedEngineeringState {
   // Actions
   setActiveWorkflowStage: (stage: WorkflowStage) => void;
   setStageStatus: (stage: WorkflowStage, status: ConfigurationStatus) => void;
+  setTransmissionStatus: (status: ConfigurationStatus) => void;
+  markTransmissionComplete: () => void;
+  setPowertrainSelecting: (selecting: boolean) => void;
   markStageComplete: (stage: WorkflowStage) => void;
 
   // Invalidation Triggers (when user edits an earlier stage)
@@ -124,88 +169,31 @@ interface GuidedEngineeringState {
 export const useGuidedEngineeringStore = create<GuidedEngineeringState>((set, get) => ({
   // All stages start completely UNCONFIGURED by default
   engineStatus: "unconfigured",
+  transmissionStatus: "unconfigured",
   vehicleStatus: "unconfigured",
   aeroStatus: "unconfigured",
   interiorStatus: "unconfigured",
+  safetyStatus: "unconfigured",
+  simulationStatus: "unconfigured",
+  manufacturingStatus: "unconfigured",
   finalBuildStatus: "unconfigured",
 
   activeWorkflowStage: "engine",
+  isPowertrainSelecting: true,
 
   canEnterStage: (targetStage: WorkflowStage): StageGateResult => {
     const s = get();
-
-    switch (targetStage) {
-      case "engine":
-        // Engine is always accessible
-        return { allowed: true };
-
-      case "vehicle": {
-        const isEngineSatisfied =
-          s.engineStatus === "configured" || s.engineStatus === "invalidated";
-        if (!isEngineSatisfied) {
-          return {
-            allowed: false,
-            reason: "Complete ENGINE configuration first.",
-            requiredStage: "engine",
-          };
-        }
-        return { allowed: true };
-      }
-
-      case "aero": {
-        // Vehicle check
-        const vehicleGate = s.canEnterStage("vehicle");
-        if (!vehicleGate.allowed) return vehicleGate;
-
-        const isVehicleSatisfied =
-          s.vehicleStatus === "configured" || s.vehicleStatus === "invalidated";
-        if (!isVehicleSatisfied) {
-          return {
-            allowed: false,
-            reason: "Complete VEHICLE configuration first.",
-            requiredStage: "vehicle",
-          };
-        }
-        return { allowed: true };
-      }
-
-      case "interior": {
-        // Aero check
-        const aeroGate = s.canEnterStage("aero");
-        if (!aeroGate.allowed) return aeroGate;
-
-        const isAeroSatisfied =
-          s.aeroStatus === "configured" || s.aeroStatus === "invalidated";
-        if (!isAeroSatisfied) {
-          return {
-            allowed: false,
-            reason: "Complete AERODYNAMICS configuration first.",
-            requiredStage: "aero",
-          };
-        }
-        return { allowed: true };
-      }
-
-      case "final_build": {
-        // Interior check
-        const interiorGate = s.canEnterStage("interior");
-        if (!interiorGate.allowed) return interiorGate;
-
-        const isInteriorSatisfied =
-          s.interiorStatus === "configured" || s.interiorStatus === "invalidated";
-        if (!isInteriorSatisfied) {
-          return {
-            allowed: false,
-            reason: "Complete INTERIOR configuration first.",
-            requiredStage: "interior",
-          };
-        }
-        return { allowed: true };
-      }
-
-      default:
-        return { allowed: true };
-    }
+    return AccessManager.canAccessStage(targetStage, {
+      engineStatus: s.engineStatus,
+      transmissionStatus: s.transmissionStatus,
+      vehicleStatus: s.vehicleStatus,
+      aeroStatus: s.aeroStatus,
+      interiorStatus: s.interiorStatus,
+      safetyStatus: s.safetyStatus,
+      simulationStatus: s.simulationStatus,
+      manufacturingStatus: s.manufacturingStatus,
+      finalBuildStatus: s.finalBuildStatus,
+    });
   },
 
   setActiveWorkflowStage: (stage: WorkflowStage) => {
@@ -229,16 +217,37 @@ export const useGuidedEngineeringStore = create<GuidedEngineeringState>((set, ge
       case "interior":
         set({ interiorStatus: status });
         break;
+      case "safety":
+        set({ safetyStatus: status });
+        break;
+      case "simulation":
+        set({ simulationStatus: status });
+        break;
+      case "manufacturing":
+        set({ manufacturingStatus: status });
+        break;
       case "final_build":
         set({ finalBuildStatus: status });
         break;
     }
   },
 
+  setTransmissionStatus: (status: ConfigurationStatus) => {
+    set({ transmissionStatus: status });
+  },
+
+  markTransmissionComplete: () => {
+    set({ transmissionStatus: "configured" });
+  },
+
+  setPowertrainSelecting: (selecting: boolean) => {
+    set({ isPowertrainSelecting: selecting });
+  },
+
   markStageComplete: (stage: WorkflowStage) => {
     switch (stage) {
       case "engine":
-        set({ engineStatus: "configured" });
+        set({ engineStatus: "configured", isPowertrainSelecting: false });
         break;
       case "vehicle":
         set({ vehicleStatus: "configured" });
@@ -248,6 +257,15 @@ export const useGuidedEngineeringStore = create<GuidedEngineeringState>((set, ge
         break;
       case "interior":
         set({ interiorStatus: "configured" });
+        break;
+      case "safety":
+        set({ safetyStatus: "configured" });
+        break;
+      case "simulation":
+        set({ simulationStatus: "configured" });
+        break;
+      case "manufacturing":
+        set({ manufacturingStatus: "configured" });
         break;
       case "final_build":
         set({ finalBuildStatus: "configured" });
@@ -296,21 +314,31 @@ export const useGuidedEngineeringStore = create<GuidedEngineeringState>((set, ge
   resetAllStages: () => {
     set({
       engineStatus: "unconfigured",
+      transmissionStatus: "unconfigured",
       vehicleStatus: "unconfigured",
       aeroStatus: "unconfigured",
       interiorStatus: "unconfigured",
+      safetyStatus: "unconfigured",
+      simulationStatus: "unconfigured",
+      manufacturingStatus: "unconfigured",
       finalBuildStatus: "unconfigured",
       activeWorkflowStage: "engine",
+      isPowertrainSelecting: true,
     });
   },
 
   loadPresetAllStagesComplete: () => {
     set({
       engineStatus: "configured",
+      transmissionStatus: "configured",
       vehicleStatus: "configured",
       aeroStatus: "configured",
       interiorStatus: "configured",
+      safetyStatus: "configured",
+      simulationStatus: "configured",
+      manufacturingStatus: "configured",
       finalBuildStatus: "configured",
+      isPowertrainSelecting: false,
     });
   },
 }));

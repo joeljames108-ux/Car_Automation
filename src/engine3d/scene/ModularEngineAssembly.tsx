@@ -12,6 +12,7 @@ import { useEngine3DStore } from '../store/useEngine3DStore';
 import { ComponentMesh3D } from './ComponentMesh3D';
 import { getAllV12AttachmentPoints } from '../attachmentMaps/v12AttachmentMap';
 import { Engine3DGeometryGenerator } from '../../exterior3d/geometry/engine3dGeometryGenerator';
+import { buildProceduralFallbackMesh } from '../assets/glbAssetLoader';
 
 // ============================================================================
 // 1. ATTACHMENT POINT SOCKET VISUALIZER OVERLAY
@@ -102,12 +103,29 @@ export const ModularEngineAssembly: React.FC = () => {
   const showAttachmentPoints = useEngine3DStore((s) => s.showAttachmentPoints);
   const showDependencies = useEngine3DStore((s) => s.showDependencies);
   const engineRotation = useEngine3DStore((s) => s.engineRotation);
+  const engineConfig = useEngine3DStore((s) => s.engineConfig);
   const instanceList = Object.values(instances);
 
-  // When assembly is complete or empty showcase, yield to EngineRuntimeMotion's authentic V12 GLB
-  const isShowcase = instanceList.length === 0 || isAssemblyComplete;
-  if (isShowcase) {
+  const fallbackBlock = useMemo(() => {
+    return buildProceduralFallbackMesh('engine-block', engineConfig || undefined);
+  }, [engineConfig]);
+
+  // When assembly is complete, yield to EngineRuntimeMotion's running engine
+  if (isAssemblyComplete) {
     return null;
+  }
+
+  // If instanceList is still populating asynchronously, show procedural block so viewport is never empty or black
+  if (instanceList.length === 0) {
+    return (
+      <group
+        name="Modular_Engine_Assembly_Placeholder"
+        rotation={engineRotation}
+        position={[0, -0.08, 0]}
+      >
+        <primitive object={fallbackBlock} />
+      </group>
+    );
   }
 
   return (

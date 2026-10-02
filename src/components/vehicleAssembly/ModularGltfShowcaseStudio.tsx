@@ -8,27 +8,18 @@
 import React, { useState } from 'react';
 import {
   Layers,
-  Compass,
-  Zap,
   Download,
-  Share2,
-  CheckCircle2,
-  ShieldCheck,
-  RotateCcw,
   Sparkles,
   Activity,
-  Gauge,
+  ShieldCheck,
 } from 'lucide-react';
 import { MasterVehicleAssemblyDeck } from './MasterVehicleAssemblyDeck';
-import { PhotorealisticVehicleBlueprint } from '../assembly/iso3d/PhotorealisticVehicleBlueprint';
-import { ChassisFeaStressCard } from '../chassis/ChassisFeaStressCard';
-import { EvBatteryThermalStudio } from '../powertrain/EvBatteryThermalStudio';
 import { PowertrainDynoDashboard } from './PowertrainDynoDashboard';
 import { useMasterVehicleAssemblyStore } from '../../state/masterVehicleAssemblyStore';
 import { UniversalGlbExporter } from '../../exterior3d/export/universalGlbExporter';
 import { HighFidelitySedanChassisGenerator } from '../../exterior3d/generators/highFidelitySedanChassisGenerator';
 
-export type StudioTabId = '3D_ASSEMBLY' | 'CAD_BLUEPRINT' | 'FEA_CHASSIS' | 'EV_THERMAL' | 'ENGINE_DYNO';
+export type StudioTabId = '3D_ASSEMBLY' | 'ENGINE_DYNO';
 
 export const ModularGltfShowcaseStudio: React.FC = () => {
   const [activeTab, setActiveTab] = useState<StudioTabId>('3D_ASSEMBLY');
@@ -60,9 +51,6 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
 
   const tabs: { id: StudioTabId; label: string; icon: React.FC<{ className?: string }> }[] = [
     { id: '3D_ASSEMBLY', label: '3D Assembly Deck', icon: Layers },
-    { id: 'CAD_BLUEPRINT', label: '7-Layer CAD Blueprint', icon: Compass },
-    { id: 'FEA_CHASSIS', label: 'Chassis FEA Rigidity', icon: Gauge },
-    { id: 'EV_THERMAL', label: '800V EV Thermal', icon: Zap },
     { id: 'ENGINE_DYNO', label: 'Engine Dyno & Telemetry', icon: Activity },
   ];
 
@@ -128,9 +116,6 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
       {/* Main Studio Viewport Workspace */}
       <div className="flex-1 overflow-hidden p-3 bg-slate-900/80">
         {activeTab === '3D_ASSEMBLY' && <MasterVehicleAssemblyDeck />}
-        {activeTab === 'CAD_BLUEPRINT' && <PhotorealisticVehicleBlueprint />}
-        {activeTab === 'FEA_CHASSIS' && <ChassisFeaStressCard />}
-        {activeTab === 'EV_THERMAL' && <EvBatteryThermalStudio />}
         {activeTab === 'ENGINE_DYNO' && <PowertrainDynoDashboard />}
       </div>
 

@@ -1,18 +1,18 @@
 # 🔍 Comprehensive Project Forensic Audit Report
-**Generated:** 2026-09-29T19:11:32.580Z  
+**Generated:** 2026-10-02T17:38:17.953Z  
 **Project:** Modular glTF Vehicle Construction System & Car Automation Simulator  
-**Root Directory:** `E:\Car_Automation`  
+**Root Directory:** `E:\projects\THE PROJECT\Car_Automation`  
 **Audit Status:** ✅ **PASSED QUALITY GATE**
 
 ---
 ## 1. Executive Summary & Codebase Scale
 | Metric | Value |
 |---|---|
-| **Total Source Files** | `1,211` files |
-| **Total Lines of Code (LOC)** | `293,794` lines |
-| **Comment Lines** | `27,641` lines |
-| **Blank Lines** | `34,810` lines |
-| **Total Codebase Size** | `15174.7` KB |
+| **Total Source Files** | `1,500` files |
+| **Total Lines of Code (LOC)** | `373,020` lines |
+| **Comment Lines** | `33,758` lines |
+| **Blank Lines** | `42,509` lines |
+| **Total Codebase Size** | `18894.2` KB |
 | **Technical Debt Score** | `40 / 100` (Lower is better) |
 | **DAG Dependency Cycles** | `0` cycles |
 | **Max Dependency Depth** | `11` layers |
@@ -20,31 +20,32 @@
 ## 2. Subsystem Architecture Breakdown
 | Subsystem | Files | LOC | Size (KB) | Role & Responsibility |
 |---|---|---|---|---|
-| **`simulation_core`** | 282 | 61,907 | 3639.0 KB | Vehicle physics, engine thermodynamics & dyno solvers |
-| **`engine_assembly`** | 75 | 20,992 | 1027.5 KB | Modular 3D engine block, heads, turbos & SVG iso components |
-| **`modular_vehicle`** | 105 | 31,574 | 1597.5 KB | 50-chassis platforms, aggregator, validation engine & bridges |
-| **`exterior_3d`** | 324 | 75,781 | 3755.7 KB | Modular closures, PBR materials, aero & glTF geometry generators |
-| **`rendering_engine`** | 16 | 6,116 | 303.7 KB | Three.js viewports, WebGL contexts, canvas shaders & cameras |
-| **`state_management`** | 33 | 10,985 | 453.2 KB | Zustand master store slices for vehicle & assembly configurations |
-| **`ai_agent_framework`** | 37 | 4,283 | 201.7 KB | Domain engineering agents (Aero, Thermal, Brake, Homologation) |
-| **`ui_components`** | 242 | 66,929 | 3388.3 KB | Workshop decks, 3-column configurator, SVG diagrams & ribbon UI |
-| **`asset_pipeline`** | 1 | 72 | 3.4 KB | 3D glTF/GLB loaders, hardpoint manifests & asset catalogs |
-| **`testing_verification`** | 86 | 13,903 | 742.3 KB | Automated test runners, assertion suites & unit tests |
+| **`simulation_core`** | 422 | 101,899 | 5441.5 KB | Vehicle physics, engine thermodynamics & dyno solvers |
+| **`engine_assembly`** | 75 | 21,037 | 1029.0 KB | Modular 3D engine block, heads, turbos & SVG iso components |
+| **`modular_vehicle`** | 105 | 31,680 | 1604.8 KB | 50-chassis platforms, aggregator, validation engine & bridges |
+| **`exterior_3d`** | 324 | 75,782 | 3757.0 KB | Modular closures, PBR materials, aero & glTF geometry generators |
+| **`rendering_engine`** | 18 | 7,415 | 366.5 KB | Three.js viewports, WebGL contexts, canvas shaders & cameras |
+| **`state_management`** | 51 | 19,343 | 814.8 KB | Zustand master store slices for vehicle & assembly configurations |
+| **`ai_agent_framework`** | 33 | 2,694 | 126.2 KB | Domain engineering agents (Aero, Thermal, Brake, Homologation) |
+| **`ui_components`** | 304 | 89,190 | 4519.5 KB | Workshop decks, 3-column configurator, SVG diagrams & ribbon UI |
+| **`asset_pipeline`** | 3 | 472 | 22.4 KB | 3D glTF/GLB loaders, hardpoint manifests & asset catalogs |
+| **`testing_verification`** | 155 | 22,256 | 1150.2 KB | Automated test runners, assertion suites & unit tests |
 | **`documentation_audit`** | 10 | 1,252 | 62.4 KB | Architecture documentation, specifications & forensic audit tools |
 
 
 ## 3. Rendering Pipeline & 3D WebGL Diagnostics
 - **Three.js Core Version:** `^0.160.0 (r160+)`
-- **Active WebGL Canvases Found:** `16` viewports
+- **Active WebGL Canvases Found:** `17` viewports
 - **SVG Isometric Engines Found:** `1` renderers
-- **GLTF / GLB Asset Loaders:** `19` loaders configured
-- **PBR Shader Material Libraries:** `256` modules
-- **Interactive Camera Controllers:** `52` controllers
+- **GLTF / GLB Asset Loaders:** `21` loaders configured
+- **PBR Shader Material Libraries:** `259` modules
+- **Interactive Camera Controllers:** `54` controllers
 
 ### WebGL Viewport Detail
 | Component | File | Antialias | Shadow Maps | Tone Mapping |
 |---|---|---|---|---|
 | **AeroStudioCanvasViewport** | `src/components/aeroStudio/AeroStudioCanvasViewport.tsx` | ✅ Yes | ✅ Yes | `ACESFilmicToneMapping` |
+| **Campus3DMapViewport** | `src/components/campus/Campus3DMapViewport.tsx` | ✅ Yes | ✅ Yes | `ACESFilmicToneMapping` |
 | **Suspension3DStudioViewport** | `src/components/chassis/Suspension3DStudioViewport.tsx` | ✅ Yes | ✅ Yes | `ACESFilmicToneMapping` |
 | **F1Car3DViewport** | `src/components/f1/3d/F1Car3DViewport.tsx` | ✅ Yes | ✅ Yes | `ACESFilmicToneMapping` |
 | **F1ModularAssemblyViewport** | `src/components/f1/3d/F1ModularAssemblyViewport.tsx` | ✅ Yes | ✅ Yes | `ACESFilmicToneMapping` |
@@ -66,26 +67,26 @@
 Top architectural hub modules with high connection degree:
 | Module Path | In-Degree (Depended On) | Out-Degree (Dependencies) | Total Degree |
 |---|---|---|---|
-| `src/utils/hmiSoundSynth.ts` | 85 | 0 | **85** |
-| `src/sim/types.ts` | 66 | 0 | **66** |
+| `src/utils/hmiSoundSynth.ts` | 86 | 0 | **86** |
+| `src/sim/types.ts` | 68 | 0 | **68** |
 | `src/sim/modularVehicle/runTests.ts` | 0 | 58 | **58** |
-| `src/components/ui/Controls.tsx` | 40 | 2 | **42** |
-| `src/state/DesignContext.tsx` | 36 | 4 | **40** |
-| `src/sim/assemblyTypes.ts` | 38 | 1 | **39** |
-| `src/components/assembly/EngineBuilderFlow.tsx` | 0 | 36 | **36** |
+| `src/state/simulationClockStore.ts` | 48 | 0 | **48** |
+| `src/sim/assemblyTypes.ts` | 37 | 1 | **38** |
+| `src/state/DesignContext.tsx` | 34 | 4 | **38** |
+| `src/components/assembly/EngineBuilderFlow.tsx` | 0 | 37 | **37** |
+| `src/components/ui/Controls.tsx` | 35 | 2 | **37** |
+| `src/sim/economy/__tests__/companyEconomyReputation.test.ts` | 0 | 35 | **35** |
 | `src/sim/__tests__/masterPhaseExpansionTests.ts` | 0 | 35 | **35** |
-| `src/sim/agents/agentFramework.ts` | 32 | 1 | **33** |
-| `src/sim/interior/masterInteriorTypes.ts` | 32 | 1 | **33** |
 
 
 ## 5. Technical Debt & Strategic Recommendations
 - **Estimated Technical Debt Score:** `40 / 100`
-- **Monolithic Files (>500 LOC):** `167` files
-- **TODO Comments:** `0` | **FIXME Comments:** `0` | **Explicit `any` Types:** `326`
+- **Monolithic Files (>500 LOC):** `206` files
+- **TODO Comments:** `0` | **FIXME Comments:** `0` | **Explicit `any` Types:** `341`
 
 ### Strategic Engineering Recommendations:
-1. 🚀 **Modularize 167 monolithic files (>500 lines) into focused subsystem domain modules.**
-1. 🚀 **Replace 326 loose 'any' type annotations with strict TypeScript generic/interface types.**
+1. 🚀 **Modularize 206 monolithic files (>500 lines) into focused subsystem domain modules.**
+1. 🚀 **Replace 341 loose 'any' type annotations with strict TypeScript generic/interface types.**
 1. 🚀 **Maintain 100% deterministic transform snap repeatability across all 36 chassis sockets.**
 1. 🚀 **Ensure all 3D assets implement strict level of detail (LOD 1-6) polygon and texture budgets.**
 

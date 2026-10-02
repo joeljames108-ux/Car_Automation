@@ -24,6 +24,13 @@ import {
   Sun,
   Moon,
   Crosshair,
+  ChevronDown,
+  Car,
+  Flame,
+  Cog,
+  Compass,
+  CircleDot,
+  Wrench,
 } from "lucide-react";
 import {
   useModularVehicleBuilderStore,
@@ -34,8 +41,35 @@ import {
   getBodyArchitectureGlbPath,
   STAGE_EXPLODED_OFFSETS,
   AssemblyStage,
+  ASSEMBLY_STAGES,
 } from "../../state/modularVehicleBuilderStore";
 import { useVehicleArchitectureStore } from "../../state/useVehicleArchitectureStore";
+import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
+
+const getVehicleStageIcon = (stageId: string) => {
+  switch (stageId) {
+    case "chassis":
+      return Layers;
+    case "engine":
+      return Flame;
+    case "gearbox":
+      return Cog;
+    case "suspension":
+      return Compass;
+    case "brakes":
+      return CircleDot;
+    case "wheels":
+      return CircleDot;
+    case "body_framework":
+      return Box;
+    case "exterior_panels":
+      return Car;
+    case "lighting_glass":
+      return Sparkles;
+    default:
+      return Wrench;
+  }
+};
 
 export const ModularVehicleCanvasViewport: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -61,6 +95,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   const setIsAutoRotate = useModularVehicleBuilderStore((s) => s.setIsAutoRotate);
   const showAttachmentPoints = useModularVehicleBuilderStore((s) => s.showAttachmentPoints);
   const setShowAttachmentPoints = useModularVehicleBuilderStore((s) => s.setShowAttachmentPoints);
+  const setCurrentStage = useModularVehicleBuilderStore((s) => s.setCurrentStage);
 
   // Local Viewport States
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -1277,63 +1312,150 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
       </div>
 
       {/* =====================================================================
-          BOTTOM OVERLAY: Real-Time Exploded View Slider
+          FLOATING BOTTOM OPTIONS DOCK (Matching Photo 1 & Photo 2)
           ===================================================================== */}
-      <div className="absolute bottom-3.5 left-3.5 right-3.5 flex flex-wrap items-center justify-between gap-3 p-2.5 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-700/60 shadow-xl pointer-events-auto z-20">
-        <div className="flex items-center gap-3 flex-1 min-w-[240px]">
-          <div className="flex items-center gap-1.5 text-slate-300 font-mono text-xs font-bold whitespace-nowrap">
-            <MoveHorizontal size={14} className="text-amber-400" />
-            <span>EXPLODED VIEW:</span>
-            <span className="text-amber-400 min-w-[36px]">
-              {Math.round(explodedProgress * 100)}%
-            </span>
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 max-w-[96vw] overflow-x-auto p-1 scrollbar-none pointer-events-auto">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-slate-100/95 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700/80 backdrop-blur-xl shadow-2xl select-none">
+          {/* 1. Subassembly Focus Dropdown */}
+          <div className="relative flex items-center">
+            <select
+              value={currentStage}
+              onChange={(e) => {
+                playHMIClickSound();
+                setCurrentStage(e.target.value as AssemblyStage);
+              }}
+              className="bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-[11px] font-bold pl-2.5 pr-7 py-1.5 rounded-xl border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer appearance-none shadow-sm"
+            >
+              {ASSEMBLY_STAGES.map((st) => (
+                <option key={st.id} value={st.id}>
+                  Focus [{st.label}] {installedStages.includes(st.id) ? "✓" : ""}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              size={12}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 dark:text-slate-400"
+            />
           </div>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={explodedProgress}
-            onChange={(e) => setExplodedProgress(parseFloat(e.target.value))}
-            className="w-full accent-amber-500 cursor-pointer h-1.5 bg-slate-700 rounded-lg appearance-none"
-          />
-        </div>
 
-        {/* Quick Presets */}
-        <div className="flex items-center gap-1.5 font-mono text-[10px]">
-          <button
-            type="button"
-            onClick={() => setExplodedProgress(0.0)}
-            className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer ${
-              explodedProgress === 0
-                ? "bg-amber-500 text-slate-950"
-                : "bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700"
-            }`}
-          >
-            0% (ASSEMBLED)
-          </button>
-          <button
-            type="button"
-            onClick={() => setExplodedProgress(0.5)}
-            className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer ${
-              Math.abs(explodedProgress - 0.5) < 0.05
-                ? "bg-amber-500 text-slate-950"
-                : "bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700"
-            }`}
-          >
-            50%
-          </button>
-          <button
-            type="button"
-            onClick={() => setExplodedProgress(1.0)}
-            className={`px-2.5 py-1 rounded-md font-bold transition-all cursor-pointer ${
-              explodedProgress === 1
-                ? "bg-amber-500 text-slate-950"
-                : "bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700"
-            }`}
-          >
-            100% (FULL CAD EXPLODE)
-          </button>
+          {/* 2. Camera View Pills */}
+          <div className="flex items-center bg-slate-200/90 dark:bg-slate-800/90 rounded-xl p-0.5 border border-slate-300 dark:border-slate-700 text-[10px] font-bold">
+            {(["iso", "front", "side", "rear", "top"] as const).map((cam) => (
+              <button
+                key={cam}
+                type="button"
+                onClick={() => {
+                  playHMIClickSound();
+                  applyCameraPreset(cam);
+                }}
+                className={`px-2 py-1 rounded-lg uppercase transition-all cursor-pointer ${
+                  activeCamPreset === cam
+                    ? "bg-slate-800 dark:bg-slate-700 text-amber-400 shadow-sm font-black"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                }`}
+              >
+                {cam}
+              </button>
+            ))}
+          </div>
+
+          {/* Quick Toggles: X-Ray & Auto-Rotate & Explode */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => {
+                playHMIClickSound();
+                setIsXRay(!isXRay);
+              }}
+              title="Toggle X-Ray Wireframe"
+              className={`px-2 py-1 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
+                isXRay
+                  ? "bg-purple-500/25 text-purple-800 dark:text-purple-300 border-purple-400 shadow-sm"
+                  : "bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border-slate-300/80 dark:border-slate-700 hover:bg-slate-200/70"
+              }`}
+            >
+              X-Ray
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                playHMIClickSound();
+                setIsAutoRotate(!isAutoRotate);
+              }}
+              title="Toggle 360 Auto-Rotate"
+              className={`px-2 py-1 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
+                isAutoRotate
+                  ? "bg-cyan-500/25 text-cyan-800 dark:text-cyan-300 border-cyan-400 shadow-sm"
+                  : "bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border-slate-300/80 dark:border-slate-700 hover:bg-slate-200/70"
+              }`}
+            >
+              Rotate
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                playHMIClickSound();
+                setExplodedProgress(explodedProgress > 0.1 ? 0 : 0.6);
+              }}
+              title="Toggle Exploded CAD View"
+              className={`px-2 py-1 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
+                explodedProgress > 0.1
+                  ? "bg-amber-500/25 text-amber-800 dark:text-amber-300 border-amber-400 shadow-sm"
+                  : "bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border-slate-300/80 dark:border-slate-700 hover:bg-slate-200/70"
+              }`}
+            >
+              Explode
+            </button>
+          </div>
+
+          {/* Vertical Divider */}
+          <div className="h-7 w-px bg-slate-300 dark:bg-slate-700 mx-0.5 hidden sm:block" />
+
+          {/* 3. Subassembly Option Action Cards (Photo 2 style!) */}
+          <div className="flex items-center gap-1">
+            {ASSEMBLY_STAGES.map((st) => {
+              const active = currentStage === st.id;
+              const installed = installedStages.includes(st.id);
+              const Icon = getVehicleStageIcon(st.id);
+              return (
+                <button
+                  key={st.id}
+                  type="button"
+                  onClick={() => {
+                    playHMITabSound();
+                    setCurrentStage(st.id);
+                  }}
+                  title={st.label}
+                  className={`flex flex-col items-center justify-center px-2 py-1 rounded-xl border transition-all cursor-pointer min-w-[44px] ${
+                    active
+                      ? "bg-amber-500/20 text-amber-800 dark:text-amber-300 border-amber-400 ring-2 ring-amber-400/80 shadow-sm font-black"
+                      : installed
+                      ? "bg-emerald-50/90 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/60 hover:bg-emerald-100/70"
+                      : "bg-white/80 dark:bg-slate-800/70 text-slate-700 dark:text-slate-300 border-slate-300/80 dark:border-slate-700/80 hover:bg-slate-200/70 dark:hover:bg-slate-700/70"
+                  }`}
+                >
+                  <div className="relative">
+                    <Icon
+                      size={14}
+                      className={
+                        active
+                          ? "text-amber-500"
+                          : installed
+                          ? "text-emerald-600 dark:text-emerald-400"
+                          : "text-slate-500 dark:text-slate-400"
+                      }
+                    />
+                    {installed && (
+                      <span className="absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-emerald-500" />
+                    )}
+                  </div>
+                  <span className="text-[9px] mt-0.5 leading-tight truncate max-w-[50px]">
+                    {st.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

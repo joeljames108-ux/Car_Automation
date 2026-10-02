@@ -189,7 +189,7 @@ function FamilyTreeNode({ vehicle, allVehicles, depth = 0 }: {
   );
 }
 
-export function VehicleGarage() {
+export function VehicleGarage({ onSelectStage }: { onSelectStage?: (stage: string) => void } = {}) {
   const { company, saveToGarage, removeFromGarage, duplicateVehicle } = useCompany();
   const { design, sim, setDesign } = useDesign();
   const [search, setSearch] = useState("");

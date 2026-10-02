@@ -7,6 +7,7 @@ import {
   resumeProject, cancelProject, hireEngineer, fireEngineer, patentTech,
   startSkunkworksProject,
 } from "../sim/rdEngine";
+import { clockListeners } from "./gameClockEngine";
 
 interface RDContextValue {
   state: RDState;
@@ -97,6 +98,13 @@ export function RDProvider({ children }: { children: ReactNode }) {
     }, 800);
     return () => clearTimeout(timer);
   }, [state, loading]);
+
+  // Automatically advance RD state on continuous game clock month ticks
+  useEffect(() => {
+    return clockListeners.subscribe("month", "rdContextAutoMonthAdvance", () => {
+      setState((s) => advanceMonth(s));
+    });
+  }, []);
 
   const advanceOneMonth = useCallback(() => setState((s) => advanceMonth(s)), []);
   const advanceSixMonths = useCallback(() => {

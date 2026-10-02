@@ -18,6 +18,7 @@ import { EngineRuntimeMotion } from './EngineRuntimeMotion';
 import { globalPerformanceManager } from '../core/PerformanceManager';
 import { useWebGLRecovery } from '../../utils/useWebGLRecovery';
 import { useFrameloopPause } from '../../utils/ViewportPauseCanvas';
+import { useCameraControls } from '../camera/useCameraControls';
 
 // ============================================================================
 // 1. STUDIO LIGHTING RIG & ENVIRONMENT
@@ -86,13 +87,30 @@ export const StudioLightingRig: React.FC = () => {
       {/* Hemisphere Ambient */}
       <hemisphereLight args={['#ffffff', '#64748b', 1.1]} />
 
-      {/* HDRI Metallic Environment Map (Non-blocking async load) */}
-      <Suspense fallback={null}>
-        <Environment preset={values.envPreset} environmentIntensity={1.4} />
-      </Suspense>
+      {/* HDRI Metallic Environment Map (Non-blocking async load with offline safety) */}
+      <SafeEnvironment>
+        <Suspense fallback={null}>
+          <Environment preset={values.envPreset} environmentIntensity={1.4} />
+        </Suspense>
+      </SafeEnvironment>
     </>
   );
 };
+
+// Error boundary to prevent Drei environment load failures from crashing the canvas
+class SafeEnvironment extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(err: any) {
+    console.warn("[Engine3DScene] Environment preset load failed, continuing with studio directional lights:", err);
+  }
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
+}
 
 // ============================================================================
 // 2. INNER SCENE GRAPH & FRAME ANIMATION HOOK
@@ -102,6 +120,8 @@ export const SceneContent: React.FC<{ showRuntimeHUD?: boolean }> = ({ showRunti
   useSnapAnimationTicker();
   const orbitRef = useRef<any>(null);
   const isAutoRotate360 = useEngine3DStore((s) => s.isAutoRotate360);
+  const isAssemblyComplete = useEngine3DStore((s) => s.isAssemblyComplete);
+  useCameraControls(orbitRef);
 
   useFrame(({ gl }: { gl: THREE.WebGLRenderer }) => {
     globalPerformanceManager.updateFrameStats(gl, 0, false);
@@ -114,8 +134,12 @@ export const SceneContent: React.FC<{ showRuntimeHUD?: boolean }> = ({ showRunti
       {/* Core Modular 3D Engine Assembly */}
       <ModularEngineAssembly />
 
-      {/* Engine Runtime Motion - auto-starts when assembly completes */}
-      <EngineRuntimeMotion autoStart={true} initialRpm={800} showHUD={showRuntimeHUD} />
+      {/* Engine Runtime Motion - only mounts when assembly completes or when cockpit HUD is enabled */}
+      {(showRuntimeHUD || isAssemblyComplete) && (
+        <Suspense fallback={null}>
+          <EngineRuntimeMotion autoStart={true} initialRpm={800} showHUD={showRuntimeHUD} />
+        </Suspense>
+      )}
 
       {/* Post-Processing Overlays & Studio Highlights */}
       <PostProcessingStack />
@@ -123,37 +147,37 @@ export const SceneContent: React.FC<{ showRuntimeHUD?: boolean }> = ({ showRunti
       {/* Ground Contact Shadow Plate (Cached 1-Frame Texture Bake) */}
       <ContactShadows
         position={[0, -0.12, 0]}
-        opacity={0.4}
-        scale={2.6}
-        blur={2.2}
+        opacity={0.25}
+        scale={2.0}
+        blur={2.0}
         far={1.0}
         resolution={512}
         frames={1}
-        color="#2a1a0a"
+        color="#4a3e2e"
       />
 
-      {/* Reflective Ground Plane */}
+      {/* Reflective Studio Workbench Ground Plane */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.13, 0]} receiveShadow>
-        <circleGeometry args={[2.0, 64]} />
+        <circleGeometry args={[1.5, 48]} />
         <meshPhysicalMaterial
-          color="#1a1208"
-          roughness={0.12}
-          metalness={0.7}
-          clearcoat={0.4}
+          color="#ebe5d8"
+          roughness={0.25}
+          metalness={0.3}
+          clearcoat={0.6}
           clearcoatRoughness={0.15}
           envMapIntensity={0.8}
           transparent
-          opacity={0.9}
+          opacity={0.65}
         />
       </mesh>
 
-      {/* Ground Grid Overlay (Engineering Blueprint Style) */}
+      {/* Ground Grid Overlay (Snug Engineering Workbench Style) */}
       <gridHelper
-        args={[4.0, 40, '#1a1508', '#0d0a06']}
+        args={[2.2, 22, '#d4caba', '#e8e2d5']}
         position={[0, -0.125, 0]}
       />
       <gridHelper
-        args={[4.0, 8, '#92702a', '#1a1508']}
+        args={[2.2, 6, '#b89b58', '#d4caba']}
         position={[0, -0.124, 0]}
       />
 
@@ -163,10 +187,10 @@ export const SceneContent: React.FC<{ showRuntimeHUD?: boolean }> = ({ showRunti
         makeDefault
         enableDamping
         dampingFactor={0.06}
-        minDistance={0.4}
-        maxDistance={4.5}
-        maxPolarAngle={Math.PI / 2 + 0.1}
-        target={[0, 0.10, 0]}
+        minDistance={0.3}
+        maxDistance={3.5}
+        maxPolarAngle={Math.PI / 2 + 0.05}
+        target={[0, 0.08, 0]}
         autoRotate={isAutoRotate360}
         autoRotateSpeed={0.9}
       />
@@ -183,6 +207,13 @@ export const SceneContent: React.FC<{ showRuntimeHUD?: boolean }> = ({ showRunti
 // 3. MASTER CANVAS WRAPPER COMPONENT
 // ============================================================================
 
+const CanvasLoadingFallback: React.FC = () => (
+  <>
+    <ambientLight intensity={1.5} color="#ffffff" />
+    <directionalLight position={[3, 4, 3]} intensity={2.0} color="#fef08a" />
+  </>
+);
+
 export interface Engine3DSceneProps {
   className?: string;
   /** When false, the runtime cockpit HUD overlays are omitted from the scene. */
@@ -194,20 +225,16 @@ export const Engine3DScene: React.FC<Engine3DSceneProps> = ({
   showRuntimeHUD = true,
 }) => {
   const { remountKey, attachWebGLRecovery } = useWebGLRecovery();
-  // Stop rendering entirely when the viewport is scrolled off-screen.
-  // frameloop="never" keeps the GL context + last frame alive (context-safe,
-  // unlike display:none) and cuts GPU/CPU to ~0 for hidden viewports.
-  const isPaused = useFrameloopPause();
 
   return (
     <div className={`relative bg-transparent select-none overflow-hidden ${className}`}>
       <Canvas
         key={remountKey}
         onCreated={({ gl }) => attachWebGLRecovery(gl.domElement)}
-        camera={{ position: [1.4, 1.2, 0.9], fov: 42, near: 0.05, far: 50 }}
+        camera={{ position: [0.92, 0.62, 0.76], fov: 36, near: 0.05, far: 50 }}
         dpr={[1, 1.5]}
         performance={{ min: 0.5 }}
-        frameloop={isPaused ? 'never' : 'always'}
+        frameloop="always"
         gl={{
           antialias: true,
           alpha: true,
@@ -218,7 +245,7 @@ export const Engine3DScene: React.FC<Engine3DSceneProps> = ({
         }}
         shadows
       >
-        <Suspense fallback={null}>
+        <Suspense fallback={<CanvasLoadingFallback />}>
           <SceneContent showRuntimeHUD={showRuntimeHUD} />
         </Suspense>
       </Canvas>

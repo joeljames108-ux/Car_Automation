@@ -344,11 +344,11 @@ export function SafetyCenter({ onSelectStage }: SafetyCenterProps = {}) {
           </div>
           <button
             type="button"
-            onClick={() => onSelectStage("final_build")}
+            onClick={() => onSelectStage("simulation")}
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(245,158,11,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
           >
             <Check size={15} strokeWidth={3} />
-            <span>COMPLETE SAFETY & PROCEED TO 6. FINAL BUILD →</span>
+            <span>COMPLETE SAFETY & PROCEED TO 6. SIM & TESTING →</span>
           </button>
         </div>
       )}

@@ -11,7 +11,7 @@ import type {
 
 export type UnitSystem = "metric" | "imperial";
 export type CarConceptFocus = "budget" | "track" | "luxury" | "balanced";
-export type UITheme = "theme3" | "theme4";
+export type UITheme = "theme4";
 
 interface DesignContextValue {
   design: VehicleDesign;
@@ -49,15 +49,7 @@ export function DesignProvider({ children }: { children: ReactNode }) {
   const [design, setDesignState] = useState<VehicleDesign>(() => defaultDesign());
   const [units, setUnits] = useState<UnitSystem>("metric");
   const [carConcept, setCarConcept] = useState<CarConceptFocus>("balanced");
-  const [uiTheme, setUiThemeState] = useState<UITheme>(() => {
-    try {
-      const stored = window.localStorage.getItem("apex-engineer:ui-theme");
-      if (stored === "theme4" || stored === "theme3") return stored as UITheme;
-    } catch {
-      // Fallback if localStorage is inaccessible
-    }
-    return "theme4";
-  });
+  const [uiTheme, setUiThemeState] = useState<UITheme>("theme4");
 
   const setUiTheme = useCallback((theme: UITheme) => {
     setUiThemeState(theme);

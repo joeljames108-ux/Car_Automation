@@ -14,6 +14,10 @@ import {
 } from "../sim/rdData";
 import { canResearchTech, projectProgress, monthlySalaryTotal } from "../sim/rdEngine";
 import type { TechTreeId, TechnologyId, Engineer } from "../sim/rdTypes";
+import { RDDepartmentSelect } from "./rd/RDDepartmentSelect";
+import { RDDepartmentTreeView } from "./rd/RDDepartmentTreeView";
+import { RDNodeInspectorModal } from "./rd/RDNodeInspectorModal";
+import { useRDTreeStore } from "../state/rdTreeStore";
 
 const ICONS: Record<string, React.ComponentType<{ size?: number | string; className?: string }>> = {
   Cog: Cog as React.ComponentType<{ size?: number | string; className?: string }>,
@@ -81,22 +85,7 @@ function TopBar({ state, view, setView }: { state: ReturnType<typeof useRD>["sta
   );
 }
 
-/* ---------- Month controls ---------- */
 
-function MonthControls() {
-  const { advanceOneMonth, advanceSixMonths, saving } = useRD();
-  return (
-    <div className="flex items-center gap-2">
-      <button onClick={advanceOneMonth} className="btn-primary text-xs flex items-center gap-1.5 px-3 py-1.5">
-        <ChevronRight size={14} /> Advance 1 Month
-      </button>
-      <button onClick={advanceSixMonths} className="btn-secondary text-xs flex items-center gap-1.5 px-3 py-1.5">
-        <ChevronRight size={14} /><ChevronRight size={14} className="-ml-2" /> Advance 6 Months
-      </button>
-      {saving && <span className="text-[10px] text-slate-600">saving…</span>}
-    </div>
-  );
-}
 
 /* ---------- Overview ---------- */
 
@@ -242,120 +231,28 @@ function Campus() {
   );
 }
 
-/* ---------- Tech Tree ---------- */
+/* ---------- Tech Tree (22 Specialized Departments across 8 Master Divisions) ---------- */
 
 function TechTree() {
-  const { state, startResearch } = useRD();
-  const [selectedTree, setSelectedTree] = useState<TechTreeId>("engine");
-  const [scientistInput, setScientistInput] = useState<Record<TechnologyId, number>>({});
-
-  const trees: TechTreeId[] = ["engine", "materials", "aerodynamics", "electronics", "manufacturing", "battery", "safety", "ai"];
-  const techs = TECHNOLOGIES.filter((t) => t.tree === selectedTree && t.cost > 0);
+  const [mode, setMode] = useState<"departments" | "tree">("departments");
+  const { activeDepartmentId, setActiveDepartment } = useRDTreeStore();
 
   return (
     <div className="space-y-4">
-      <Section title="Technology Tree" icon={<Lightbulb size={16} />}>
-        <p className="text-xs text-slate-500 mb-3">Unlock technologies through research projects. Each tech widens your engineering possibilities and applies bonuses to vehicle simulations.</p>
-        <div className="flex flex-wrap gap-1 mb-3">
-          {trees.map((t) => (
-            <button
-              key={t}
-              onClick={() => setSelectedTree(t)}
-              className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
-                selectedTree === t ? "bg-accent-500/20 text-accent-300 border border-accent-500/40" : "bg-base-850 text-slate-400 border border-base-800 hover:border-base-700"
-              }`}
-            >
-              {TREE_LABELS[t]}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-          {techs.map((tech) => {
-            const st = state.technologies[tech.id];
-            const check = canResearchTech(state, tech.id);
-            const activeProj = state.projects.find((p) => p.techId === tech.id && p.status === "active");
-            const sci = scientistInput[tech.id] ?? tech.scientists;
-            return (
-              <div key={tech.id} className={`panel p-3 border transition-all duration-300 hover:shadow-[0_8px_24px_-12px_rgba(0,0,0,0.3)] ${st?.unlocked ? "border-ok-500/30" : activeProj ? "border-accent-500/30" : "border-base-800"}`}>
-                <div className="flex items-start justify-between mb-1.5">
-                  <div className="min-w-0 pr-2">
-                    <div className="text-sm font-semibold text-slate-200">{tech.name}</div>
-                    <div className="text-[11px] text-slate-500">{tech.description}</div>
-                  </div>
-                  {st?.unlocked ? (
-                    <CheckCircle2 size={16} className="text-ok-400 shrink-0" />
-                  ) : st?.patented ? (
-                    <Lock size={14} className="text-amber-400 shrink-0" />
-                  ) : activeProj ? (
-                    <FlaskConical size={16} className="text-accent-400 shrink-0 animate-pulse" />
-                  ) : null}
-                </div>
-
-                {/* Effects */}
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {tech.effect.map((e, i) => (
-                    <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-base-850 text-slate-400 border border-base-800">{e.label}</span>
-                  ))}
-                </div>
-
-                {/* Stats */}
-                <div className="grid grid-cols-4 gap-1.5 text-center mb-2">
-                  <div><div className="text-[9px] text-slate-600 uppercase">Cost</div><div className="font-mono text-[11px] text-accent-300">{fmtMoney(tech.cost)}</div></div>
-                  <div><div className="text-[9px] text-slate-600 uppercase">Time</div><div className="font-mono text-[11px] text-slate-300">{tech.months}mo</div></div>
-                  <div><div className="text-[9px] text-slate-600 uppercase">Sci</div><div className="font-mono text-[11px] text-slate-300">{tech.scientists}</div></div>
-                  <div><div className="text-[9px] text-slate-600 uppercase">EK</div><div className="font-mono text-[11px] text-slate-300">{tech.ekCost}</div></div>
-                </div>
-
-                {/* Prerequisites */}
-                {tech.requires.length > 0 && (
-                  <div className="text-[10px] text-slate-600 mb-2">
-                    Requires: {tech.requires.map((r) => {
-                      const met = state.technologies[r]?.unlocked;
-                      return <span key={r} className={met ? "text-ok-400" : "text-warn-400"}>{TECH_BY_ID[r]?.name ?? r} </span>;
-                    })}
-                  </div>
-                )}
-
-                {/* Active project progress */}
-                {activeProj && (
-                  <div className="mb-2">
-                    <div className="flex justify-between text-[10px] text-slate-500 mb-1">
-                      <span className="capitalize">{activeProj.phase.replace("_", " ")}</span>
-                      <span className="font-mono">{(projectProgress(activeProj) * 100).toFixed(0)}%</span>
-                    </div>
-                    <div className="h-1.5 bg-base-800 rounded-full overflow-hidden">
-                      <div className="bg-accent-500" style={{ width: `${projectProgress(activeProj) * 100}%`, transition: "width 0.4s" }} />
-                    </div>
-                  </div>
-                )}
-
-                {/* Action */}
-                {!st?.unlocked && !activeProj && (
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="number" min={1} max={50} value={sci}
-                      onChange={(e) => setScientistInput((p) => ({ ...p, [tech.id]: parseInt(e.target.value) || 1 }))}
-                      className="w-14 bg-base-850 border border-base-700 rounded-lg px-2 py-1 text-xs text-slate-200"
-                    />
-                    <button
-                      onClick={() => startResearch(tech.id, sci)}
-                      disabled={!check.ok}
-                      className="flex-1 text-xs py-1.5 rounded-lg border transition-all flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed bg-accent-500/10 border-accent-500/30 text-accent-300 hover:bg-accent-500/20"
-                    >
-                      <Plus size={12} /> Start Research
-                    </button>
-                  </div>
-                )}
-                {!check.ok && !st?.unlocked && !activeProj && (
-                  <div className="text-[10px] text-warn-400 mt-1">{check.reasons[0]}</div>
-                )}
-                {st?.unlocked && <div className="text-xs text-ok-400 text-center font-medium">Unlocked</div>}
-              </div>
-            );
-          })}
-        </div>
-      </Section>
+      {mode === "departments" ? (
+        <RDDepartmentSelect
+          onSelectDepartment={(depId) => {
+            setActiveDepartment(depId);
+            setMode("tree");
+          }}
+        />
+      ) : (
+        <RDDepartmentTreeView
+          departmentId={activeDepartmentId}
+          onBackToOverview={() => setMode("departments")}
+        />
+      )}
+      <RDNodeInspectorModal />
     </div>
   );
 }
@@ -636,7 +533,6 @@ export function RDCenter() {
   return (
     <div className="space-y-4">
       <TopBar state={state} view={view} setView={setView} />
-      <MonthControls />
       {view === "overview" && <Overview />}
       {view === "campus" && <Campus />}
       {view === "techtree" && <TechTree />}

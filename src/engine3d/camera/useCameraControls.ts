@@ -13,11 +13,9 @@ import { CAMERA_PRESET_DEFINITIONS } from './cameraPresets';
 import { EasingFunctions } from '../animations/snapAnimationEngine';
 import type { Vector3D } from '../types';
 
-export function useCameraControls(): void {
+export function useCameraControls(orbitRef?: React.RefObject<any>): void {
   const { camera } = useThree();
   const currentPreset = useEngine3DStore((s) => s.cameraPreset);
-  const selectedInstanceId = useEngine3DStore((s) => s.selectedInstanceId);
-  const instances = useEngine3DStore((s) => s.instances);
 
   const transitionRef = useRef<{
     active: boolean;
@@ -35,13 +33,13 @@ export function useCameraControls(): void {
     durationMs: 700,
     startPos: new THREE.Vector3(),
     targetPos: new THREE.Vector3(),
-    startLookAt: new THREE.Vector3(0, 0, 0.18),
-    targetLookAt: new THREE.Vector3(0, 0, 0.18),
-    startFov: 42,
-    targetFov: 42,
+    startLookAt: new THREE.Vector3(0, 0.08, 0),
+    targetLookAt: new THREE.Vector3(0, 0.08, 0),
+    startFov: 36,
+    targetFov: 36,
   });
 
-  const currentLookAtRef = useRef<THREE.Vector3>(new THREE.Vector3(0, 0, 0.18));
+  const currentLookAtRef = useRef<THREE.Vector3>(new THREE.Vector3(0, 0.08, 0));
 
   // Trigger smooth transition when preset changes
   useEffect(() => {
@@ -51,7 +49,7 @@ export function useCameraControls(): void {
     transitionRef.current = {
       active: true,
       startTime: performance.now(),
-      durationMs: 800,
+      durationMs: 700,
       startPos: camera.position.clone(),
       targetPos: new THREE.Vector3(preset.position.x, preset.position.y, preset.position.z),
       startLookAt: currentLookAtRef.current.clone(),
@@ -72,7 +70,13 @@ export function useCameraControls(): void {
 
     camera.position.lerpVectors(t.startPos, t.targetPos, easeT);
     currentLookAtRef.current.lerpVectors(t.startLookAt, t.targetLookAt, easeT);
-    camera.lookAt(currentLookAtRef.current);
+    
+    if (orbitRef?.current) {
+      orbitRef.current.target.copy(currentLookAtRef.current);
+      orbitRef.current.update();
+    } else {
+      camera.lookAt(currentLookAtRef.current);
+    }
 
     if ((camera as THREE.PerspectiveCamera).isPerspectiveCamera) {
       const pCam = camera as THREE.PerspectiveCamera;

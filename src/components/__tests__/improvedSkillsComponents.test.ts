@@ -1,25 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { PhotorealisticVehicleBlueprint } from "../assembly/iso3d/PhotorealisticVehicleBlueprint";
-import { ChassisFeaStressCard } from "../chassis/ChassisFeaStressCard";
-import { EvBatteryThermalStudio } from "../powertrain/EvBatteryThermalStudio";
 import { MultiViewProjectionEngine } from "../../exterior3d/projections/multiViewProjectionEngine";
 
 describe("Domain Skills Components & Photorealistic SVG Verification", () => {
-  it("PhotorealisticVehicleBlueprint should be defined and memoized", () => {
-    expect(PhotorealisticVehicleBlueprint).toBeDefined();
-    expect(typeof PhotorealisticVehicleBlueprint).toBe("object");
-  });
-
-  it("ChassisFeaStressCard should be defined and memoized", () => {
-    expect(ChassisFeaStressCard).toBeDefined();
-    expect(typeof ChassisFeaStressCard).toBe("object");
-  });
-
-  it("EvBatteryThermalStudio should be defined and memoized", () => {
-    expect(EvBatteryThermalStudio).toBeDefined();
-    expect(typeof EvBatteryThermalStudio).toBe("object");
-  });
-
   it("MultiViewProjectionEngine should render all 4 projection views", () => {
     const params = {
       wheelbaseMm: 2820,
@@ -82,8 +64,6 @@ describe("Complete Vehicle GLB Resolution", () => {
 import { VehicleDesigner } from "../VehicleDesigner";
 import { InteractiveDashboardStudio } from "../interior/InteractiveDashboardStudio";
 
-import { FinalBuildStudio } from "../finalBuild/FinalBuildStudio";
-
 describe("VehicleDesigner & Interior Studio Sub-Tab Verification", () => {
   it("VehicleDesigner is defined and exports clean modular sub-tabs", () => {
     expect(VehicleDesigner).toBeDefined();
@@ -93,11 +73,6 @@ describe("VehicleDesigner & Interior Studio Sub-Tab Verification", () => {
   it("InteractiveDashboardStudio is defined and supports edge-to-edge 3D GLB canvas", () => {
     expect(InteractiveDashboardStudio).toBeDefined();
     expect(typeof InteractiveDashboardStudio).toBe("function");
-  });
-
-  it("FinalBuildStudio is defined and supports custom typed model designation", () => {
-    expect(FinalBuildStudio).toBeDefined();
-    expect(typeof FinalBuildStudio).toBe("function");
   });
 });
 

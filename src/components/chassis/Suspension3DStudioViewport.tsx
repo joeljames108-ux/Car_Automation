@@ -42,18 +42,8 @@ export type SuspensionType3D =
   | "MULTI_LINK_5ARM";
 
 const Suspension3DStudioViewportComponent: React.FC = () => {
-  const { uiTheme } = useDesign();
   const mountRef = useRef<HTMLDivElement>(null);
-
-  // Map global uiTheme to default 3D studio environment preset
-  const defaultEnv: StudioEnvironmentPreset =
-    uiTheme === "theme4"
-      ? "warm_sunset"
-      : uiTheme === "theme3"
-      ? "luxury_showroom"
-      : uiTheme === "theme2"
-      ? "cyberpunk_neon"
-      : "titanium_slate";
+  const defaultEnv: StudioEnvironmentPreset = "warm_sunset";
 
   const [envPreset, setEnvPreset] = useState<StudioEnvironmentPreset>(defaultEnv);
   const [suspensionType, setSuspensionType] = useState<SuspensionType3D>("DOUBLE_WISHBONE");
@@ -83,10 +73,6 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
   const antiSquatPct = useMemo(() => Number((48.0 + (springRateNmm / 120) * 12.0).toFixed(1)), [springRateNmm]);
   const ackermannDeg = useMemo(() => Number((steeringAngleDeg * 1.15).toFixed(1)), [steeringAngleDeg]);
 
-  // Sync default environment if global UI theme changes
-  useEffect(() => {
-    setEnvPreset(defaultEnv);
-  }, [uiTheme]);
 
   // Main 3D Three.js Scene Setup
   useEffect(() => {

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   Cog, Car, Activity, Flag, BarChart3, Save, FolderOpen, RotateCcw,
-  Sofa, Factory, FlaskConical, Ruler, Wind, Newspaper,
-  Monitor, Microscope, LayoutDashboard, Trophy, Warehouse, GitCompare,
+  Sofa, Factory, Ruler, Wind, Newspaper,
+  Monitor, Microscope, Trophy, GitCompare,
   TrendingUp, ShieldCheck, DollarSign, Cpu, GitBranch,
-  LayoutGrid, Bell, SlidersHorizontal, Box, Truck, Volume2, Gauge, Navigation
+  Bell, SlidersHorizontal, Box, Volume2, Gauge, Navigation, Home, ChevronRight
 } from "lucide-react";
 import { DesignProvider, useDesign } from "./state/DesignContext";
 import { RDProvider } from "./state/RDContext";
@@ -17,45 +17,21 @@ import { scheduleIdleWork } from "./utils/performanceOptimizer";
 const EngineeringLog = React.lazy(() => import("./components/EngineeringLog").then(m => ({ default: m.EngineeringLog })));
 const StatRail = React.lazy(() => import("./components/StatRail").then(m => ({ default: m.StatRail })));
 const ThermalAlertMonitor = React.lazy(() => import("./components/ThermalAlertMonitor").then(m => ({ default: m.ThermalAlertMonitor })));
-const AgentNotificationCenter = React.lazy(() => import("./components/agents/AgentNotificationCenter").then(m => ({ default: m.AgentNotificationCenter })));
 
-// Heavy agent framework — deferred to idle
-let agentOrchestratorReady = false;
-const initAgents = () => {
-  if (agentOrchestratorReady) return;
-  agentOrchestratorReady = true;
-  import("./sim/agents/agentFramework").then(({ AgentOrchestrator }) => {
-    import("./sim/agents/registerDefaultAgents").then(({ registerAllDomainAgents }) => {
-      // Agent init deferred — will start on next idle frame
-    });
-  });
-};
-
-// Lazy agent orchestrator reference (for non-critical UI usage)
-let _agentOrchestrator: any = null;
-const getAgentOrchestrator = async () => {
-  if (!_agentOrchestrator) {
-    const mod = await import("./sim/agents/agentFramework");
-    _agentOrchestrator = mod.AgentOrchestrator;
-  }
-  return _agentOrchestrator;
-};
-import { Search, Command as CmdIcon, Bot, Wrench } from "lucide-react";
-import { VisionGlassHeader } from "./components/ui/VisionGlassHeader";
-import { VisionGlassDock } from "./components/ui/VisionGlassDock";
-import { VisionGlassToolbar } from "./components/ui/VisionGlassToolbar";
+import { Search, Command as CmdIcon, Wrench, RefreshCw, PanelRightOpen, ChevronLeft } from "lucide-react";
+import { useGuidedEngineeringStore } from "./state/guidedEngineeringStore";
 import { StageLoadingSkeleton } from "./components/ui/StageLoadingSkeleton";
 
 const SaveLoadDialog = React.lazy(() => import("./components/SaveLoadDialog").then(m => ({ default: m.SaveLoadDialog })));
 const CommandPalette = React.lazy(() => import("./components/CommandPalette").then(m => ({ default: m.CommandPalette })));
+const DeveloperControlModal = React.lazy(() => import("./components/dev/DeveloperControlModal").then(m => ({ default: m.DeveloperControlModal })));
+import { DevModeBanner } from "./components/dev/DevModeBanner";
+import { DevConsole } from "./components/dev/DevConsole";
+import { useDeveloperModeStore } from "./state/developerModeStore";
+import { useDevConsoleStore } from "./state/devConsoleStore";
+import { useSimulationClockStore } from "./state/simulationClockStore";
+import { useLiveStatsRailStore } from "./state/liveStatsRailStore";
 
-
-import { Sparkles as SparklesIcon } from "lucide-react";
-
-
-import { GuidedWorkflowStepper } from "./components/guidedWorkflow/GuidedWorkflowStepper";
-import { StoryScrollHUD } from "./components/guidedWorkflow/StoryScrollHUD";
-import type { WorkflowStage } from "./state/guidedEngineeringStore";
 
 export type WorkspaceCategory = "engineering" | "studios" | "simulation" | "world";
 
@@ -67,15 +43,19 @@ interface StageItem {
 }
 
 const STAGES: StageItem[] = [
-  // --- Engineering Sequential Workflow ---
+  // --- Main Menu Hub & Overview ---
+  { id: "main_menu", label: "Main Menu", icon: <Home size={14} />, category: "engineering" },
+  { id: "create_vehicle_hub", label: "Creation Hub", icon: <Car size={14} />, category: "engineering" },
+
+  // --- Engineering Sequential Workflow (8 Divisions) ---
   { id: "engine", label: "1. Engine", icon: <Cog size={14} />, category: "engineering" },
   { id: "vehicle", label: "2. Vehicle Studio", icon: <Car size={14} />, category: "engineering" },
   { id: "aero_studio", label: "3. Aero Studio", icon: <Wind size={14} />, category: "engineering" },
   { id: "interior", label: "4. Interior", icon: <Sofa size={14} />, category: "engineering" },
   { id: "safety", label: "5. Safety Center", icon: <ShieldCheck size={14} />, category: "engineering" },
-  { id: "final_build", label: "6. Final Build", icon: <Trophy size={14} />, category: "engineering" },
-  { id: "command", label: "Command Center", icon: <LayoutDashboard size={14} />, category: "engineering" },
-  { id: "manufacturing", label: "Manufacturing", icon: <Factory size={14} />, category: "engineering" },
+  { id: "simulation", label: "6. Sim & Testing", icon: <Activity size={14} />, category: "engineering" },
+  { id: "manufacturing", label: "7. Manufacture", icon: <Factory size={14} />, category: "engineering" },
+  { id: "factory", label: "8. Factory Floor", icon: <Factory size={14} />, category: "engineering" },
 
   // --- Design Studios Hub ---
   { id: "transmission3d", label: "3D Transmission Studio", icon: <Cog size={14} />, category: "studios" },
@@ -83,32 +63,21 @@ const STAGES: StageItem[] = [
   { id: "f1_constructor", label: "🏎️ F1 Constructor Studio", icon: <Flag size={14} />, category: "studios" },
   { id: "hypercar_constructor", label: "🏆 Hypercar WEC Studio", icon: <Trophy size={14} />, category: "studios" },
   { id: "suspension3d", label: "3D Suspension Studio", icon: <Activity size={14} />, category: "studios" },
-  { id: "ai", label: "Apex AI Studio", icon: <Bot size={14} />, category: "studios" },
 
   // --- Simulation & Testing ---
   { id: "simulation", label: "Simulation", icon: <Activity size={14} />, category: "simulation" },
   { id: "nvh", label: "NVH Audio Lab", icon: <Volume2 size={14} />, category: "simulation" },
-  { id: "testing", label: "Testing Lab", icon: <FlaskConical size={14} />, category: "simulation" },
   { id: "race", label: "Race Track", icon: <Flag size={14} />, category: "simulation" },
   { id: "stats", label: "Telemetry Stats", icon: <BarChart3 size={14} />, category: "simulation" },
 
   // --- World & Racing ---
-  { id: "garage", label: "Garage", icon: <Warehouse size={14} />, category: "world" },
-  { id: "supplyChain", label: "Supply Chain", icon: <Truck size={14} />, category: "world" },
+  { id: "reputation", label: "Reputation", icon: <Trophy size={14} />, category: "world" },
   { id: "compare", label: "Compare", icon: <GitCompare size={14} />, category: "world" },
   { id: "economy", label: "Economy", icon: <TrendingUp size={14} />, category: "world" },
-  { id: "motorsport", label: "Motorsport", icon: <Trophy size={14} />, category: "world" },
   { id: "twin", label: "Digital Twin", icon: <Cpu size={14} />, category: "world" },
   { id: "sales", label: "Sales", icon: <DollarSign size={14} />, category: "world" },
   { id: "press", label: "Press Reviews", icon: <Newspaper size={14} />, category: "world" },
   { id: "competitors", label: "Rivals", icon: <GitBranch size={14} />, category: "world" },
-];
-
-const WORKSPACE_CATEGORIES: { id: WorkspaceCategory; label: string; icon: React.ReactNode }[] = [
-  { id: "engineering", label: "Engineering", icon: <Wrench size={14} /> },
-  { id: "studios", label: "Studios Suite", icon: <SparklesIcon size={14} /> },
-  { id: "simulation", label: "Sim & Testing", icon: <Activity size={14} /> },
-  { id: "world", label: "World & Racing", icon: <Trophy size={14} /> },
 ];
 
 // Error Boundary to catch runtime crashes
@@ -122,9 +91,15 @@ class VisionGlassErrorBoundary extends React.Component<
     super(props);
   }
   static getDerivedStateFromError(error: Error) {
+    if (error?.message?.includes("suspended while responding to synchronous input")) {
+      return { hasError: false, error: null };
+    }
     return { hasError: true, error };
   }
   componentDidCatch(error: Error, info: React.ErrorInfo) {
+    if (error?.message?.includes("suspended while responding to synchronous input")) {
+      return;
+    }
     console.error("Vision Glass Error:", error, info);
   }
   render() {
@@ -142,10 +117,29 @@ class VisionGlassErrorBoundary extends React.Component<
           <pre style={{ color: "#94a3b8", fontSize: 11, marginTop: 12, maxWidth: "80vw", overflow: "auto", whiteSpace: "pre-wrap" }}>
             {this.state.error?.stack}
           </pre>
-          <button onClick={() => this.setState({ hasError: false, error: null })}
-            style={{ marginTop: 24, padding: "8px 24px", background: "#007AFF", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: 600 }}>
-            Try Again
-          </button>
+          <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
+            <button
+              onClick={() => {
+                if (
+                  this.state.error?.message?.includes("Failed to fetch dynamically imported module") ||
+                  this.state.error?.message?.includes("Importing a module script failed")
+                ) {
+                  window.location.reload();
+                } else {
+                  this.setState({ hasError: false, error: null });
+                }
+              }}
+              style={{ padding: "8px 24px", background: "#007AFF", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: 600 }}
+            >
+              Try Again
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              style={{ padding: "8px 24px", background: "#334155", color: "#fff", border: "1px solid #475569", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: 600 }}
+            >
+              Reload App
+            </button>
+          </div>
         </div>
       );
     }
@@ -154,7 +148,7 @@ class VisionGlassErrorBoundary extends React.Component<
 }
 
 function AppInner() {
-  const [stage, setStage] = useState<Stage>("command");
+  const [stage, setStage] = useState<Stage>("main_menu");
   const [activeCategory, setActiveCategory] = useState<WorkspaceCategory>("engineering");
   const [dialog, setDialog] = useState<{ open: boolean; mode: "save" | "load" }>({ open: false, mode: "save" });
   const [cmdPaletteOpen, setCmdPaletteOpen] = useState(false);
@@ -167,6 +161,9 @@ function AppInner() {
   });
   const { design, sim, carConcept, updateEngine, resetDesign, units, setUnits, uiTheme, setUiTheme } = useDesign();
   const { company, advanceAllSystems } = useCompany();
+  const { isCollapsedToRight, setIsCollapsedToRight, toggleCollapseToRight } = useLiveStatsRailStore();
+  const isPowertrainSelecting = useGuidedEngineeringStore((s) => s.isPowertrainSelecting);
+  const isSelectingPowertrain = stage === "engine" && isPowertrainSelecting;
   const [booted, setBooted] = useState(false);
 
   // Stable Memoized Handlers for UI Performance
@@ -187,28 +184,70 @@ function AppInner() {
     });
     setCmdPaletteOpen(false);
   }, []);
+  const isMainMenuOrSubPage = useCallback((s: Stage) => {
+    return [
+      "main_menu",
+      "create_vehicle_hub",
+      "powertrain_studio_select",
+      "operations",
+      "project_overview",
+      "hq",
+      "calendar",
+      "contracts",
+      "settings",
+      "reputation",
+      "garage",
+      "motorsport",
+      "rd",
+    ].includes(s);
+  }, []);
+
   const handleSelectStage = useCallback((st: string) => {
     const selectedStage = STAGES.find((item) => item.id === st);
-    if (selectedStage) setActiveCategory(selectedStage.category);
-    setStage(st as Stage);
+    if (selectedStage) {
+      setActiveCategory(selectedStage.category);
+    } else if (st === "garage" || st === "motorsport" || st === "supplyChain") {
+      setActiveCategory("world");
+    } else if (["operations", "project_overview", "hq", "calendar", "contracts", "settings", "reputation"].includes(st)) {
+      setActiveCategory("world");
+    }
+    React.startTransition(() => {
+      setStage(st as Stage);
+    });
   }, []);
-  const handleSelectCategory = useCallback((cat: string) => setActiveCategory(cat as WorkspaceCategory), []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       (window as any).__selectStage = handleSelectStage;
     }
-  }, [handleSelectStage]);
 
-  const toolbarActions = useMemo(() => [
-    { id: "command", icon: <LayoutGrid size={17} />, label: "Dashboard", onClick: () => handleSelectStage("command"), isActive: stage === "command" },
-    { id: "interior", icon: <SlidersHorizontal size={17} />, label: "Interior Configurator", onClick: () => handleSelectStage("interior"), isActive: stage === "interior" },
-    { id: "search", icon: <Search size={17} />, label: "Search (Ctrl+K)", onClick: handleSearch },
-    { id: "simulation", icon: <Activity size={17} />, label: "Analytics", onClick: () => handleSelectStage("simulation"), isActive: stage === "simulation" },
-    { id: "ai", icon: <Bot size={17} />, label: "Apex AI Studio", onClick: () => handleSelectStage("ai"), isActive: stage === "ai" },
-    { id: "safety", icon: <Bell size={17} />, label: "Safety & Alerts", onClick: () => handleSelectStage("safety"), isActive: stage === "safety" },
-    { id: "vehicle", icon: <SlidersHorizontal size={17} />, label: "Vehicle Controls", onClick: () => handleSelectStage("vehicle"), isActive: stage === "vehicle" },
-  ], [stage, handleSearch, handleSelectStage]);
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // F8: Global Developer Mode Toggle
+      if (e.key === "F8") {
+        e.preventDefault();
+        useDeveloperModeStore.getState().toggleDevMode();
+        return;
+      }
+
+      // F9: Global Developer Console Toggle
+      if (e.key === "F9") {
+        e.preventDefault();
+        useDevConsoleStore.getState().toggle();
+        return;
+      }
+
+      // Ctrl+Shift+D or Cmd+Shift+D or ` (backtick) when not typing in an input
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "D" || e.key === "d")) {
+        e.preventDefault();
+        useDeveloperModeStore.getState().toggleModal();
+      } else if (e.key === "`" && !["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement)?.tagName)) {
+        e.preventDefault();
+        useDeveloperModeStore.getState().toggleModal();
+      }
+    };
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, [handleSelectStage]);
 
   // Phase 1 Scroll Animation Physics (120Hz / 60fps rAF lerp engine)
   const scrollRef = React.useRef<HTMLElement>(null);
@@ -223,8 +262,6 @@ function AppInner() {
   });
 
   useEffect(() => {
-    if (uiTheme !== "theme4") return;
-
     let rafId: number;
 
     const renderFrame = () => {
@@ -271,7 +308,7 @@ function AppInner() {
       el.removeEventListener("scroll", onScroll);
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [uiTheme, stage]);
+  }, [stage]);
 
   useEffect(() => { const t = setTimeout(() => setBooted(true), 60); return () => clearTimeout(t); }, []);
 
@@ -289,14 +326,17 @@ function AppInner() {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setCmdPaletteOpen((prev: boolean) => !prev);
-      } else if (uiTheme === "theme4" && (e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "f") {
+      } else if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "f") {
         e.preventDefault();
         handleToggleFocusMode();
+      } else if ((e.ctrlKey || e.metaKey) && e.key === "]") {
+        e.preventDefault();
+        toggleCollapseToRight();
       }
     }
     window.addEventListener("keydown", handleGlobalKeydown);
     return () => window.removeEventListener("keydown", handleGlobalKeydown);
-  }, [handleToggleFocusMode, uiTheme]);
+  }, [handleToggleFocusMode, toggleCollapseToRight]);
 
   const designRef = React.useRef(design);
   designRef.current = design;
@@ -305,47 +345,19 @@ function AppInner() {
   const carConceptRef = React.useRef(carConcept);
   carConceptRef.current = carConcept;
 
-  // Initialize Autonomous AI Engineering Division deferred to idle frame
-  useEffect(() => {
-    let timerId: any;
-    let idleHandle: any;
 
-    const startAgents = async () => {
-      const { AgentOrchestrator } = await import("./sim/agents/agentFramework");
-      const { registerAllDomainAgents } = await import("./sim/agents/registerDefaultAgents");
-      const orchestrator = AgentOrchestrator.getInstance();
-      registerAllDomainAgents(orchestrator);
-      orchestrator.start(
-        () => ({ engine: designRef.current.engine, vehicle: designRef.current.vehicle, carConcept: carConceptRef.current }),
-        () => simRef.current
-      );
-    };
 
-    scheduleIdleWork(startAgents, 3000);
-
-    return () => {
-      import("./sim/agents/agentFramework").then(({ AgentOrchestrator }) => {
-        AgentOrchestrator.getInstance().stop();
-      }).catch(() => {});
-    };
-  }, []);
-
-  const activeCategoryStages = STAGES.filter(s => s.category === activeCategory);
-
-  const isVisionGlass = uiTheme === "theme4";
-
-  // ===== UI 4: Vision Glass — Completely separate UI/UX =====
-  if (isVisionGlass) {
-    return (
-      <VisionGlassErrorBoundary>
+  return (
+    <VisionGlassErrorBoundary>
         <div
           className={`theme4 vision-glass-app${focusMode ? " vision-focus-mode" : ""}`}
           style={{
             position: "fixed", inset: 0,
             background: "#111118",
             fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif",
-            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start",
+            display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start",
             overflow: "hidden",
+            width: "100%", height: "100vh",
             opacity: booted ? 1 : 0, transition: "opacity 0.7s ease",
           }}
         >
@@ -373,50 +385,23 @@ function AppInner() {
           />
           <a className="skip-link" href="#vision-workspace">Skip to workspace</a>
 
-          {/* ===== Left Vertical Toolbar (Phase 7 Component) ===== */}
-          {!focusMode && <VisionGlassToolbar actions={toolbarActions} />}
-
-          {/* ===== Floating Liquid Glass Window ===== */}
+          {/* ===== Edge-to-Edge Full Screen Glass Workspace ===== */}
           <div className="vision-glass-window" style={{
             position: "relative", zIndex: 10,
-            width: focusMode ? "min(99vw, 1680px)" : "min(calc(100vw - 140px), 1440px)",
-            marginTop: 16, marginBottom: 16,
-            borderRadius: 28,
-            background: "rgba(255, 255, 255, 0.45)",
-            backdropFilter: "blur(60px) saturate(210%)",
-            WebkitBackdropFilter: "blur(60px) saturate(210%)",
-            border: "1px solid rgba(255, 255, 255, 0.35)",
-            boxShadow: "0 24px 80px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.90)",
+            width: "100%",
+            maxWidth: "100%",
+            marginTop: 0, marginBottom: 0,
+            borderRadius: 0,
+            background: isMainMenuOrSubPage(stage) ? "transparent" : "rgba(255, 255, 255, 0.45)",
+            backdropFilter: isMainMenuOrSubPage(stage) ? "none" : "blur(60px) saturate(210%)",
+            WebkitBackdropFilter: isMainMenuOrSubPage(stage) ? "none" : "blur(60px) saturate(210%)",
+            border: "none",
+            boxShadow: "none",
             display: "flex", flexDirection: "column",
-            height: "calc(100vh - 32px)",
+            height: "100vh",
             overflow: "hidden",
           }}>
 
-            {/* ── HEADER BAR (Phase 3 Component) ── */}
-            <VisionGlassHeader
-              month={company.economy.month}
-              totalRevenue={company.totalRevenue}
-              units={units}
-              onSetUnits={setUnits}
-              onSave={handleSave}
-              onLoad={handleLoad}
-              onReset={resetDesign}
-              onSearch={handleSearch}
-              onAdvanceMonth={advanceAllSystems}
-              uiTheme={uiTheme}
-              onSetUiTheme={setUiTheme}
-              focusMode={focusMode}
-              onToggleFocusMode={handleToggleFocusMode}
-            />
-
-            {/* ── SPATIAL GLASS SCROLL PROGRESS INDICATOR BAR (Phase 1) ── */}
-            <div className="vision-scroll-indicator-bar">
-              <div
-                ref={progressFillRef}
-                className="vision-scroll-indicator-fill"
-                style={{ width: "0%" }}
-              />
-            </div>
 
             {/* ── SCROLLABLE CONTENT WITH MOMENTUM (Phase 1) ── */}
             <main
@@ -426,48 +411,45 @@ function AppInner() {
               aria-label="Active engineering workspace"
               className="vision-glass-content vision-scroll-momentum"
               style={{
-                flex: 1, overflowY: "auto", overflowX: "hidden",
-                padding: "16px 20px 140px 20px",
+                flex: 1,
+                overflowY: (isSelectingPowertrain || stage === "main_menu" || stage === "create_vehicle_hub" || stage === "powertrain_studio_select") ? "hidden" : "auto",
+                overflowX: "hidden",
+                padding: isMainMenuOrSubPage(stage)
+                  ? "0px"
+                  : (isSelectingPowertrain
+                    ? "12px 20px"
+                    : "16px 24px 24px 24px"),
               }}
             >
               <div className="sr-only" aria-live="polite">
-                {STAGES.find((item) => item.id === stage)?.label ?? stage} workspace opened.
+                {STAGES.find((item) => item.id === stage)?.label ?? (stage === "garage" ? "Garage" : stage === "motorsport" ? "Motorsport" : stage === "supplyChain" ? "Supply Chain" : stage)} workspace opened.
               </div>
               <div className="sr-only" aria-live="polite">
                 {focusMode ? "Focus workspace mode enabled. Navigation chrome hidden." : "Focus workspace mode disabled."}
               </div>
-              <div style={{ display: "flex", gap: 16 }}>
-                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
-                  {stage !== "f1_constructor" && stage !== "hypercar_constructor" && (
-                    <GuidedWorkflowStepper activeStageId={stage} onSelectStage={handleSelectStage} />
-                  )}
+              <div style={{ display: "flex", gap: isCollapsedToRight || isSelectingPowertrain ? 0 : 16, transition: "gap 280ms cubic-bezier(0.4, 0, 0.2, 1)", height: isMainMenuOrSubPage(stage) ? "100%" : "auto", flex: 1 }}>
+                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: isMainMenuOrSubPage(stage) ? 0 : 16, height: isMainMenuOrSubPage(stage) ? "100%" : "auto" }}>
                   <StageSwitcher stage={stage} onSelectStage={handleSelectStage} />
-                  {/* Scroll-Driven 3D Storytelling HUD — only visible for the 5 engineering stages */}
-                  {(["engine", "vehicle", "aero_studio", "interior", "final_build"] as string[]).includes(stage) && (
-                    <div style={{
-                      position: "sticky", bottom: 0, zIndex: 30,
-                      display: "flex", justifyContent: "center",
-                      paddingTop: 12, paddingBottom: 4,
-                      pointerEvents: "none",
-                    }}>
-                      <StoryScrollHUD
-                        activeStage={
-                          ({
-                            engine: "engine",
-                            vehicle: "vehicle",
-                            aero_studio: "aero",
-                            interior: "interior",
-                            final_build: "final_build",
-                          } as Record<string, WorkflowStage>)[stage] || "engine"
-                        }
-                      />
-                    </div>
-                  )}</div>
+                </div>
 
-                {/* Right Sidebar — hidden for F1/Hypercar (they have their own full-width layout) */}
-                {!focusMode && stage !== "f1_constructor" && stage !== "hypercar_constructor" && (
-                  <div className="hidden xl:flex flex-col gap-4" style={{ width: 300, flexShrink: 0 }}>
-                    <div style={{ position: "sticky", top: 8, display: "flex", flexDirection: "column", gap: 12 }}>
+                {/* Right Sidebar — hidden for F1/Hypercar/MainMenu/SubPages/PowertrainSelect (they have their own full-width layout) */}
+                {!focusMode && stage !== "f1_constructor" && stage !== "hypercar_constructor" && !isMainMenuOrSubPage(stage) && !isSelectingPowertrain && (
+                  <aside
+                    aria-label="Live Telemetry and Stats Sidebar"
+                    className="hidden xl:flex flex-col gap-4"
+                    style={{
+                      width: isCollapsedToRight ? 0 : 300,
+                      minWidth: isCollapsedToRight ? 0 : 300,
+                      opacity: isCollapsedToRight ? 0 : 1,
+                      transform: isCollapsedToRight ? "translateX(24px)" : "translateX(0)",
+                      overflow: isCollapsedToRight ? "hidden" : "visible",
+                      pointerEvents: isCollapsedToRight ? "none" : "auto",
+                      flexShrink: 0,
+                      visibility: isCollapsedToRight ? "hidden" : "visible",
+                      transition: "width 280ms cubic-bezier(0.4, 0, 0.2, 1), min-width 280ms cubic-bezier(0.4, 0, 0.2, 1), opacity 200ms ease, transform 280ms cubic-bezier(0.4, 0, 0.2, 1)",
+                    }}
+                  >
+                    <div style={{ width: 300, position: "sticky", top: 8, display: "flex", flexDirection: "column", gap: 12 }}>
                       {/* Live Stat Rail (Top) */}
                       <div className="stat-rail-container">
                         <StatRail />
@@ -475,20 +457,36 @@ function AppInner() {
                       {/* Engineering Log Panel (Bottom) */}
                       <EngineeringLog />
                     </div>
-                  </div>
+                  </aside>
                 )}
               </div>
-            </main>
 
-            {/* ── BOTTOM DOCK (Phase 4 Component) ── */}
-            <VisionGlassDock
-              stages={STAGES}
-              categories={WORKSPACE_CATEGORIES}
-              activeCategory={activeCategory}
-              activeStage={stage}
-              onSelectCategory={handleSelectCategory}
-              onSelectStage={handleSelectStage}
-            />
+              {/* Floating Docked Pull-Tab on Right Edge when sidebar is collapsed to the right */}
+              {!focusMode && stage !== "f1_constructor" && stage !== "hypercar_constructor" && !isMainMenuOrSubPage(stage) && !isSelectingPowertrain && isCollapsedToRight && (
+                <button
+                  type="button"
+                  onClick={() => setIsCollapsedToRight(false)}
+                  title="Expand Live Stats (Ctrl+])"
+                  aria-label="Expand Live Stats Sidebar"
+                  className="fixed right-0 top-36 z-40 flex flex-col items-center gap-2 py-3 px-2 rounded-l-2xl bg-[#faf7f2]/95 hover:bg-white text-slate-800 border-l-2 border-y-2 border-[#dfd6c8] hover:border-amber-400 shadow-xl backdrop-blur-md cursor-pointer transition-all duration-200 hover:-translate-x-1 group select-none animate-fadeIn"
+                  style={{
+                    boxShadow: "-4px 6px 20px -2px rgba(0, 0, 0, 0.12)",
+                  }}
+                >
+                  <PanelRightOpen size={16} className="text-amber-600 group-hover:scale-110 transition-transform shrink-0" />
+                  <div className="flex flex-col items-center gap-1.5 py-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span
+                      className="text-[9px] font-mono font-black text-slate-700 group-hover:text-amber-900 uppercase tracking-widest"
+                      style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+                    >
+                      LIVE STATS
+                    </span>
+                  </div>
+                  <ChevronLeft size={13} className="text-slate-400 group-hover:text-amber-600 group-hover:-translate-x-0.5 transition-all" />
+                </button>
+              )}
+            </main>
           </div>
 
           {/* Overlays */}
@@ -501,204 +499,36 @@ function AppInner() {
               focusMode={focusMode}
               onToggleFocusMode={handleToggleFocusMode}
             />
+            <DeveloperControlModal onSelectStage={handleSelectStage} />
+            <DevModeBanner />
+            <DevConsole />
           </React.Suspense>
           <ThermalAlertMonitor />
         </div>
       </VisionGlassErrorBoundary>
     );
-  }
+}
 
-  // ===== Themes 1, 2, 3: Original Layout =====
-  return (
-    <VisionGlassErrorBoundary>
-      <div className={`min-h-screen bg-base-950 flex flex-col grid-bg transition-opacity duration-700 ${booted ? "opacity-100" : "opacity-0"} ${uiTheme}`}>
-      <a className="skip-link" href="#main-workspace">Skip to workspace</a>
-      {/* Top Header */}
-      <header className="border-b border-white/10 bg-slate-900/80 backdrop-blur-xl sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] inner-light">
-        <div className="max-w-full px-6 h-14 flex items-center justify-between gap-4">
-          {/* Logo */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            <svg viewBox="0 0 24 24" className="h-7 w-7 text-amber-400 animate-pulse-glow rounded-lg drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]" fill="currentColor">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-            </svg>
-            <div>
-              <span className="text-sm font-extrabold tracking-wider gradient-text block leading-none">APEX ENGINEER</span>
-              <span className="text-[9px] text-slate-500 font-mono tracking-widest uppercase">Design Studio</span>
-            </div>
-          </div>
+/**
+ * Continuous Global Simulation Clock Ticker — Time always runs across all views
+ */
+function GlobalSimulationTicker() {
+  const { isPlaying, speed, advanceDays, advanceHours } = useSimulationClockStore();
 
-          {/* Workspace Category Switcher Pills */}
-          <div className="flex items-center gap-1.5 bg-base-900/90 backdrop-blur-md rounded-xl p-1 border border-white/10 shadow-inner">
-            {WORKSPACE_CATEGORIES.map((cat) => {
-              const isActive = activeCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  aria-current={isActive ? "page" : undefined}
-                  onClick={() => {
-                    setActiveCategory(cat.id);
-                    const firstInCat = STAGES.find(s => s.category === cat.id);
-                    if (firstInCat && !STAGES.filter(s => s.category === cat.id).some(s => s.id === stage)) {
-                      setStage(firstInCat.id);
-                    }
-                  }}
-                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ripple-effect haptic-press ${isActive
-                    ? "bg-gradient-to-r from-amber-500/30 to-amber-500/25 text-amber-200 border border-amber-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)] aurora-glow"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-                    }`}
-                >
-                  {cat.icon}
-                  <span>{cat.label}</span>
-                </button>
-              );
-            })}
-          </div>
+  useEffect(() => {
+    if (!isPlaying) return;
+    const intervalMs = 1000;
+    const timer = setInterval(() => {
+      if (speed >= 25) {
+        advanceDays(speed >= 50 ? 7 : 1);
+      } else {
+        advanceHours(speed);
+      }
+    }, intervalMs);
+    return () => clearInterval(timer);
+  }, [isPlaying, speed, advanceDays, advanceHours]);
 
-          {/* Right Control Bar */}
-          <div className="flex items-center gap-2 shrink-0">
-            {/* Direct Switcher: Theme 3 -> UI 4 (Vision Glass UI) */}
-            <button
-              onClick={() => setUiTheme("theme4")}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap border bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 text-amber-200 border-amber-400/45 hover:border-amber-300 hover:bg-amber-500/30 hover:text-white shadow-[0_0_12px_rgba(245,158,11,0.25)] hover:shadow-[0_0_18px_rgba(245,158,11,0.45)] haptic-press ripple-effect group"
-              title="Switch from Theme 3 to UI 4 (Vision Glass UI)"
-              aria-label="Switch from Theme 3 to UI 4 (Vision Glass UI)"
-            >
-              <SparklesIcon size={13} className="text-amber-300 animate-pulse group-hover:rotate-12 transition-transform" />
-              <span className="font-mono text-[11px] tracking-wide hidden sm:inline">
-                UI 4 (Vision Glass)
-              </span>
-              <span className="font-mono text-[11px] tracking-wide sm:hidden">
-                UI 4
-              </span>
-            </button>
-
-            <button
-              onClick={() => setCmdPaletteOpen(true)}
-              className="flex items-center gap-2 bg-base-850/90 hover:bg-slate-800 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 hover:text-slate-200 transition-all hidden md:flex"
-              title="Open Command Palette (Ctrl+K)"
-            >
-              <Search size={13} className="text-amber-400" />
-              <span className="text-[11px]">Search...</span>
-              <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-300 flex items-center gap-0.5">
-                <CmdIcon size={9} /> K
-              </kbd>
-            </button>
-
-            <div className="hidden lg:flex items-center gap-2 bg-base-850/80 border border-base-800 rounded-lg px-2.5 py-1 text-xs">
-              <div className="flex items-center gap-1">
-                <span className="text-[10px] text-slate-500 font-mono">MO.</span>
-                <span className="font-mono font-bold text-accent-300">{company.economy.month}</span>
-              </div>
-              <div className="h-3 w-px bg-base-700" />
-              <div className="flex items-center gap-1">
-                <span className="text-ok-400 font-mono font-bold">
-                  ${(company.totalRevenue / (company.totalRevenue >= 1e6 ? 1e6 : 1e3)).toFixed(1)}{company.totalRevenue >= 1e6 ? "M" : "k"}
-                </span>
-              </div>
-              <button
-                onClick={advanceAllSystems}
-                className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-accent-500/20 text-accent-300 hover:bg-accent-500/30 text-[10px] font-semibold transition-all"
-                title="Advance month"
-              >
-                +1 Mo
-              </button>
-            </div>
-
-            <div className="flex items-center gap-0.5 bg-base-850 rounded-lg p-0.5 border border-base-800">
-              <button onClick={() => setUnits("metric")} className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${units === "metric" ? "bg-accent-500/20 text-accent-300 font-bold" : "text-slate-500 hover:text-slate-300"}`}>
-                <Ruler size={11} className="inline mr-1" />Metric
-              </button>
-              <button onClick={() => setUnits("imperial")} className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${units === "imperial" ? "bg-accent-500/20 text-accent-300 font-bold" : "text-slate-500 hover:text-slate-300"}`}>
-                Imperial
-              </button>
-            </div>
-
-            <div className="flex items-center gap-1">
-              <button onClick={() => setDialog({ open: true, mode: "save" })} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all" title="Save Design">
-                <Save size={14} />
-              </button>
-              <button onClick={() => setDialog({ open: true, mode: "load" })} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all" title="Load Design">
-                <FolderOpen size={14} />
-              </button>
-              <button onClick={resetDesign} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all" title="Reset to Defaults">
-                <RotateCcw size={14} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Sub-Navigation Bar */}
-      <nav aria-label="Workspace modules" className="border-b border-white/5 bg-slate-900/60 backdrop-blur-md sticky top-14 z-30 shadow-md">
-        <div className="max-w-full px-6 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-          {activeCategoryStages.map((s) => {
-            const isCurrent = stage === s.id;
-            return (
-              <button
-                key={s.id}
-                aria-current={isCurrent ? "page" : undefined}
-                onClick={() => handleSelectStage(s.id)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ripple-effect haptic-press ${isCurrent
-                  ? "bg-gradient-to-r from-amber-500/30 to-sky-500/20 text-amber-100 border border-amber-400/50 shadow-[0_0_12px_rgba(34,211,238,0.25)] neon-underline font-bold"
-                  : "text-slate-400 hover:text-slate-100 hover:bg-white/5 border border-transparent"
-                  }`}
-              >
-                <span className={isCurrent ? "text-amber-300" : "text-slate-500"}>{s.icon}</span>
-                <span>{s.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </nav>
-
-      {/* Main content */}
-      <main id="main-workspace" tabIndex={-1} aria-label="Active engineering workspace" className={`flex-1 max-w-full w-full px-6 py-4 pb-44 ${stage === "f1_constructor" || stage === "hypercar_constructor" ? "" : "flex gap-4"}`}>
-        <div className="sr-only" aria-live="polite">
-          {STAGES.find((item) => item.id === stage)?.label ?? stage} workspace opened.
-        </div>
-        <div className={`${stage === "f1_constructor" || stage === "hypercar_constructor" ? "w-full" : "flex-1 min-w-0"}`}>
-          <StageSwitcher stage={stage} onSelectStage={handleSelectStage} />
-        </div>
-        {/* Hide sidebar for F1/Hypercar — they have their own full-width layout */}
-        {stage !== "f1_constructor" && stage !== "hypercar_constructor" && (
-          <div className="hidden lg:block w-80 shrink-0">
-            <div className="sticky top-20 stat-rail-container">
-              <StatRail />
-            </div>
-          </div>
-        )}
-      </main>
-
-      <React.Suspense fallback={null}>
-        <SaveLoadDialog
-          open={dialog.open}
-          mode={dialog.mode}
-          onClose={() => setDialog({ open: false, mode: dialog.mode })}
-        />
-
-        <CommandPalette
-          isOpen={cmdPaletteOpen}
-          onClose={() => setCmdPaletteOpen(false)}
-          onSelectStage={(s) => setStage(s as Stage)}
-        />
-      </React.Suspense>
-
-      <React.Suspense fallback={null}>
-        <ThermalAlertMonitor />
-        <AgentNotificationCenter
-          findings={[]}
-          onApplyRecommendation={(rec: any) => updateEngine(rec.changes)}
-        />
-      </React.Suspense>
-
-
-      <div className="ambient-orb ambient-orb-1" />
-      <div className="ambient-orb ambient-orb-2" />
-      <div className="ambient-orb ambient-orb-3" />
-      <div className="light-leak" />
-    </div>
-    </VisionGlassErrorBoundary>
-  );
+  return null;
 }
 
 export default function App() {
@@ -707,6 +537,7 @@ export default function App() {
       <RDProvider>
         <CompanyProvider>
           <ToastProvider>
+            <GlobalSimulationTicker />
             <AppInner />
           </ToastProvider>
         </CompanyProvider>

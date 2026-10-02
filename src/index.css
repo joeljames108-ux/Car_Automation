@@ -1935,111 +1935,7 @@ a,
   z-index: 1;
 }
 
-/* ==========================================================================
-   THEME 3 — "Apex Architectural Stone Lounge" (Exact 2nd Photo Match)
-   ========================================================================== */
-.theme3 {
-  position: relative;
-  background-color: #0b111e !important;
-  color: #ffffff !important;
-}
 
-/* Photorealistic Architectural Stone & Glass Lounge Background */
-.theme3::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(to bottom, rgba(10, 16, 28, 0.5), rgba(6, 10, 18, 0.8)),
-    url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop");
-  background-size: cover;
-  background-position: center;
-  filter: contrast(110%) brightness(85%);
-}
-
-/* Header for Theme 3 */
-.theme3 header {
-  background: rgba(12, 18, 30, 0.8) !important;
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6) !important;
-}
-
-/* Translucent Frosted Glass Cards with 3D Perspective Hover in Theme 3 */
-.theme3 .panel {
-  background: rgba(18, 26, 44, 0.68) !important;
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
-  box-shadow:
-    0 20px 48px -10px rgba(0, 0, 0, 0.65),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.18) !important;
-  border-radius: 1rem !important;
-  color: #ffffff !important;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease !important;
-  transform-style: preserve-3d;
-}
-
-.theme3 .panel:hover {
-  background: rgba(22, 32, 54, 0.76) !important;
-  border-color: rgba(251, 191, 36, 0.5) !important;
-  transform: perspective(1000px) translateY(-4px) rotateX(1.5deg) rotateY(-1.5deg) scale(1.01) !important;
-  box-shadow:
-    0 30px 60px -10px rgba(0, 0, 0, 0.8),
-    0 0 30px rgba(251, 191, 36, 0.25) !important;
-}
-
-.theme3 .panel-glow {
-  background: rgba(22, 32, 54, 0.8) !important;
-  backdrop-filter: blur(28px);
-  border: 1px solid rgba(251, 191, 36, 0.7) !important;
-  box-shadow: 0 0 35px rgba(0, 229, 255, 0.35) !important;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease !important;
-}
-
-.theme3 .panel-glow:hover {
-  transform: perspective(1000px) translateY(-5px) rotateX(2deg) rotateY(-2deg) scale(1.015) !important;
-  box-shadow: 0 0 45px rgba(251, 191, 36, 0.5) !important;
-}
-
-.theme3 .glass-panel {
-  background: rgba(16, 24, 40, 0.68) !important;
-  backdrop-filter: blur(22px);
-  border-color: rgba(255, 255, 255, 0.15) !important;
-  color: #ffffff !important;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease !important;
-}
-
-.theme3 .glass-panel:hover {
-  transform: perspective(1000px) translateY(-3px) rotateX(1deg) rotateY(-1deg) scale(1.008) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(251, 191, 36, 0.2) !important;
-}
-
-/* 3D Interactive Hover for Engine Choice Cards & Sub-boxes in Theme 3 */
-.theme3 .engine-choice-btn {
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
-}
-
-.theme3 .engine-choice-btn:hover {
-  transform: perspective(800px) translateY(-2px) scale(1.025) !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 229, 255, 0.30) !important;
-}
-
-/* 3D Perspective Slant Transform for Theme 3 Live Stats Rail (Matches 2nd Reference Photo Right Side) */
-.theme3 .stat-rail-container {
-  transform: perspective(1000px) rotateY(-12deg) rotateX(4deg) scale(0.98);
-  transform-origin: right center;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
-  box-shadow: -20px 20px 50px rgba(0, 0, 0, 0.7);
-}
-
-.theme3 .stat-rail-container:hover {
-  transform: perspective(1000px) rotateY(-3deg) rotateX(1deg) scale(1.02);
-  box-shadow: -30px 30px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 229, 255, 0.30);
-}
 
 /* ==========================================================================
    THEME 4 — "Vision Glass" (iOS / macOS / visionOS Light Frosted Glass)
@@ -2077,6 +1973,14 @@ a,
   background:
     radial-gradient(ellipse 55% 45% at 75% 12%, rgba(255, 220, 150, 0.20), transparent 70%),
     radial-gradient(ellipse 45% 35% at 20% 80%, rgba(255, 190, 100, 0.15), transparent 65%);
+}
+
+/* Prevent duplicate window-level scrollbar when Vision Glass (Theme 4) is active */
+html:has(.theme4),
+body:has(.theme4) {
+  overflow: hidden !important;
+  height: 100% !important;
+  width: 100% !important;
 }
 
 /* ==============================================================================
@@ -3527,26 +3431,6 @@ a,
   border-color: rgba(0, 0, 0, 0.25) !important;
 }
 
-/* Cutaway / 2D Cross-section Box & SVG Overrides */
-.theme4 .vision-glass-content .bg-black\/50,
-.theme4 .vision-glass-content .bg-black\/70,
-.theme4 .vision-glass-content [class*="bg-black/10"],
-.theme4 .vision-glass-content [class*="bg-black/20"],
-.theme4 .vision-glass-content [class*="bg-black/30"],
-.theme4 .vision-glass-content [class*="bg-black/40"],
-.theme4 .vision-glass-content [class*="bg-black/50"] {
-  background-color: rgba(255, 253, 248, 0.65) !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
-}
-
-.theme4 .vision-glass-content svg line[stroke="#1e293b"],
-.theme4 .vision-glass-content svg line[stroke="#080c14"] {
-  stroke: rgba(0, 0, 0, 0.12) !important;
-}
-
-.theme4 .vision-glass-content svg rect[stroke="#334155"] {
-  stroke: rgba(0, 0, 0, 0.30) !important;
-}
 
 /* Subtle Borders Override for Slate Borders in Light Theme */
 .theme4 .vision-glass-content .border-slate-900,
@@ -3666,6 +3550,109 @@ a,
 .theme4 .stat-rail-popover .text-slate-400 {
   color: #1c1c1e !important;
   font-weight: 800 !important;
+}
+
+/* ==============================================================================
+   LIGHT THEME MANDATE: HARMONIOUS LIGHT COLORS (NOT JUST WHITE)
+   Primary aesthetic standard adhering to user directive:
+   - Light canvas with warm cream/alabaster gradient (#f7f5ef -> #e8e4d8)
+   - Soft eucalyptus/sage, ice blue, champagne amber, and periwinkle surface cards
+   - Deep slate & charcoal high-contrast typography (#0f172a, #1e293b)
+   - Distinct, colorful progress indicators and high-contrast tracks
+   ============================================================================== */
+.theme4 .vision-glass-content .main-menu-root,
+.main-menu-root {
+  background: linear-gradient(135deg, #f7f5ef 0%, #f1eee4 50%, #e8e4d8 100%) !important;
+  color: #0f172a !important;
+  overflow: visible !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root * {
+  color: inherit;
+}
+
+.theme4 .vision-glass-content .main-menu-root .text-slate-900 {
+  color: #0f172a !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .text-slate-800 {
+  color: #1e293b !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .text-slate-700 {
+  color: #334155 !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .text-slate-600 {
+  color: #475569 !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .text-slate-500 {
+  color: #64748b !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .text-white {
+  color: #ffffff !important;
+}
+
+/* Allow gradients and soft light card backgrounds */
+.theme4 .vision-glass-content .main-menu-root [class*="bg-gradient-to"] {
+  background-color: transparent !important;
+  background-image: var(--tw-gradient-stops) !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .project-focus-card {
+  background-color: #edf3eb !important;
+  border: 1px solid #c6d7c2 !important;
+  box-shadow: 0 4px 16px rgba(45, 74, 45, 0.05) !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .metric-card-power {
+  background-color: #e4eff8 !important;
+  border: 1px solid #b8d6ec !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.06) !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .metric-card-weight {
+  background-color: #e5f2e7 !important;
+  border: 1px solid #b8dfbc !important;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.06) !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .metric-card-drag {
+  background-color: #edeef9 !important;
+  border: 1px solid #c7cbf0 !important;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.06) !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .metric-card-cost {
+  background-color: #fcf3e3 !important;
+  border: 1px solid #edd5ae !important;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.06) !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .dev-progress-card {
+  background-color: #f8f5ed !important;
+  border: 1px solid #e0d6c5 !important;
+  box-shadow: 0 4px 16px rgba(74, 63, 45, 0.05) !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .company-feed-card {
+  background-color: #f1f5f9 !important;
+  border: 1px solid #cbd8e6 !important;
+  box-shadow: 0 4px 16px rgba(30, 41, 59, 0.05) !important;
+}
+
+.theme4 .vision-glass-content .main-menu-root .todays-events-card {
+  background-color: #faf5f0 !important;
+  border: 1px solid #e6d8cb !important;
+  box-shadow: 0 4px 16px rgba(180, 83, 9, 0.05) !important;
 }
 
 .theme4 .vision-glass-content .bg-base-950\/95 *,
@@ -4274,18 +4261,6 @@ a,
   }
 }
 
-/* Dock label entrance animation */
-@keyframes vg-dock-label-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-
-  to {
-    opacity: 0.7;
-    transform: translateY(0);
-  }
-}
 
 /* Generic pulse for live indicators */
 @keyframes pulse {
@@ -4311,16 +4286,6 @@ a,
   }
 }
 
-/* Dock hover lift spring */
-@keyframes vg-dock-lift {
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-3px);
-  }
-}
 
 /* ══════════════════════════════════════════════════════════════════
    Phase 1 & 2 CORRECTIONS — Issues found during audit
@@ -5646,23 +5611,9 @@ a,
     height: 100vh !important;
   }
 
-  /* Bottom dock becomes horizontally scrollable */
-  .theme4>div:nth-child(4)>div:last-child {
-    max-width: calc(100vw - 16px) !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    border-radius: 16px !important;
-    padding: 4px 6px !important;
-  }
-
-  /* Hide scrollbar on mobile dock */
-  .theme4>div:nth-child(4)>div:last-child::-webkit-scrollbar {
-    display: none !important;
-  }
-
-  /* Content padding tighter */
+  /* Content padding */
   .theme4 .vision-glass-content {
-    padding: 10px 12px 80px 12px !important;
+    padding: 10px 12px 16px 12px !important;
   }
 
   /* Panels stack full-width */
@@ -5677,11 +5628,23 @@ a,
   }
 }
 
-/* ── RESPONSIVE: Tablet (768px - 1024px) ── */
+/* ── RESPONSIVE: Full-Width Screen Integration (All Viewports) ── */
+.theme4 > div:nth-child(4),
+.vision-glass-window {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
 @media (min-width: 768px) and (max-width: 1024px) {
-  .theme4>div:nth-child(4) {
-    width: min(98vw, 1200px) !important;
-    border-radius: 22px !important;
+  .theme4 > div:nth-child(4),
+  .vision-glass-window {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
   }
 
   .theme4 .vision-glass-content {
@@ -5691,8 +5654,12 @@ a,
 
 /* ── RESPONSIVE: Large screens (> 1440px) ── */
 @media (min-width: 1441px) {
-  .theme4>div:nth-child(4) {
-    width: min(92vw, 1600px) !important;
+  .theme4 > div:nth-child(4),
+  .vision-glass-window {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
   }
 }
 
@@ -5951,7 +5918,7 @@ a,
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════ */
-/* APEX AI TOOLTIP SYSTEM                                                     */
+/* ENGINEERING TOOLTIP SYSTEM                                                 */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
 /* Trigger — inline info icon */
@@ -6368,22 +6335,6 @@ button:active,
   }
 }
 
-/* 6. Bottom Navigation Active Icon Spring Bounce */
-.dock-item-active {
-  animation: dockSpringBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-@keyframes dockSpringBounce {
-  0% {
-    transform: scale(0.88);
-  }
-  50% {
-    transform: scale(1.18);
-  }
-  100% {
-    transform: scale(1.1);
-  }
-}
 
 /* 7. Expanding Search Bar Input */
 .expanding-search-input {
@@ -7657,49 +7608,46 @@ button:active,
   display: none;
 }
 
+.vision-glass-window {
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+
 @media (min-width: 1281px) and (max-width: 1600px) {
   .vision-glass-window {
-    width: min(calc(100vw - 140px), 1440px) !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
   }
 }
 
 @media (max-width: 1280px) {
-  .vision-glass-header-status,
-  .vision-glass-toolbar {
+  .vision-glass-header-status {
     display: none !important;
   }
 
   .vision-glass-window {
-    width: calc(100vw - 24px) !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
   }
 }
 
 @media (max-width: 960px) {
   .vision-glass-window {
-    width: calc(100vw - 16px) !important;
-    height: calc(100vh - 16px) !important;
-    margin-top: 8px !important;
-    margin-bottom: 8px !important;
-    border-radius: 20px !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
   }
 
   .vision-glass-content {
-    padding: 12px 12px 112px !important;
-  }
-
-  .vision-glass-dock {
-    bottom: 7px !important;
-  }
-
-  .vision-glass-dock-bar {
-    padding: 5px 7px !important;
-    border-radius: 18px !important;
-  }
-
-  .vision-glass-dock-stage-label {
-    display: none;
+    padding: 12px 12px 20px !important;
   }
 }
 
@@ -7739,9 +7687,6 @@ button:active,
     padding: 3px 6px !important;
   }
 
-  .vision-glass-dock-category-label {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
@@ -7760,17 +7705,14 @@ button:active,
     padding: 4px !important;
   }
 
-  .vision-glass-dock-bar {
-    max-width: calc(100vw - 12px) !important;
-  }
 }
 
 /* ── Focus Workspace Mode ── */
 .vision-focus-mode .vision-glass-window {
-  width: min(99vw, 1680px) !important;
-  margin-top: 8px !important;
-  margin-bottom: 8px !important;
-  height: calc(100vh - 16px) !important;
+  width: 100vw !important;
+  margin: 0 !important;
+  height: 100vh !important;
+  border-radius: 0 !important;
   transition: width 320ms cubic-bezier(0.22, 1, 0.36, 1), margin 320ms ease;
 }
 
@@ -7778,13 +7720,6 @@ button:active,
   padding-bottom: 26px !important;
 }
 
-.vision-focus-mode .vision-glass-dock {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translate(-50%, 28px) !important;
-  transition: opacity 180ms ease, transform 280ms ease, visibility 180ms ease;
-}
 
 .vision-glass-focus-toggle {
   min-height: 28px;
@@ -7803,9 +7738,159 @@ button:active,
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .vision-focus-mode .vision-glass-window,
-  .vision-focus-mode .vision-glass-dock {
+  .vision-focus-mode .vision-glass-window {
     transition: none !important;
   }
 }
+
+/* ================================================================
+   DEVELOPER CONTROL MATRIX — High-Contrast Dark Tech Glass (WCAG AAA)
+   Overrides any light-theme text colors and guarantees 100% legibility.
+   ================================================================ */
+.theme4 .dev-matrix-modal,
+.dev-matrix-modal {
+  color: #f1f5f9 !important;
+  background-color: #080c16 !important;
+}
+
+.theme4 .dev-matrix-modal .font-mono,
+.dev-matrix-modal .font-mono {
+  color: inherit !important;
+}
+
+.theme4 .dev-matrix-modal .text-white,
+.dev-matrix-modal .text-white {
+  color: #ffffff !important;
+}
+
+.theme4 .dev-matrix-modal .text-slate-100,
+.dev-matrix-modal .text-slate-100 {
+  color: #f8fafc !important;
+}
+
+.theme4 .dev-matrix-modal .text-slate-200,
+.dev-matrix-modal .text-slate-200 {
+  color: #e2e8f0 !important;
+}
+
+.theme4 .dev-matrix-modal .text-slate-300,
+.dev-matrix-modal .text-slate-300 {
+  color: #cbd5e1 !important;
+}
+
+.theme4 .dev-matrix-modal .text-slate-400,
+.dev-matrix-modal .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.theme4 .dev-matrix-modal .text-slate-500,
+.dev-matrix-modal .text-slate-500 {
+  color: #64748b !important;
+}
+
+.theme4 .dev-matrix-modal .text-amber-400,
+.dev-matrix-modal .text-amber-400 {
+  color: #fbbf24 !important;
+}
+
+.theme4 .dev-matrix-modal .text-amber-300,
+.dev-matrix-modal .text-amber-300 {
+  color: #fcd34d !important;
+}
+
+.theme4 .dev-matrix-modal .text-amber-200,
+.dev-matrix-modal .text-amber-200 {
+  color: #fde68a !important;
+}
+
+.theme4 .dev-matrix-modal .text-orange-400,
+.dev-matrix-modal .text-orange-400 {
+  color: #fb923c !important;
+}
+
+.theme4 .dev-matrix-modal .text-orange-300,
+.dev-matrix-modal .text-orange-300 {
+  color: #fdba74 !important;
+}
+
+.theme4 .dev-matrix-modal .text-cyan-400,
+.dev-matrix-modal .text-cyan-400 {
+  color: #22d3ee !important;
+}
+
+.theme4 .dev-matrix-modal .text-cyan-300,
+.dev-matrix-modal .text-cyan-300 {
+  color: #67e8f9 !important;
+}
+
+.theme4 .dev-matrix-modal .text-teal-400,
+.dev-matrix-modal .text-teal-400 {
+  color: #2dd4bf !important;
+}
+
+.theme4 .dev-matrix-modal .text-teal-300,
+.dev-matrix-modal .text-teal-300 {
+  color: #5eead4 !important;
+}
+
+.theme4 .dev-matrix-modal .text-purple-400,
+.dev-matrix-modal .text-purple-400 {
+  color: #c084fc !important;
+}
+
+.theme4 .dev-matrix-modal .text-purple-300,
+.dev-matrix-modal .text-purple-300 {
+  color: #d8b4fe !important;
+}
+
+.theme4 .dev-matrix-modal .text-indigo-400,
+.dev-matrix-modal .text-indigo-400 {
+  color: #818cf8 !important;
+}
+
+.theme4 .dev-matrix-modal .text-indigo-300,
+.dev-matrix-modal .text-indigo-300 {
+  color: #a5b4fc !important;
+}
+
+.theme4 .dev-matrix-modal .text-rose-400,
+.dev-matrix-modal .text-rose-400 {
+  color: #fb7185 !important;
+}
+
+.theme4 .dev-matrix-modal .text-rose-300,
+.dev-matrix-modal .text-rose-300 {
+  color: #fda4af !important;
+}
+
+.theme4 .dev-matrix-modal .text-emerald-400,
+.dev-matrix-modal .text-emerald-400 {
+  color: #34d399 !important;
+}
+
+.theme4 .dev-matrix-modal .text-emerald-300,
+.dev-matrix-modal .text-emerald-300 {
+  color: #6ee7b7 !important;
+}
+
+.theme4 .dev-matrix-modal .text-yellow-400,
+.dev-matrix-modal .text-yellow-400 {
+  color: #facc15 !important;
+}
+
+.theme4 .dev-matrix-modal .text-yellow-300,
+.dev-matrix-modal .text-yellow-300 {
+  color: #fde047 !important;
+}
+
+.theme4 .dev-matrix-modal .text-blue-400,
+.dev-matrix-modal .text-blue-400 {
+  color: #60a5fa !important;
+}
+
+.theme4 .dev-matrix-modal .text-blue-300,
+.dev-matrix-modal .text-blue-300 {
+  color: #93c5fd !important;
+}
+
 

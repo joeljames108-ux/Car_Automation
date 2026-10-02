@@ -49,18 +49,20 @@ export class ViewportErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="relative overflow-hidden rounded-2xl bg-slate-900/90 border border-red-500/30 h-[400px] flex flex-col items-center justify-center gap-4 p-6 text-center">
-          <div className="w-12 h-12 rounded-xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-400 text-xl">!
+        <div className="relative overflow-hidden rounded-2xl bg-[#faf8f4] border border-[#dfd6c8] min-h-[260px] h-full w-full flex flex-col items-center justify-center gap-3 p-6 text-center shadow-xs">
+          <div className="w-10 h-10 rounded-xl bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-800 font-bold text-lg">
+            ⚠️
           </div>
           <div>
-            <h3 className="text-sm font-bold text-red-300 mb-1">{this.props.fallbackLabel || "3D Viewport"} Error</h3>
-            <p className="text-xs text-slate-400 max-w-md">{this.state.error?.message}</p>
+            <h3 className="text-xs font-mono font-bold text-slate-800 mb-0.5">{this.props.fallbackLabel || "3D Viewport"} Standby</h3>
+            <p className="text-[11px] font-mono text-slate-500 max-w-md">3D canvas paused or initializing. Click retry to reload WebGL context.</p>
           </div>
           <button
+            type="button"
             onClick={() => this.setState({ hasError: false, error: null })}
-            className="px-4 py-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold hover:bg-amber-500/30 transition-all cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-mono font-bold shadow-xs transition-all cursor-pointer active:scale-95"
           >
-            Try Again
+            Retry 3D Viewport
           </button>
         </div>
       );

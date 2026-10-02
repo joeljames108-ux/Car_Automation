@@ -329,24 +329,24 @@ function PropertyBar({
   const pct = Math.min(100, (value / maxValue) * 100);
   return (
     <div>
-      <div className="flex justify-between text-slate-400 mb-0.5">
+      <div className="flex justify-between text-slate-600 mb-0.5 font-medium">
         <span className="truncate">{label}</span>
         <span className={`font-bold ${color}`}>
           {displayValue}
           {unit && <span className="text-slate-500 font-normal ml-0.5">{unit}</span>}
         </span>
       </div>
-      <div className="h-1.5 w-full bg-slate-800/60 dark:bg-slate-900 rounded-full overflow-hidden">
+      <div className="h-1.5 w-full bg-[#e2d8ca] rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-500`}
           style={{
             width: `${pct}%`,
-            backgroundColor: color.includes("cyan") ? "#fbbf24"
-              : color.includes("emerald") ? "#34d399"
-              : color.includes("amber") ? "#fbbf24"
-              : color.includes("purple") ? "#fbbf24"
-              : color.includes("red") ? "#f87171"
-              : "#94a3b8",
+            backgroundColor: color.includes("cyan") ? "#d97706"
+              : color.includes("emerald") ? "#059669"
+              : color.includes("amber") ? "#d97706"
+              : color.includes("purple") ? "#7c3aed"
+              : color.includes("red") ? "#dc2626"
+              : "#64748b",
           }}
         />
       </div>
@@ -359,12 +359,12 @@ function PropertyBar({
 function MetallurgyDetailPanel({ grade }: { grade: MetallurgyGrade }) {
   const p = grade.properties;
   return (
-    <div className="mt-3 p-3 rounded-xl bg-slate-900/40 dark:bg-slate-950/80 border border-slate-700/50 dark:border-slate-800/80 space-y-3">
+    <div className="mt-3 p-3 rounded-xl bg-amber-50/70 border border-amber-200/90 text-slate-800 space-y-3">
       {/* Material Family & Designation */}
-      <div className="flex items-center gap-2 pb-2 border-b border-slate-800/60">
-        <Beaker size={12} className="text-amber-400 shrink-0" />
+      <div className="flex items-center gap-2 pb-2 border-b border-amber-200/70">
+        <Beaker size={12} className="text-amber-600 shrink-0" />
         <div>
-          <div className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider">
+          <div className="text-[10px] font-mono font-bold text-amber-900 uppercase tracking-wider">
             {grade.designation}
           </div>
           <div className="text-[9px] font-mono text-slate-500">{grade.family.replace(/_/g, " ")}</div>
@@ -374,35 +374,35 @@ function MetallurgyDetailPanel({ grade }: { grade: MetallurgyGrade }) {
       {/* Mechanical Properties */}
       <div>
         <div className="flex items-center gap-1 mb-2">
-          <Hammer size={10} className="text-amber-400" />
-          <span className="text-[9px] font-mono font-bold text-amber-400 uppercase tracking-wider">
+          <Hammer size={10} className="text-amber-600" />
+          <span className="text-[9px] font-mono font-bold text-amber-800 uppercase tracking-wider">
             Mechanical Properties
           </span>
         </div>
         <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[9px] font-mono">
           <div className="flex justify-between">
             <span className="text-slate-500">Yield Strength</span>
-            <span className="text-amber-300 font-bold">{p.yieldStrengthMPa} MPa</span>
+            <span className="text-amber-800 font-bold">{p.yieldStrengthMPa} MPa</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">UTS</span>
-            <span className="text-amber-300 font-bold">{p.ultimateTensileStrengthMPa} MPa</span>
+            <span className="text-amber-800 font-bold">{p.ultimateTensileStrengthMPa} MPa</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Fatigue Limit</span>
-            <span className="text-amber-300 font-bold">{p.fatigueLimitMPa} MPa</span>
+            <span className="text-amber-800 font-bold">{p.fatigueLimitMPa} MPa</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Elastic Modulus</span>
-            <span className="text-slate-300 font-bold">{p.youngsModulusGPa} GPa</span>
+            <span className="text-slate-800 font-bold">{p.youngsModulusGPa} GPa</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Elongation</span>
-            <span className="text-emerald-300 font-bold">{p.elongationPercent}%</span>
+            <span className="text-emerald-700 font-bold">{p.elongationPercent}%</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Hardness</span>
-            <span className="text-amber-300 font-bold">{p.hardness.value} {p.hardness.scale}</span>
+            <span className="text-amber-800 font-bold">{p.hardness.value} {p.hardness.scale}</span>
           </div>
         </div>
       </div>
@@ -410,35 +410,35 @@ function MetallurgyDetailPanel({ grade }: { grade: MetallurgyGrade }) {
       {/* Physical Properties */}
       <div>
         <div className="flex items-center gap-1 mb-2">
-          <Thermometer size={10} className="text-amber-400" />
-          <span className="text-[9px] font-mono font-bold text-amber-400 uppercase tracking-wider">
+          <Thermometer size={10} className="text-amber-600" />
+          <span className="text-[9px] font-mono font-bold text-amber-800 uppercase tracking-wider">
             Physical & Thermal
           </span>
         </div>
         <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[9px] font-mono">
           <div className="flex justify-between">
             <span className="text-slate-500">Density</span>
-            <span className="text-slate-300 font-bold">{(p.densityKgM3 / 1000).toFixed(2)} g/cm³</span>
+            <span className="text-slate-800 font-bold">{(p.densityKgM3 / 1000).toFixed(2)} g/cm³</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Thermal K</span>
-            <span className="text-amber-300 font-bold">{p.thermalConductivityWMK} W/m·K</span>
+            <span className="text-amber-800 font-bold">{p.thermalConductivityWMK} W/m·K</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">CTE</span>
-            <span className="text-slate-300 font-bold">{p.thermalExpansionUmMK} µm/m·K</span>
+            <span className="text-slate-800 font-bold">{p.thermalExpansionUmMK} µm/m·K</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Max Temp</span>
-            <span className="text-red-300 font-bold">{p.maxOperatingTempC}°C</span>
+            <span className="text-rose-700 font-bold">{p.maxOperatingTempC}°C</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Melting Point</span>
-            <span className="text-slate-300 font-bold">{p.meltingPointC}°C</span>
+            <span className="text-slate-800 font-bold">{p.meltingPointC}°C</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Max Boost</span>
-            <span className="text-amber-300 font-bold">{(p.maxBoostBar * 14.5).toFixed(0)} PSI</span>
+            <span className="text-amber-800 font-bold">{(p.maxBoostBar * 14.5).toFixed(0)} PSI</span>
           </div>
         </div>
       </div>
@@ -446,35 +446,35 @@ function MetallurgyDetailPanel({ grade }: { grade: MetallurgyGrade }) {
       {/* Manufacturing & Heat Treatment */}
       <div>
         <div className="flex items-center gap-1 mb-2">
-          <Flame size={10} className="text-red-400" />
-          <span className="text-[9px] font-mono font-bold text-red-400 uppercase tracking-wider">
+          <Flame size={10} className="text-rose-600" />
+          <span className="text-[9px] font-mono font-bold text-rose-700 uppercase tracking-wider">
             Processing
           </span>
         </div>
         <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[9px] font-mono">
           <div className="flex justify-between">
             <span className="text-slate-500">Heat Treat</span>
-            <span className="text-red-300 font-bold">{grade.heatTreatment.replace(/_/g, " ")}</span>
+            <span className="text-rose-700 font-bold">{grade.heatTreatment.replace(/_/g, " ")}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Process</span>
-            <span className="text-red-300 font-bold">{grade.manufacturingProcess.replace(/_/g, " ")}</span>
+            <span className="text-rose-700 font-bold">{grade.manufacturingProcess.replace(/_/g, " ")}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Corrosion</span>
-            <span className="text-emerald-300 font-bold capitalize">{p.corrosionResistance}</span>
+            <span className="text-emerald-700 font-bold capitalize">{p.corrosionResistance}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Machinability</span>
-            <span className="text-slate-300 font-bold capitalize">{p.machinability}</span>
+            <span className="text-slate-800 font-bold capitalize">{p.machinability}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Cost/kg</span>
-            <span className="text-amber-300 font-bold">${p.rawMaterialCostPerKg.toFixed(0)}</span>
+            <span className="text-amber-800 font-bold">${p.rawMaterialCostPerKg.toFixed(0)}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Tooling Life</span>
-            <span className="text-slate-300 font-bold">{(p.toolingLifeMultiplier * 100).toFixed(0)}%</span>
+            <span className="text-slate-800 font-bold">{(p.toolingLifeMultiplier * 100).toFixed(0)}%</span>
           </div>
         </div>
       </div>
@@ -482,8 +482,8 @@ function MetallurgyDetailPanel({ grade }: { grade: MetallurgyGrade }) {
       {/* Alloying Elements */}
       <div>
         <div className="flex items-center gap-1 mb-1">
-          <Info size={10} className="text-slate-400" />
-          <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+          <Info size={10} className="text-slate-500" />
+          <span className="text-[9px] font-mono font-bold text-slate-700 uppercase tracking-wider">
             Key Alloying Elements
           </span>
         </div>
@@ -491,7 +491,7 @@ function MetallurgyDetailPanel({ grade }: { grade: MetallurgyGrade }) {
           {p.keyAlloyingElements.map((el, i) => (
             <span
               key={i}
-              className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-800/50 dark:bg-slate-900/80 text-slate-400 border border-slate-700/60 dark:border-slate-800/60"
+              className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-white/90 text-slate-700 border border-amber-200/90 shadow-2xs font-semibold"
             >
               {el}
             </span>
@@ -500,9 +500,9 @@ function MetallurgyDetailPanel({ grade }: { grade: MetallurgyGrade }) {
       </div>
 
       {/* Microstructure */}
-      <div className="p-2 rounded-lg bg-slate-800/40 dark:bg-slate-900/60 border border-slate-700/40 dark:border-slate-800/40">
+      <div className="p-2 rounded-lg bg-white/80 border border-amber-200/80">
         <div className="text-[9px] font-mono text-slate-500 mb-1">Microstructure</div>
-        <div className="text-[9px] font-mono text-slate-300 italic">{p.microstructure}</div>
+        <div className="text-[9px] font-mono text-slate-700 italic">{p.microstructure}</div>
       </div>
     </div>
   );
@@ -522,11 +522,11 @@ export function MaterialGradePicker({
   return (
     <div className={`space-y-3 ${className}`}>
       <div className="flex items-center justify-between">
-        <label className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-          <Layers size={13} className="text-amber-400" />
+        <label className="text-[11px] font-mono font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+          <Layers size={13} className="text-amber-600" />
           <span>{title}</span>
         </label>
-        <span className="text-[10px] font-mono text-amber-300 bg-slate-900/40 dark:bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
+        <span className="text-[10px] font-mono text-amber-900 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded-full font-bold shadow-2xs">
           {variants.length} Grades Available
         </span>
       </div>
@@ -544,13 +544,13 @@ export function MaterialGradePicker({
               key={v.id}
               className={`rounded-xl border transition-all duration-300 overflow-hidden ${
                 isSelected
-                  ? "bg-gradient-to-r from-amber-950/80 via-slate-900/90 to-slate-950/95 border-amber-400 shadow-[0_0_25px_rgba(192,132,252,0.25)] scale-[1.01]"
-                  : "bg-slate-900/40 dark:bg-slate-950/70 border-slate-700/50 dark:border-slate-800/80 hover:border-amber-400/60 hover:bg-slate-800/40"
+                  ? "bg-gradient-to-r from-amber-50 via-amber-100/70 to-amber-50 border-amber-500 shadow-sm scale-[1.01]"
+                  : "bg-white/90 border-[#dfd6c8] hover:border-amber-400 hover:bg-[#faf8f4]"
               }`}
             >
               {/* Subtle top edge active glow */}
               {isSelected && (
-                <div className="h-[2px] bg-gradient-to-r from-amber-500 via-cyan-400 to-amber-500 animate-pulse" />
+                <div className="h-[2px] bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 animate-pulse" />
               )}
 
               {/* Clickable Header */}
@@ -566,7 +566,7 @@ export function MaterialGradePicker({
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <span
                           className={`text-xs font-mono font-extrabold truncate ${
-                            isSelected ? "text-amber-200" : "text-slate-200"
+                            isSelected ? "text-amber-950 font-black" : "text-slate-800"
                           }`}
                         >
                           {v.label}
@@ -574,8 +574,8 @@ export function MaterialGradePicker({
                         <span
                           className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-bold border shrink-0 ${
                             isSelected
-                              ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
-                              : "bg-slate-800/60 dark:bg-slate-900 text-slate-400 border-slate-700/60 dark:border-slate-800"
+                              ? "bg-amber-500/20 text-amber-900 border-amber-500/50"
+                              : "bg-slate-100 text-slate-600 border-slate-300"
                           }`}
                         >
                           {spec.badge}
@@ -593,8 +593,8 @@ export function MaterialGradePicker({
                       }}
                       className={`p-1 rounded-full transition-colors ${
                         isExpanded
-                          ? "bg-amber-500/20 text-amber-300"
-                          : "text-slate-600 hover:text-slate-400 hover:bg-slate-800"
+                          ? "bg-amber-500/20 text-amber-800"
+                          : "text-slate-500 hover:text-slate-800 hover:bg-slate-200/60"
                       }`}
                     >
                       {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -604,8 +604,8 @@ export function MaterialGradePicker({
                     <div
                       className={`w-4 h-4 rounded-full border flex items-center justify-center transition-all ${
                         isSelected
-                          ? "border-amber-400 bg-amber-500 shadow-[0_0_10px_rgba(192,132,252,0.6)]"
-                          : "border-slate-600 bg-slate-800/80 dark:border-slate-700 dark:bg-slate-900/80 group-hover:border-slate-500"
+                          ? "border-amber-600 bg-amber-500 shadow-xs"
+                          : "border-slate-300 bg-white hover:border-slate-400"
                       }`}
                     >
                       {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
@@ -614,39 +614,39 @@ export function MaterialGradePicker({
                 </div>
 
                 {/* Sub-description */}
-                <p className="text-[10px] text-slate-400 font-mono mb-2 line-clamp-1">
+                <p className="text-[10px] text-slate-600 font-mono mb-2 line-clamp-1">
                   {spec.description}
                 </p>
 
                 {/* Engineering Metrics Progress Bars */}
-                <div className="grid grid-cols-4 gap-1.5 pt-2 border-t border-slate-800/60 text-[9px] font-mono">
+                <div className="grid grid-cols-4 gap-1.5 pt-2 border-t border-[#dfd6c8] text-[9px] font-mono">
                   <PropertyBar
                     label="Power"
                     value={v.hpMultiplier}
                     displayValue={`${Math.round(v.hpMultiplier * 100)}%`}
                     maxValue={1.7}
-                    color="text-amber-400"
+                    color="text-amber-700"
                   />
                   <PropertyBar
                     label="Weight"
                     value={v.weightMultiplier}
                     displayValue={`${Math.round(v.weightMultiplier * 100)}%`}
                     maxValue={1.2}
-                    color="text-emerald-400"
+                    color="text-emerald-700"
                   />
                   <PropertyBar
                     label="Reliab"
                     value={v.reliabilityDelta}
                     displayValue={`+${v.reliabilityDelta}%`}
                     maxValue={30}
-                    color="text-amber-400"
+                    color="text-amber-700"
                   />
                   <PropertyBar
                     label="Cost"
                     value={v.costMultiplier}
                     displayValue={`${v.costMultiplier}x`}
                     maxValue={8}
-                    color="text-amber-400"
+                    color="text-amber-700"
                   />
                 </div>
               </div>

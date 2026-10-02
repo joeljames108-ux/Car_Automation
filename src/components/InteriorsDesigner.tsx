@@ -9,7 +9,7 @@
 // ============================================================================
 
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Cpu, LayoutGrid, Gauge, Sofa, Check } from 'lucide-react';
+import { Sparkles, Cpu, LayoutGrid, Gauge, Sofa, Check, ChevronLeft, ArrowRight } from 'lucide-react';
 import { useDesign } from '../state/DesignContext';
 import { useGuidedEngineeringStore } from '../state/guidedEngineeringStore';
 import { InfotainmentDesigner } from './InfotainmentDesigner';
@@ -28,6 +28,13 @@ export function InteriorsDesigner({ initialSubTab = 'setup', onSelectStage }: In
   const { design } = useDesign();
   const { interiorStatus, markStageComplete, setActiveWorkflowStage } = useGuidedEngineeringStore();
   const [viewMode, setViewMode] = useState<InteriorStudioViewMode>(initialSubTab);
+
+  const handleNextToCreatorMenu = () => {
+    markStageComplete("interior");
+    if (onSelectStage) {
+      onSelectStage("create_vehicle_hub");
+    }
+  };
 
   useEffect(() => {
     if (initialSubTab) {
@@ -78,17 +85,27 @@ export function InteriorsDesigner({ initialSubTab = 'setup', onSelectStage }: In
         </div>
 
         {onSelectStage && (
-          <button
-            type="button"
-            onClick={() => {
-              markStageComplete("interior");
-              onSelectStage("safety");
-            }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <Check size={15} strokeWidth={3} />
-            <span>COMPLETE INTERIOR & PROCEED TO SAFETY CENTER →</span>
-          </button>
+          <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={() => onSelectStage("create_vehicle_hub")}
+              className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:border-amber-400/50 text-slate-300 hover:text-amber-300 font-mono font-bold text-xs tracking-wider uppercase transition-all cursor-pointer"
+              title="Return to Creator Menu"
+            >
+              <ChevronLeft size={14} />
+              <span>← CREATOR MENU</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleNextToCreatorMenu}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
+              title="Complete Interior and return to Creator Menu"
+            >
+              <Check size={15} strokeWidth={3} />
+              <span>NEXT → CREATOR MENU</span>
+              <ArrowRight size={15} strokeWidth={2.5} />
+            </button>
+          </div>
         )}
       </div>
       {/* ── TOP SWITCHER: UNIFIED INTERIOR & ELECTRONICS STUDIO TABS ── */}
