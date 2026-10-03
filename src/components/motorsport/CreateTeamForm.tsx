@@ -4,12 +4,14 @@
 import { useState, memo } from "react";
 import { Plus, ChevronRight } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
+import { useMotorsportStore } from "../../state/motorsportStore";
 import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 import type { MotorsportCategory } from "../../sim/types";
 
 export const CreateTeamForm = memo(function CreateTeamForm({ onClose }: { onClose: () => void }) {
-  const { createMotorsportTeam, company } = useCompany();
+  const createMotorsportTeam = useMotorsportStore(s => s.createMotorsportTeam);
+  const { company } = useCompany();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
     name: "", category: "gt" as MotorsportCategory,

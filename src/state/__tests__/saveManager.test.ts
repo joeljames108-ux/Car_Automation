@@ -17,6 +17,7 @@ import {
 } from "../stateSnapshotManager";
 import { useDeveloperModeStore } from "../developerModeStore";
 import { useSimulationClockStore } from "../simulationClockStore";
+import { useCompanyFinanceStore } from "../companyFinanceStore";
 
 const createStorageMock = () => {
   let store: Record<string, string> = {};
@@ -50,7 +51,7 @@ describe("saveManager & namespace isolation", () => {
     mockStorage.clear();
     useDeveloperModeStore.getState().resetToPlayerMode();
     useSimulationClockStore.getState().setDate(1975, 5, 20);
-    useSimulationClockStore.setState({ cash: 10_000_000 });
+    useCompanyFinanceStore.setState({ cash: 10_000_000 });
   });
 
   it("saves to player namespace when devMode is false", () => {
@@ -89,19 +90,19 @@ describe("saveManager & namespace isolation", () => {
   it("loads save game and rehydrates state", () => {
     useDeveloperModeStore.setState({ devMode: false });
     useSimulationClockStore.getState().setDate(1982, 3, 15);
-    useSimulationClockStore.setState({ cash: 45_000_000 });
+    useCompanyFinanceStore.setState({ cash: 45_000_000 });
 
     saveGame("slot_1982", "Turbo Era Save");
 
     // Mutate state
     useSimulationClockStore.getState().setDate(2020, 1, 1);
-    useSimulationClockStore.setState({ cash: 100 });
+    useCompanyFinanceStore.setState({ cash: 100 });
 
     // Load back
     const loadRes = loadGame("slot_1982", "player");
     expect(loadRes.success).toBe(true);
     expect(useSimulationClockStore.getState().year).toBe(1982);
-    expect(useSimulationClockStore.getState().cash).toBe(45_000_000);
+    expect(useCompanyFinanceStore.getState().cash).toBe(45_000_000);
   });
 
   it("flags cross-namespace loading correctly", () => {
@@ -147,7 +148,7 @@ describe("stateSnapshotManager & diffing", () => {
   beforeEach(() => {
     useDeveloperModeStore.getState().resetToPlayerMode();
     useSimulationClockStore.getState().setDate(1970, 1, 1);
-    useSimulationClockStore.setState({ cash: 5_000_000 });
+    useCompanyFinanceStore.setState({ cash: 5_000_000 });
   });
 
   it("captures snapshots and lists them", async () => {
@@ -166,7 +167,7 @@ describe("stateSnapshotManager & diffing", () => {
 
     // Modify state
     useSimulationClockStore.getState().setDate(1985, 6, 1);
-    useSimulationClockStore.setState({ cash: 75_000_000 });
+    useCompanyFinanceStore.setState({ cash: 75_000_000 });
     useDeveloperModeStore.getState().unlockAll();
 
     const snapB = await takeSnapshot("Snap B");
@@ -176,7 +177,7 @@ describe("stateSnapshotManager & diffing", () => {
     expect(diffRes.diff).toBeDefined();
     expect(diffRes.diff?.changes.length).toBeGreaterThan(0);
 
-    const cashDiff = diffRes.diff?.changes.find((c) => c.path === "clock.cash");
+    const cashDiff = diffRes.diff?.changes.find((c) => c.path === "finance.cash");
     expect(cashDiff).toBeDefined();
     expect(cashDiff?.oldValue).toBe(5_000_000);
     expect(cashDiff?.newValue).toBe(75_000_000);
@@ -184,17 +185,17 @@ describe("stateSnapshotManager & diffing", () => {
 
   it("restores state from snapshot", async () => {
     useSimulationClockStore.getState().setDate(1990, 8, 12);
-    useSimulationClockStore.setState({ cash: 123_456_789 });
+    useCompanyFinanceStore.setState({ cash: 123_456_789 });
     const snap = await takeSnapshot("Target 1990");
 
     // Mutate
     useSimulationClockStore.getState().setDate(2025, 1, 1);
-    useSimulationClockStore.setState({ cash: 0 });
+    useCompanyFinanceStore.setState({ cash: 0 });
 
     const res = await restoreSnapshot(snap.id);
     expect(res.success).toBe(true);
     expect(useSimulationClockStore.getState().year).toBe(1990);
-    expect(useSimulationClockStore.getState().cash).toBe(123_456_789);
+    expect(useCompanyFinanceStore.getState().cash).toBe(123_456_789);
   });
 
   it("dumps formatted JSON representation of all stores", () => {
@@ -203,6 +204,6 @@ describe("stateSnapshotManager & diffing", () => {
     expect(json).toContain("developerMode");
     expect(json).toContain("rdTree");
     const parsed = JSON.parse(json);
-    expect(parsed.simulationClock.cash).toBeDefined();
+    expect(parsed.finance.cash).toBeDefined();
   });
 });

@@ -14,6 +14,8 @@ import {
 import { useDeveloperModeStore } from "../../state/developerModeStore";
 import { useDevConsoleStore } from "../../state/devConsoleStore";
 import { useSimulationClockStore } from "../../state/simulationClockStore";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
+import { useTradeStore, selectTotalMaterialsTonnes } from "../../state/tradeStore";
 import { formatGameDate } from "../../state/gameClockEngine";
 
 export const DevModeBanner: React.FC = () => {
@@ -21,6 +23,8 @@ export const DevModeBanner: React.FC = () => {
     useDeveloperModeStore();
   const { toggle: toggleConsole, isOpen: isConsoleOpen } = useDevConsoleStore();
   const clock = useSimulationClockStore();
+  const cash = useCompanyFinanceStore((s) => s.cash);
+  const materialsTonnes = useTradeStore(selectTotalMaterialsTonnes);
 
   const [collapsed, setCollapsed] = useState(false);
 
@@ -119,11 +123,11 @@ export const DevModeBanner: React.FC = () => {
         </span>
         <span className="flex items-center gap-1 text-emerald-300">
           <DollarSign size={12} />
-          {formatCash(clock.cash)}
+          {formatCash(cash)}
         </span>
         <span className="flex items-center gap-1 text-sky-200">
           <Boxes size={12} />
-          {clock.materialsTonnes?.toLocaleString() || 0}t
+          {materialsTonnes.toLocaleString()}t
         </span>
       </div>
 

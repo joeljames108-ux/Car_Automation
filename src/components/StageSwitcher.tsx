@@ -23,7 +23,11 @@ export type Stage =
   | "boundary_suction" | "thermal_pcm";
 
 // ── Lazy-loaded stage panel components ──
-import { useGuidedEngineeringStore, WorkflowStage, WORKFLOW_STAGES_META } from "../state/guidedEngineeringStore";
+import {
+  useGuidedEngineeringStore,
+  EngineeringPipelineStage,
+  ENGINEERING_PIPELINE_STAGES_META,
+} from "../state/guidedEngineeringStore";
 import { LockedStageGate } from "./guidedWorkflow/LockedStageGate";
 import { MainMenu } from "./mainMenu/MainMenu";
 const CreateVehicleHub = lazy(() => import("./mainMenu/CreateVehicleHub").then(m => ({ default: m.CreateVehicleHub })));
@@ -105,8 +109,8 @@ const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectS
     }
   }, []);
 
-  // Check if target stage is governed by the sequential workflow gating
-  const workflowMap: Partial<Record<Stage, WorkflowStage>> = {
+  // Check if target stage is governed by the sequential engineering pipeline gating
+  const pipelineMap: Partial<Record<Stage, EngineeringPipelineStage>> = {
     engine: "engine",
     vehicle: "vehicle",
     aero_studio: "aero",
@@ -116,24 +120,24 @@ const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectS
     manufacturing: "manufacturing",
   };
 
-  const targetWorkflowStage = workflowMap[stage];
+  const targetPipelineStage = pipelineMap[stage];
 
   React.useEffect(() => {
-    if (targetWorkflowStage) {
-      setActiveWorkflowStage(targetWorkflowStage);
+    if (targetPipelineStage) {
+      setActiveWorkflowStage(targetPipelineStage);
     }
-  }, [targetWorkflowStage, setActiveWorkflowStage]);
+  }, [targetPipelineStage, setActiveWorkflowStage]);
 
-  if (targetWorkflowStage) {
-    const gate = canEnterStage(targetWorkflowStage);
+  if (targetPipelineStage) {
+    const gate = canEnterStage(targetPipelineStage);
     if (!gate.allowed) {
       return (
         <LockedStageGate
-          targetStage={targetWorkflowStage}
+          targetStage={targetPipelineStage}
           reason={gate.reason}
           requiredStage={gate.requiredStage}
           onGoToRequiredStage={(reqStage) => {
-            const meta = WORKFLOW_STAGES_META[reqStage];
+            const meta = ENGINEERING_PIPELINE_STAGES_META[reqStage];
             setActiveWorkflowStage(reqStage);
             onSelectStage(meta.appStageId as Stage);
           }}

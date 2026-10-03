@@ -8,6 +8,7 @@ import {
   startSkunkworksProject,
 } from "../sim/rdEngine";
 import { clockListeners } from "./gameClockEngine";
+import { useSimulationClockStore } from "./simulationClockStore";
 
 interface RDContextValue {
   state: RDState;
@@ -101,14 +102,17 @@ export function RDProvider({ children }: { children: ReactNode }) {
 
   // Automatically advance RD state on continuous game clock month ticks
   useEffect(() => {
-    return clockListeners.subscribe("month", "rdContextAutoMonthAdvance", () => {
-      setState((s) => advanceMonth(s));
+    return clockListeners.subscribe("month", "rdContextAutoMonthAdvance", (payload) => {
+      const gameMonth = (payload.current.year - 1970) * 12 + payload.current.month;
+      setState((s) => advanceMonth({ ...s, month: gameMonth - 1 }));
     });
   }, []);
 
-  const advanceOneMonth = useCallback(() => setState((s) => advanceMonth(s)), []);
+  const advanceOneMonth = useCallback(() => {
+    useSimulationClockStore.getState().advanceMonths(1);
+  }, []);
   const advanceSixMonths = useCallback(() => {
-    setState((s) => { let cur = s; for (let i = 0; i < 6; i++) cur = advanceMonth(cur); return cur; });
+    useSimulationClockStore.getState().advanceMonths(6);
   }, []);
   const upgrade = useCallback((id: BuildingId) => setState((s) => upgradeBuilding(s, id)), []);
   const startResearch = useCallback((techId: TechnologyId, scientists: number) =>

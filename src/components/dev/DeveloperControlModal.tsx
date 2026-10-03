@@ -32,6 +32,8 @@ import {
   type DevOverrides,
 } from "../../state/developerModeStore";
 import { useSimulationClockStore } from "../../state/simulationClockStore";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
+import { useTradeStore, selectTotalMaterialsTonnes } from "../../state/tradeStore";
 import { formatGameDate } from "../../state/gameClockEngine";
 import { DevQuickSpawner } from "./DevQuickSpawner";
 import { DevAssetGallery } from "./DevAssetGallery";
@@ -560,13 +562,13 @@ export const DeveloperControlModal: React.FC<DeveloperControlModalProps> = ({
                   <div>
                     <span className="text-slate-400">Cash:</span>{" "}
                     <span className="text-emerald-400 font-bold">
-                      ${clock.cash.toLocaleString()}
+                      ${useCompanyFinanceStore.getState().cash.toLocaleString()}
                     </span>
                   </div>
                   <div>
                     <span className="text-slate-400">Materials:</span>{" "}
                     <span className="text-cyan-400 font-bold">
-                      {clock.materialsTonnes.toLocaleString()} t
+                      {selectTotalMaterialsTonnes(useTradeStore.getState()).toLocaleString()} t
                     </span>
                   </div>
                 </div>
@@ -699,21 +701,30 @@ export const DeveloperControlModal: React.FC<DeveloperControlModalProps> = ({
                 <div className="flex flex-wrap gap-2">
                   <button
                     type="button"
-                    onClick={() => clock.addResources(10_000_000, 1_000)}
+                    onClick={() => {
+                      useCompanyFinanceStore.getState().injectCapital(10_000_000, "Developer Resource Injection", clock.month, clock.year);
+                      useTradeStore.getState().addRawMaterialsTonnes(1_000);
+                    }}
                     className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500 hover:text-black transition-all text-xs font-mono font-bold"
                   >
                     +$10M Cash & 1,000t Materials
                   </button>
                   <button
                     type="button"
-                    onClick={() => clock.addResources(50_000_000, 10_000)}
+                    onClick={() => {
+                      useCompanyFinanceStore.getState().injectCapital(50_000_000, "Developer Resource Injection", clock.month, clock.year);
+                      useTradeStore.getState().addRawMaterialsTonnes(10_000);
+                    }}
                     className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500 hover:text-black transition-all text-xs font-mono font-bold"
                   >
                     +$50M Cash & 10,000t Materials
                   </button>
                   <button
                     type="button"
-                    onClick={() => clock.addResources(500_000_000, 100_000)}
+                    onClick={() => {
+                      useCompanyFinanceStore.getState().injectCapital(500_000_000, "Developer Resource Injection", clock.month, clock.year);
+                      useTradeStore.getState().addRawMaterialsTonnes(100_000);
+                    }}
                     className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500 hover:text-black transition-all text-xs font-mono font-bold"
                   >
                     +$500M Maximum Treasury
@@ -772,7 +783,8 @@ export const DeveloperControlModal: React.FC<DeveloperControlModalProps> = ({
                             applyScenario(key);
                             clock.setDate(sc.year, 1, 1);
                             if (sc.cash) {
-                              clock.addResources(sc.cash, sc.materialsTonnes || 1000);
+                              useCompanyFinanceStore.getState().injectCapital(sc.cash, "Dev Scenario Setup", 1, sc.year);
+                              useTradeStore.getState().addRawMaterialsTonnes(sc.materialsTonnes || 1000);
                             }
                           }}
                           className={`px-4 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${

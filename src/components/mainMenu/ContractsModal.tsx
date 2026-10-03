@@ -1,6 +1,6 @@
 import React from "react";
 import { X, FileText, CheckCircle, ShieldAlert, Award, Building, DollarSign, Handshake, ChevronRight } from "lucide-react";
-import { useSimulationClockStore } from "../../state/simulationClockStore";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
 
 interface ContractsModalProps {
   isOpen: boolean;
@@ -9,7 +9,7 @@ interface ContractsModalProps {
 }
 
 export const ContractsModal: React.FC<ContractsModalProps> = ({ isOpen, onClose, onSelectStage }) => {
-  const { cash } = useSimulationClockStore();
+  const cash = useCompanyFinanceStore((s) => s.cash);
 
   if (!isOpen) return null;
 

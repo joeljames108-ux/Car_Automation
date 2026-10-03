@@ -9,6 +9,9 @@ import {
 import { useSimulationClockStore, formatSimDate } from "../../state/simulationClockStore";
 import { useDeveloperModeStore } from "../../state/developerModeStore";
 import { useCompanyActivities } from "../../hooks/useCompanyActivities";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
+import { useTradeStore, selectTotalMaterialsTonnes } from "../../state/tradeStore";
+import { useReputationStore } from "../../state/reputationStore";
 
 interface MainMenuProps {
   onSelectStage: (stage: string) => void;
@@ -17,10 +20,13 @@ interface MainMenuProps {
 export const MainMenu: React.FC<MainMenuProps> = ({ onSelectStage }) => {
   const {
     year, month, day, hour, minute, dayOfWeek, week, isPlaying, speed,
-    cash, materialsTonnes, reputation,
-    activeProject, todayEvents, feedItems,
+    todayEvents, feedItems,
     togglePlay, setSpeed,
   } = useSimulationClockStore();
+
+  const cash = useCompanyFinanceStore((s) => s.cash);
+  const materialsTonnes = useTradeStore(selectTotalMaterialsTonnes);
+  const reputation = useReputationStore((s) => s.overallReputation);
 
   const { activities, isIdle, activeCount } = useCompanyActivities();
   const [selectedActivityIdx, setSelectedActivityIdx] = useState<number>(0);

@@ -21,6 +21,7 @@ import {
 import { useSimulationClockStore } from "../../state/simulationClockStore";
 import { useTradeStore } from "../../state/tradeStore";
 import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
+import { useReputationStore } from "../../state/reputationStore";
 import {
   getInflationRecordForDate,
   getDaysUntilNextRevision,
@@ -42,7 +43,8 @@ import {
 import { getForecastHistory } from "../../sim/economy/economicForecastEngine";
 
 export const InflationTrendsTab: React.FC = () => {
-  const { year, month, day, reputation } = useSimulationClockStore();
+  const { year, month, day } = useSimulationClockStore();
+  const reputation = useReputationStore((s) => s.overallReputation);
   const tradeStore = useTradeStore();
   const financeStore = useCompanyFinanceStore();
 

@@ -13,6 +13,9 @@
 import { useDeveloperModeStore, type DevOverrides } from "./developerModeStore";
 import { useSimulationClockStore } from "./simulationClockStore";
 import { useRDTreeStore } from "./rdTreeStore";
+import { useCompanyFinanceStore } from "./companyFinanceStore";
+import { useTradeStore, selectTotalMaterialsTonnes } from "./tradeStore";
+import { useReputationStore } from "./reputationStore";
 
 export type SaveNamespace = "player" | "developer";
 
@@ -44,10 +47,19 @@ export interface ApexSaveGame {
       day: number;
       hour: number;
       minute: number;
-      cash: number;
-      materialsTonnes: number;
-      reputation: number;
+      cash?: number;
+      materialsTonnes?: number;
+      reputation?: number;
       speed?: number;
+    };
+    finance?: {
+      cash: number;
+    };
+    trade?: {
+      materialsTonnes: number;
+    };
+    reputation?: {
+      overallReputation: number;
     };
     developerMode?: {
       devMode: boolean;
@@ -92,6 +104,10 @@ export function saveGame(
 
     const gameDate = `${clock.year}-${String(clock.month).padStart(2, "0")}-${String(clock.day).padStart(2, "0")}`;
 
+    const currentCash = useCompanyFinanceStore.getState().cash;
+    const currentReputation = useReputationStore.getState().overallReputation;
+    const currentMaterials = selectTotalMaterialsTonnes(useTradeStore.getState());
+
     const metadata: SaveGameMetadata = {
       slotId,
       namespace,
@@ -100,9 +116,9 @@ export function saveGame(
       timestamp: Date.now(),
       gameDate,
       gameYear: clock.year,
-      cash: clock.cash,
-      reputation: clock.reputation,
-      materialsTonnes: clock.materialsTonnes,
+      cash: currentCash,
+      reputation: currentReputation,
+      materialsTonnes: currentMaterials,
       ...(isDev && {
         __devMetadata: {
           activeScenario: devStore.activeScenario,
@@ -122,10 +138,16 @@ export function saveGame(
           day: clock.day,
           hour: clock.hour,
           minute: clock.minute,
-          cash: clock.cash,
-          materialsTonnes: clock.materialsTonnes,
-          reputation: clock.reputation,
           speed: clock.speed,
+        },
+        finance: {
+          cash: currentCash,
+        },
+        trade: {
+          materialsTonnes: currentMaterials,
+        },
+        reputation: {
+          overallReputation: currentReputation,
         },
         developerMode: {
           devMode: devStore.devMode,
@@ -220,11 +242,27 @@ export function loadGame(
       useSimulationClockStore.setState({
         hour: c.hour,
         minute: c.minute,
-        cash: c.cash,
-        materialsTonnes: c.materialsTonnes,
-        reputation: c.reputation,
         ...(c.speed ? { speed: c.speed as any } : {}),
       });
+
+      // Restore Finance (legacy clock fallback supported)
+      const cashVal = (parsed.state as any).finance?.cash ?? (c as any).cash;
+      if (cashVal !== undefined) {
+        useCompanyFinanceStore.setState({ cash: cashVal });
+      }
+
+      // Restore Trade Materials (legacy clock fallback supported)
+      const matsVal = (parsed.state as any).trade?.materialsTonnes ?? (c as any).materialsTonnes;
+      if (matsVal !== undefined) {
+        const curTonnes = selectTotalMaterialsTonnes(useTradeStore.getState());
+        useTradeStore.getState().addRawMaterialsTonnes(matsVal - curTonnes);
+      }
+
+      // Restore Reputation (legacy clock fallback supported)
+      const repVal = (parsed.state as any).reputation?.overallReputation ?? (c as any).reputation;
+      if (repVal !== undefined) {
+        useReputationStore.setState({ overallReputation: repVal });
+      }
     }
 
     // 2. Restore Developer Mode (if present)

@@ -3,13 +3,15 @@
 // ===================================================================
 import { useState, memo } from "react";
 import { Play, Zap, Gauge, TrendingUp, Shield, AlertTriangle, Trophy, Medal } from "lucide-react";
-import { useCompany } from "../../state/CompanyContext";
+import { useMotorsportStore } from "../../state/motorsportStore";
 import { useDesign } from "../../state/DesignContext";
 import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 
 function SeasonSimulatorComponent() {
-  const { company, simulateMotorsportSeason } = useCompany();
+  const teams = useMotorsportStore(s => s.teams);
+  const currentSeason = useMotorsportStore(s => s.currentSeason);
+  const simulateMotorsportSeason = useMotorsportStore(s => s.simulateMotorsportSeason);
   const { sim } = useDesign();
   const [showResultsModal, setShowResultsModal] = useState(false);
 
@@ -27,7 +29,7 @@ function SeasonSimulatorComponent() {
           style={{ background: "radial-gradient(ellipse at center, rgba(34,211,238,0.2), transparent 70%)" }} />
 
         <div className="relative">
-          <h3 className="text-sm font-semibold text-slate-100 mb-1">Simulate Championship Season {company.motorsport.currentSeason}</h3>
+          <h3 className="text-sm font-semibold text-slate-100 mb-1">Simulate Championship Season {currentSeason}</h3>
           <p className="text-xs text-slate-500 mb-4">Your vehicle's current performance will determine race outcomes.</p>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
@@ -45,7 +47,7 @@ function SeasonSimulatorComponent() {
             ))}
           </div>
 
-          {company.motorsport.teams.filter(t => t.status === "competing").length === 0 ? (
+          {teams.filter(t => t.status === "competing").length === 0 ? (
             <div className="text-center py-6">
               <AlertTriangle size={24} className="mx-auto text-warn-400 mb-2" />
               <p className="text-sm text-slate-500">No teams ready to compete.</p>
@@ -55,14 +57,14 @@ function SeasonSimulatorComponent() {
             <button onClick={handleSimulate}
               className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-accent-500/20 to-amber-500/20 border border-accent-500/40 text-accent-300 hover:from-accent-500/30 hover:to-amber-500/30 transition-all text-sm font-semibold group">
               <Play size={16} className="group-hover:scale-110 transition-transform" />
-              Simulate Season {company.motorsport.currentSeason}
+              Simulate Season {currentSeason}
             </button>
           )}
         </div>
       </div>
 
       {/* Season results */}
-      {company.motorsport.teams.map(t => {
+      {teams.map(t => {
         const last = t.seasonResults[t.seasonResults.length - 1];
         if (!last) return null;
         return (
@@ -218,7 +220,7 @@ function SeasonSimulatorComponent() {
                 <Trophy size={20} className="text-yellow-400 fill-yellow-400 animate-bounce" />
               </div>
               <h2 className="text-2xl font-black text-slate-100 tracking-tight">
-                Motorsport Season {company.motorsport.currentSeason - 1} Completed
+                Motorsport Season {currentSeason - 1} Completed
               </h2>
               <p className="text-xs text-slate-400 mt-1">
                 Official World Constructors Championship results & technical awards declared.
@@ -227,7 +229,7 @@ function SeasonSimulatorComponent() {
 
             {/* Showcase Cards for Player Teams */}
             <div className="space-y-3">
-              {company.motorsport.teams.map(t => {
+              {teams.map(t => {
                 const res = t.seasonResults[t.seasonResults.length - 1];
                 if (!res) return null;
                 const isChamp = res.position === 1;
@@ -267,7 +269,7 @@ function SeasonSimulatorComponent() {
               }}
               className="w-full py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-yellow-500/30 via-amber-500/20 to-yellow-500/30 border border-yellow-500/50 text-yellow-300 hover:from-yellow-500/40 hover:to-yellow-500/40 transition-all shadow-[0_0_20px_rgba(234,179,8,0.2)] cursor-pointer"
             >
-              Continue to Season {company.motorsport.currentSeason} ➔
+              Continue to Season {currentSeason} ➔
             </button>
           </div>
         </div>

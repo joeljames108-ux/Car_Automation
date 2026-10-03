@@ -28,6 +28,7 @@ import { SubPageLayout } from "../mainMenu/SubPageLayout";
 import { Stage } from "../StageSwitcher";
 import { useCampusStore } from "../../state/campusStore";
 import { useSimulationClockStore } from "../../state/simulationClockStore";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
 import { Campus3DMapViewport } from "./Campus3DMapViewport";
 import { BuildingInspectorDrawer } from "./BuildingInspectorDrawer";
 import { CampusTreeSidebar } from "./CampusTreeSidebar";
@@ -58,7 +59,8 @@ export const CampusMapMasterView: React.FC<CampusMapMasterViewProps> = ({ onSele
     railwayTerminalState,
   } = useCampusStore();
 
-  const { year, month, cash } = useSimulationClockStore();
+  const { year, month } = useSimulationClockStore();
+  const { cash } = useCompanyFinanceStore();
   const telemetry = getTelemetrySummary();
 
   // Modals & Panels State

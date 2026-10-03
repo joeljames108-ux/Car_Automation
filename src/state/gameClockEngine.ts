@@ -239,6 +239,71 @@ export class ClockListenerRegistry {
 /** Singleton registry — importable by any system that wants to subscribe */
 export const clockListeners = new ClockListenerRegistry();
 
+/**
+ * Master Clock Cadence Dispatcher
+ * Dispatches ticks across DAILY, MONTHLY, and YEARLY cadences.
+ * When skipping multiple months or years, iterates sequentially through each
+ * intermediate month and year so no financial, R&D, or production cycles are skipped.
+ */
+export function dispatchClockCadences(
+  previous: GameDateTime,
+  current: GameDateTime,
+  elapsedDays: number,
+  todayEvents: ScheduledGameEvent[] = []
+): void {
+  // 1. DAILY CADENCE
+  if (previous.day !== current.day || previous.month !== current.month || previous.year !== current.year || elapsedDays > 0) {
+    clockListeners.notify('day', {
+      previous,
+      current,
+      elapsedDays,
+      todayEvents,
+    });
+  }
+
+  // 2. WEEKLY CADENCE
+  if (previous.week !== current.week || previous.year !== current.year) {
+    clockListeners.notify('week', {
+      previous,
+      current,
+      elapsedDays,
+      todayEvents,
+    });
+  }
+
+  // 3. MONTHLY CADENCE (Sequential intermediate month execution)
+  const prevMonthIdx = previous.year * 12 + (previous.month - 1);
+  const curMonthIdx = current.year * 12 + (current.month - 1);
+  if (curMonthIdx > prevMonthIdx) {
+    for (let m = prevMonthIdx + 1; m <= curMonthIdx; m++) {
+      const y = Math.floor(m / 12);
+      const mo = (m % 12) + 1;
+      const intermediateDate = new Date(Date.UTC(y, mo - 1, 1, 0, 0));
+      const intermediateDT = fromJSDate(intermediateDate);
+      clockListeners.notify('month', {
+        previous,
+        current: intermediateDT,
+        elapsedDays,
+        todayEvents: m === curMonthIdx ? todayEvents : [],
+      });
+    }
+  }
+
+  // 4. YEARLY CADENCE (Sequential intermediate year execution)
+  if (current.year > previous.year) {
+    for (let y = previous.year + 1; y <= current.year; y++) {
+      const intermediateDate = new Date(Date.UTC(y, 0, 1, 0, 0));
+      const intermediateDT = fromJSDate(intermediateDate);
+      clockListeners.notify('year', {
+        previous,
+        current: intermediateDT,
+        elapsedDays,
+        todayEvents: y === current.year ? todayEvents : [],
+      });
+    }
+  }
+}
+
 
 // ─────────────────────────────────────────────────────────────
 //  4. Month Calendar Grid Generator (for UI)

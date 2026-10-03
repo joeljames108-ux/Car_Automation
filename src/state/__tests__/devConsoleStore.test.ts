@@ -6,6 +6,8 @@ import {
 } from "../devConsoleStore";
 import { useDeveloperModeStore } from "../developerModeStore";
 import { useSimulationClockStore } from "../simulationClockStore";
+import { useCompanyFinanceStore } from "../companyFinanceStore";
+import { useTradeStore, selectTotalMaterialsTonnes } from "../tradeStore";
 
 describe("devConsoleStore", () => {
   beforeEach(() => {
@@ -46,16 +48,16 @@ describe("devConsoleStore", () => {
 
   it("executes cash and materials commands", () => {
     const { executeCommand } = useDevConsoleStore.getState();
-    const initialCash = useSimulationClockStore.getState().cash;
+    const initialCash = useCompanyFinanceStore.getState().cash;
 
     executeCommand("cash.add 1000000");
-    expect(useSimulationClockStore.getState().cash).toBe(initialCash + 1000000);
+    expect(useCompanyFinanceStore.getState().cash).toBe(initialCash + 1000000);
 
     executeCommand("cash.set 5000000");
-    expect(useSimulationClockStore.getState().cash).toBe(5000000);
+    expect(useCompanyFinanceStore.getState().cash).toBe(5000000);
 
     executeCommand("materials.add 250");
-    expect(useSimulationClockStore.getState().materialsTonnes).toBeGreaterThanOrEqual(250);
+    expect(selectTotalMaterialsTonnes(useTradeStore.getState())).toBeGreaterThanOrEqual(250);
   });
 
   it("executes unlock.all and lock.all commands updating developer mode overrides", () => {

@@ -6,7 +6,7 @@ import {
   ShieldCheck, AlertTriangle, Star, CheckCircle2, Circle,
   Weight, DollarSign, Zap, Check, ArrowRight,
 } from "lucide-react";
-import { useCompany } from "../state/CompanyContext";
+import { useSafetyStore } from "../state/safetyStore";
 import { Select, Toggle, Slider } from "./ui/Controls";
 import type {
   CrumpleZoneType, AirbagType, SafetyCageType, SeatbeltType, PedestrianSafetyType,
@@ -94,7 +94,7 @@ interface SafetyCenterProps {
 }
 
 export function SafetyCenter({ onSelectStage }: SafetyCenterProps = {}) {
-  const { safetyConfig, safetySim, updateSafety } = useCompany();
+  const { safetyConfig, safetySim, updateSafety } = useSafetyStore();
   const [activeTab, setActiveTab] = useState<"design" | "ncap">("design");
 
   const tabs = [

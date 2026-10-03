@@ -27,7 +27,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { useCampusStore } from "../../state/campusStore";
-import { useSimulationClockStore } from "../../state/simulationClockStore";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
 import { NPC_CONTRACT_MANUFACTURERS } from "../../sim/campus/campusRegistry";
 import { FactoryProgressionEngine } from "../../sim/campus/factoryProgressionEngine";
 import { useWorkforceStore } from "../../state/workforceStore";
@@ -63,7 +63,6 @@ export const BuildingInspectorDrawer: React.FC = () => {
     assignPrototypeSlot,
     purchaseFactoryLand,
     beginFactoryConstruction,
-    advanceFactoryConstructionMonth,
     selectContractPartner,
     upgradeFactoryTier,
     upgradeFactoryShop,
@@ -71,7 +70,7 @@ export const BuildingInspectorDrawer: React.FC = () => {
     clearActionMessage,
   } = useCampusStore();
 
-  const { cash } = useSimulationClockStore();
+  const { cash } = useCompanyFinanceStore();
   const { facilityOvertimePolicies, setFacilityOvertimeIntensity, getFacilityWorkloadReport } = useWorkforceStore();
 
   const [activeTab, setActiveTab] = useState<InspectorTab>("overview");

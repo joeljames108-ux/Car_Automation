@@ -3,7 +3,7 @@
 // ===================================================================
 import { useMemo, memo } from "react";
 import { TrendingUp, Users, BarChart3 } from "lucide-react";
-import { useCompany } from "../../state/CompanyContext";
+import { useMotorsportStore } from "../../state/motorsportStore";
 import { LineChart } from "../ui/LineChart";
 import { DonutChart } from "../ui/Charts";
 import { FACILITY_COLORS } from "./TeamCard";
@@ -63,7 +63,7 @@ const RadarChart = memo(function RadarChart({ stats, size = 120 }: { stats: { la
 });
 
 export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
-  const { company } = useCompany();
+  const teams = useMotorsportStore(s => s.teams);
 
   const pointsSeries = useMemo(() => {
     if (!selectedTeam || selectedTeam.seasonResults.length === 0) return [];
@@ -83,7 +83,7 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
     }];
   }, [selectedTeam]);
 
-  if (company.motorsport.teams.length === 0) {
+  if (teams.length === 0) {
     return (
       <div className="glass-panel p-10 text-center">
         <BarChart3 size={36} className="mx-auto text-slate-700 mb-3" />

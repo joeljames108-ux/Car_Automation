@@ -168,7 +168,7 @@ export function EngineDesigner({ onSelectStage }: EngineDesignerProps = {}) {
   }, []);
 
   // Robotic Engine Assembly Line System state (Unified)
-  const assembly = useAssemblyStore(eng);
+  const assembly = useAssemblyStore(eng, sim);
 
   const openEnlargedModal = () => {
     setIsEnlarged(true);

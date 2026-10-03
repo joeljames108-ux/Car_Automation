@@ -3,7 +3,7 @@
 // ===================================================================
 import React, { useState, memo } from "react";
 import { Users, Search, UserPlus, UserMinus, RefreshCw } from "lucide-react";
-import { useCompany } from "../../state/CompanyContext";
+import { useMotorsportStore } from "../../state/motorsportStore";
 import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 import type { MotorsportTeam, RaceDriver } from "../../sim/types";
 
@@ -54,10 +54,13 @@ const DriverCard = memo(function DriverCard({ driver, actions }: { driver: RaceD
 });
 
 export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
-  const {
-    company, assignMotorsportDriver, availableDrivers,
-    scoutNewDriver, signScouted, releaseMotorsportDriver, renewMotorsportContract,
-  } = useCompany();
+  const assignMotorsportDriver = useMotorsportStore(s => s.assignMotorsportDriver);
+  const scoutNewDriver = useMotorsportStore(s => s.scoutNewDriver);
+  const signScouted = useMotorsportStore(s => s.signScouted);
+  const releaseMotorsportDriver = useMotorsportStore(s => s.releaseMotorsportDriver);
+  const renewMotorsportContract = useMotorsportStore(s => s.renewMotorsportContract);
+  const scoutedDrivers = useMotorsportStore(s => s.scoutedDrivers);
+  const availableDrivers = React.useMemo(() => useMotorsportStore.getState().getAvailableDrivers(), [selectedTeam]);
   const [tab, setTab] = useState<"available" | "scouting" | "roster">("roster");
 
   return (
@@ -158,22 +161,22 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
               playHMIClickSound();
               scoutNewDriver();
             }}
-              disabled={company.motorsport.scoutedDrivers.length >= 4}
+              disabled={scoutedDrivers.length >= 4}
               className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-300 hover:bg-amber-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer">
               <Search size={14} /> Scout New Talent
             </button>
             <span className="text-[10px] text-slate-500">
-              {company.motorsport.scoutedDrivers.length}/4 scouted
+              {scoutedDrivers.length}/4 scouted
             </span>
           </div>
-          {company.motorsport.scoutedDrivers.length === 0 ? (
+          {scoutedDrivers.length === 0 ? (
             <div className="glass-panel p-8 text-center">
               <Search size={32} className="mx-auto text-slate-700 mb-2" />
               <p className="text-sm text-slate-500">Scout young talent from feeder series.</p>
               <p className="text-xs text-slate-600 mt-1">Cheaper but less experienced — high potential!</p>
             </div>
           ) : (
-            company.motorsport.scoutedDrivers.map(d => (
+            scoutedDrivers.map(d => (
               <DriverCard key={d.id} driver={d} actions={
                 selectedTeam && selectedTeam.drivers.length < 2 ? (
                   <button onClick={() => {

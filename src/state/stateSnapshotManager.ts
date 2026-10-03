@@ -8,6 +8,9 @@
 import { useDeveloperModeStore } from "./developerModeStore";
 import { useSimulationClockStore } from "./simulationClockStore";
 import { useRDTreeStore } from "./rdTreeStore";
+import { useCompanyFinanceStore } from "./companyFinanceStore";
+import { useTradeStore, selectTotalMaterialsTonnes } from "./tradeStore";
+import { useReputationStore } from "./reputationStore";
 
 export interface StateSnapshotMeta {
   id: string;
@@ -76,6 +79,9 @@ export async function takeSnapshot(name: string, description: string = ""): Prom
   const clock = useSimulationClockStore.getState();
   const dev = useDeveloperModeStore.getState();
   const rd = useRDTreeStore.getState();
+  const currentCash = useCompanyFinanceStore.getState().cash;
+  const currentMaterials = selectTotalMaterialsTonnes(useTradeStore.getState());
+  const currentReputation = useReputationStore.getState().overallReputation;
 
   const id = `snap_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
   const overridesCount = Object.values(dev.overrides).filter(Boolean).length;
@@ -87,10 +93,16 @@ export async function takeSnapshot(name: string, description: string = ""): Prom
       day: clock.day,
       hour: clock.hour,
       minute: clock.minute,
-      cash: clock.cash,
-      materialsTonnes: clock.materialsTonnes,
-      reputation: clock.reputation,
       speed: clock.speed,
+    },
+    finance: {
+      cash: currentCash,
+    },
+    trade: {
+      materialsTonnes: currentMaterials,
+    },
+    reputation: {
+      overallReputation: currentReputation,
     },
     developerMode: {
       devMode: dev.devMode,
@@ -114,7 +126,7 @@ export async function takeSnapshot(name: string, description: string = ""): Prom
     description,
     timestamp: Date.now(),
     year: clock.year,
-    cash: clock.cash,
+    cash: currentCash,
     scenario: dev.activeScenario,
     activeOverridesCount: overridesCount,
     approxSizeKb,
@@ -198,11 +210,27 @@ export async function restoreSnapshot(idOrName: string): Promise<{ success: bool
       useSimulationClockStore.setState({
         hour: c.hour,
         minute: c.minute,
-        cash: c.cash,
-        materialsTonnes: c.materialsTonnes,
-        reputation: c.reputation,
         ...(c.speed ? { speed: c.speed } : {}),
       });
+
+      // Restore Finance (legacy clock fallback supported)
+      const cashVal = (snapshot.stores as any).finance?.cash ?? c.cash;
+      if (cashVal !== undefined) {
+        useCompanyFinanceStore.setState({ cash: cashVal });
+      }
+
+      // Restore Trade Materials (legacy clock fallback supported)
+      const matsVal = (snapshot.stores as any).trade?.materialsTonnes ?? c.materialsTonnes;
+      if (matsVal !== undefined) {
+        const curTonnes = selectTotalMaterialsTonnes(useTradeStore.getState());
+        useTradeStore.getState().addRawMaterialsTonnes(matsVal - curTonnes);
+      }
+
+      // Restore Reputation (legacy clock fallback supported)
+      const repVal = (snapshot.stores as any).reputation?.overallReputation ?? c.reputation;
+      if (repVal !== undefined) {
+        useReputationStore.setState({ overallReputation: repVal });
+      }
     }
 
     // Restore Developer Mode
@@ -337,16 +365,25 @@ export function dumpFullStateJSON(): string {
   const clock = useSimulationClockStore.getState();
   const dev = useDeveloperModeStore.getState();
   const rd = useRDTreeStore.getState();
+  const cash = useCompanyFinanceStore.getState().cash;
+  const materialsTonnes = selectTotalMaterialsTonnes(useTradeStore.getState());
+  const reputation = useReputationStore.getState().overallReputation;
 
   const fullDump = {
     exportedAt: new Date().toISOString(),
     simulationClock: {
       dateTime: clock.getGameDateTime ? clock.getGameDateTime() : { year: clock.year, month: clock.month, day: clock.day },
-      cash: clock.cash,
-      materialsTonnes: clock.materialsTonnes,
-      reputation: clock.reputation,
       speed: clock.speed,
       isPlaying: clock.isPlaying,
+    },
+    finance: {
+      cash,
+    },
+    trade: {
+      materialsTonnes,
+    },
+    reputation: {
+      overallReputation: reputation,
     },
     developerMode: {
       devMode: dev.devMode,

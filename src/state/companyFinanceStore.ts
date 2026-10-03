@@ -192,6 +192,7 @@ export interface CompanyFinanceState {
   addFinancialEvents: (events: MonthlyFinancialEvent[]) => void;
 
   injectCapital: (amount: number, source: string, month: number, year: number) => void;
+  spendDirectCash: (amount: number, category?: TransactionCategory, description?: string, month?: number, year?: number) => void;
   updateCashHealth: () => void;
   recalculateValuation: (techIPValue?: number, brandValue?: number) => void;
   resetTo1970: () => void;
@@ -501,6 +502,25 @@ export const useCompanyFinanceStore = create<CompanyFinanceState>((set, get) => 
         `Capital injection via ${source}`
       );
       const newCash = state.cash + amount;
+      const balanceSheet = buildBalanceSheet(
+        newCash,
+        state.assets,
+        state.liabilities,
+        state.technologyIPValue,
+        state.brandReputationValue
+      );
+      set({
+        cash: newCash,
+        balanceSheet,
+        companyValue: balanceSheet.totalAssets,
+      });
+      get().updateCashHealth();
+    },
+
+    spendDirectCash: (amount, category = "HQ_CONSTRUCTION", description = "Direct cash expenditure", month = 1, year = 1970) => {
+      const state = get();
+      state.recordTransaction(month, year, category, amount, description);
+      const newCash = Math.max(0, state.cash - amount);
       const balanceSheet = buildBalanceSheet(
         newCash,
         state.assets,

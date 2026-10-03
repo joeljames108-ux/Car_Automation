@@ -39,6 +39,7 @@ import {
   calculateSupplierEconomics,
 } from "./reputationEngine";
 import { useSimulationClockStore } from "./simulationClockStore";
+import { clockListeners } from "./gameClockEngine";
 
 export interface ReputationState {
   // 17 Specialized Dimensions Matrix
@@ -180,8 +181,7 @@ export const useReputationStore = create<ReputationState>((set, get) => ({
       );
       const updatedOpportunities = evaluateMarketOpportunities(updatedDimensions);
 
-      // Keep SimulationClockStore reputation synchronized with brand prestige index
-      useSimulationClockStore.setState({ reputation: updatedIdentity.brandPrestigeIndex });
+
 
       return {
         dimensions: updatedDimensions,
@@ -230,7 +230,7 @@ export const useReputationStore = create<ReputationState>((set, get) => ({
         Math.max(1, (useSimulationClockStore.getState().year || 1970) - 1970 + 1)
       );
 
-      useSimulationClockStore.setState({ reputation: updatedIdentity.brandPrestigeIndex });
+
 
       return {
         components: [newRecord, ...state.components],
@@ -281,7 +281,7 @@ export const useReputationStore = create<ReputationState>((set, get) => ({
         Math.max(1, (useSimulationClockStore.getState().year || 1970) - 1970 + 1)
       );
 
-      useSimulationClockStore.setState({ reputation: updatedIdentity.brandPrestigeIndex });
+
 
       return {
         vehicles: [newRecord, ...state.vehicles],
@@ -340,7 +340,7 @@ export const useReputationStore = create<ReputationState>((set, get) => ({
         Math.max(1, (clock.year || 1970) - 1970 + 1)
       );
 
-      useSimulationClockStore.setState({ reputation: updatedIdentity.brandPrestigeIndex });
+
 
       return {
         dimensions: updatedDimensions,
@@ -425,7 +425,7 @@ export const useReputationStore = create<ReputationState>((set, get) => ({
         Math.max(1, (clock.year || 1970) - 1970 + 1)
       );
 
-      useSimulationClockStore.setState({ reputation: updatedIdentity.brandPrestigeIndex });
+
 
       return {
         dimensions: updatedDimensions,
@@ -460,7 +460,7 @@ export const useReputationStore = create<ReputationState>((set, get) => ({
       );
       const updatedOpportunities = evaluateMarketOpportunities(updatedDimensions);
 
-      useSimulationClockStore.setState({ reputation: updatedIdentity.brandPrestigeIndex });
+
 
       return {
         dimensions: updatedDimensions,
@@ -502,24 +502,10 @@ export const useReputationStore = create<ReputationState>((set, get) => ({
   },
 }));
 
-// Automatic reactive synchronization with Simulation Clock
+// Automatic reactive synchronization with Simulation Clock (Daily Cadence)
 if (typeof window !== "undefined") {
-  let lastDay = useSimulationClockStore.getState().day;
-  let lastMonth = useSimulationClockStore.getState().month;
-  let lastYear = useSimulationClockStore.getState().year;
-
-  useSimulationClockStore.subscribe((state) => {
-    const dayChanged = state.day !== lastDay || state.month !== lastMonth || state.year !== lastYear;
-    if (dayChanged) {
-      const prevDate = new Date(Date.UTC(lastYear, lastMonth - 1, lastDay));
-      const currDate = new Date(Date.UTC(state.year, state.month - 1, state.day));
-      const diff = Math.max(1, Math.round((currDate.getTime() - prevDate.getTime()) / 86_400_000));
-
-      lastDay = state.day;
-      lastMonth = state.month;
-      lastYear = state.year;
-
-      useReputationStore.getState().advanceReputationTime(diff);
-    }
+  clockListeners.subscribe("day", "reputationDailyTick", (payload) => {
+    const diff = payload.elapsedDays || 1;
+    useReputationStore.getState().advanceReputationTime(diff);
   });
 }

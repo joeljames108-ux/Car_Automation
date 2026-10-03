@@ -3,11 +3,11 @@
 // ===================================================================
 import { useMemo, memo } from "react";
 import { Trophy, Flag, Zap, Timer } from "lucide-react";
-import { useCompany } from "../../state/CompanyContext";
+import { useMotorsportStore } from "../../state/motorsportStore";
 
 export const MotorsportHeader = memo(function MotorsportHeader() {
-  const { company } = useCompany();
-  const teams = company.motorsport.teams;
+  const teams = useMotorsportStore(s => s.teams);
+  const currentSeason = useMotorsportStore(s => s.currentSeason);
 
   const { totalWins, totalTitles, totalPodiums } = useMemo(() => {
     let wins = 0, titles = 0, podiums = 0;
@@ -35,7 +35,7 @@ export const MotorsportHeader = memo(function MotorsportHeader() {
           <div>
             <h2 className="text-xl font-bold gradient-text">Motorsport Division</h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Season {company.motorsport.currentSeason} · {teams.length} {teams.length === 1 ? "team" : "teams"} active
+              Season {currentSeason} · {teams.length} {teams.length === 1 ? "team" : "teams"} active
             </p>
           </div>
         </div>

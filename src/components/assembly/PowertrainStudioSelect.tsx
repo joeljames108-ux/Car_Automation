@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useGuidedEngineeringStore } from "../../state/guidedEngineeringStore";
 import { useSimulationClockStore, formatSimDate } from "../../state/simulationClockStore";
+import { useVehicleProjectStore } from "../../state/vehicleProjectStore";
 
 export interface PowertrainStudioSelectProps {
   onSelectEngine: () => void;
@@ -27,7 +28,8 @@ export const PowertrainStudioSelect: React.FC<PowertrainStudioSelectProps> = ({
   className = "",
 }) => {
   const { engineStatus, transmissionStatus } = useGuidedEngineeringStore();
-  const { year, month, day, activeProject } = useSimulationClockStore();
+  const { year, month, day } = useSimulationClockStore();
+  const activeProject = useVehicleProjectStore((s) => s.activeProject);
 
   const isEngineConfigured = engineStatus === "configured";
   const isTransmissionConfigured = transmissionStatus === "configured";

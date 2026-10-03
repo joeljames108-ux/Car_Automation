@@ -1499,15 +1499,21 @@ export interface SafetySimResult {
 }
 
 // ===================================================================
-// ENGINEERING WORKFLOW PIPELINE
+// VEHICLE DEVELOPMENT LIFECYCLE (Product-Development Lifecycle)
+// Where a vehicle sits along its lifecycle:
+// Research → Concept → Design → Simulation → Prototype → Testing → Redesign → Manufacturing → Sales → Feedback → Next Gen
+// Distinct from EngineeringPipeline ("What am I technically configuring in the studio?")
 // ===================================================================
 
-export type WorkflowStage =
+export type VehicleDevelopmentLifecycleStage =
   | "research" | "concept" | "design" | "simulation" | "prototype"
   | "testing" | "redesign" | "manufacturing" | "sales" | "feedback" | "next_gen";
 
-export interface WorkflowStep {
-  stage: WorkflowStage;
+/** @deprecated Use VehicleDevelopmentLifecycleStage to prevent confusion with EngineeringPipelineStage */
+export type WorkflowStage = VehicleDevelopmentLifecycleStage;
+
+export interface VehicleDevelopmentStep {
+  stage: VehicleDevelopmentLifecycleStage;
   status: "locked" | "available" | "in_progress" | "completed" | "skipped";
   startedMonth: number | null;
   completedMonth: number | null;
@@ -1517,13 +1523,19 @@ export interface WorkflowStep {
   monthsSpent: number;
 }
 
-export interface WorkflowPipeline {
+/** @deprecated Use VehicleDevelopmentStep */
+export type WorkflowStep = VehicleDevelopmentStep;
+
+export interface VehicleDevelopmentLifecycle {
   vehicleId: string;
-  steps: WorkflowStep[];
-  currentStage: WorkflowStage;
+  steps: VehicleDevelopmentStep[];
+  currentStage: VehicleDevelopmentLifecycleStage;
   overallProgress: number;     // 0-1
   qualityMultiplier: number;   // product of all step qualities
 }
+
+/** @deprecated Use VehicleDevelopmentLifecycle */
+export type WorkflowPipeline = VehicleDevelopmentLifecycle;
 
 // ===================================================================
 // CUSTOMER FEEDBACK & SALES

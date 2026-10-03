@@ -8,6 +8,7 @@ import {
   Newspaper,
 } from "lucide-react";
 import { useCompany } from "../state/CompanyContext";
+import { useSimulationClockStore } from "../state/simulationClockStore";
 import { LineChart } from "./ui/LineChart";
 import type { MarketEvent, Regulation } from "../sim/types";
 
@@ -118,8 +119,9 @@ function EventCard({ event }: { event: MarketEvent }) {
 }
 
 export function DynamicEconomy() {
-  const { company, advanceAllSystems } = useCompany();
+  const { company } = useCompany();
   const { economy } = company;
+  const { monthNameShort, year, advanceMonths } = useSimulationClockStore();
   const [activeTab, setActiveTab] = useState<"overview" | "regulations" | "events" | "news">("overview");
 
   const fuelSeries = useMemo(() => [{
@@ -157,14 +159,23 @@ export function DynamicEconomy() {
           <div className="flex-1" />
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider">Game Month</div>
-              <div className="text-2xl font-bold font-mono text-accent-300">{economy.month}</div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-wider">Simulation Date</div>
+              <div className="text-xl font-bold font-mono text-accent-300">{monthNameShort} {year}</div>
+              <div className="text-[10px] font-mono text-slate-400">Elapsed: {economy.month} mo</div>
             </div>
             <div className="flex flex-col gap-1">
-              <button onClick={advanceAllSystems} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 transition-all">
+              <button
+                onClick={() => advanceMonths(1)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 transition-all cursor-pointer"
+                title="Advance Master Game Clock by 1 Month"
+              >
                 <Play size={12} /> +1 Month
               </button>
-              <button onClick={() => { for (let i = 0; i < 6; i++) advanceAllSystems(); }} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-base-850 border border-base-700 text-slate-300 hover:border-base-600 transition-all">
+              <button
+                onClick={() => advanceMonths(6)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-base-850 border border-base-700 text-slate-300 hover:border-base-600 transition-all cursor-pointer"
+                title="Advance Master Game Clock by 6 Months"
+              >
                 <FastForward size={12} /> +6 Months
               </button>
             </div>

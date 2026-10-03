@@ -3,7 +3,7 @@
 // ===================================================================
 import { memo } from "react";
 import { Settings, Fuel, Droplets } from "lucide-react";
-import { useCompany } from "../../state/CompanyContext";
+import { useMotorsportStore } from "../../state/motorsportStore";
 import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import { CATEGORY_COLORS, CATEGORY_LABELS } from "./TeamCard";
 import type { MotorsportTeam, TireChoice } from "../../sim/types";
@@ -33,9 +33,10 @@ const TireBadge = memo(function TireBadge({ tire, active, onClick }: { tire: Tir
 });
 
 export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
-  const { company, updateStrategy } = useCompany();
+  const teams = useMotorsportStore(s => s.teams);
+  const updateStrategy = useMotorsportStore(s => s.updateStrategy);
 
-  if (company.motorsport.teams.length === 0) {
+  if (teams.length === 0) {
     return (
       <div className="glass-panel p-10 text-center">
         <Settings size={36} className="mx-auto text-slate-700 mb-3" />

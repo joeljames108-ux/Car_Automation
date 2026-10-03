@@ -3,11 +3,12 @@
 // ===================================================================
 import { memo } from "react";
 import { Trophy, Award, Medal, Flag, Zap, TrendingUp } from "lucide-react";
-import { useCompany } from "../../state/CompanyContext";
+import { useMotorsportStore } from "../../state/motorsportStore";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 
 export const SeasonSummaryPanel = memo(function SeasonSummaryPanel() {
-  const { company } = useCompany();
+  const teams = useMotorsportStore(s => s.teams);
+  const currentSeason = useMotorsportStore(s => s.currentSeason);
 
   return (
     <div className="space-y-4 animate-fade-in">
@@ -21,12 +22,12 @@ export const SeasonSummaryPanel = memo(function SeasonSummaryPanel() {
               </span>
             </div>
             <h3 className="text-lg font-black text-slate-100 flex items-center gap-2 mt-1">
-              <Trophy size={20} className="text-yellow-400" /> Motorsport Season {Math.max(1, company.motorsport.currentSeason - 1)} Summary
+              <Trophy size={20} className="text-yellow-400" /> Motorsport Season {Math.max(1, currentSeason - 1)} Summary
             </h3>
           </div>
         </div>
 
-        {company.motorsport.teams.length === 0 ? (
+        {teams.length === 0 ? (
           <div className="text-center py-8 bg-base-950/60 rounded-xl border border-white/5">
             <Trophy size={32} className="mx-auto text-slate-700 mb-2" />
             <p className="text-xs text-slate-500">No completed seasons on record yet.</p>
@@ -34,7 +35,7 @@ export const SeasonSummaryPanel = memo(function SeasonSummaryPanel() {
           </div>
         ) : (
           <div className="space-y-4">
-            {company.motorsport.teams.map(t => {
+            {teams.map(t => {
               const lastRes = t.seasonResults[t.seasonResults.length - 1];
               if (!lastRes) return null;
               const isChamp = lastRes.position === 1;

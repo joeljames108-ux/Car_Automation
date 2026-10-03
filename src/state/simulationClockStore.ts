@@ -5,11 +5,10 @@ import {
   GAME_START_DATE,
   fromJSDate, toJSDate, advanceByDays, advanceByHours,
   formatGameDate, formatGameTime, gameEventDateStr,
-  clockListeners,
+  clockListeners, dispatchClockCadences,
 } from './gameClockEngine';
-
 // ─────────────────────────────────────────────────────────────
-//  Re-export legacy types so existing imports still work
+//  Master Simulation Clock Types
 // ─────────────────────────────────────────────────────────────
 
 export interface CalendarEvent {
@@ -32,41 +31,16 @@ export interface CompanyFeedItem {
   read?: boolean;
 }
 
-export interface ActiveProject {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  targetPowerHp: number;
-  weightReductionKg: number;
-  dragCoefficient: number;
-  targetUnitCostEur: number;
-  progress: {
-    design: number;
-    engineering: number;
-    testing: number;
-    production: number;
-  };
-}
-
 export type SimSpeed = 1 | 2 | 5 | 10 | 25 | 50;
 
 // ─────────────────────────────────────────────────────────────
-//  State Interface
+//  State Interface (Time & Calendar Only)
 // ─────────────────────────────────────────────────────────────
 
-interface SimulationClockState extends GameDateTime {
+export interface SimulationClockState extends GameDateTime {
   // Speed controls
   isPlaying: boolean;
   speed: SimSpeed;
-
-  // Company Resources
-  cash: number;
-  materialsTonnes: number;
-  reputation: number;
-
-  // Active Project (legacy)
-  activeProject: ActiveProject;
 
   // Events
   scheduledEvents: ScheduledGameEvent[];
@@ -84,6 +58,8 @@ interface SimulationClockState extends GameDateTime {
   advanceDays: (days?: number) => void;
   /** Advance N game-hours */
   advanceHours: (hours?: number) => void;
+  /** Advance N game-months sequentially through the master clock */
+  advanceMonths: (months?: number) => void;
   /** Skip to the date of the next scheduled event */
   skipToNextEvent: () => void;
 
@@ -96,10 +72,7 @@ interface SimulationClockState extends GameDateTime {
   setDate: (year: number, month?: number, day?: number) => void;
   /** Simulate day-by-day until reaching the target date, updating finances and firing events */
   simulateUntilDate: (targetYear: number, targetMonth?: number, targetDay?: number) => void;
-  /** Inject cash and materials (Developer utility) */
-  addResources: (cash: number, materialsTonnes: number) => void;
 
-  updateProjectProgress: (patch: Partial<ActiveProject['progress']>) => void;
   addFeedItem: (item: Omit<CompanyFeedItem, 'id'>) => void;
 
   /** Get full GameDateTime snapshot */
@@ -191,22 +164,6 @@ export const useSimulationClockStore = create<SimulationClockState>((set, get) =
     isPlaying: true, // Continuous simulation clock — time runs always
     speed: 1 as SimSpeed,
 
-    cash: 500_000,           // Startup capital in 1970
-    materialsTonnes: 200,    // Modest initial stock
-    reputation: 10,          // Brand new company
-
-    activeProject: {
-      id: "proj_first_car",
-      name: "PROJECT GENESIS",
-      category: "Grand Tourer / Prototype",
-      description: "Your company's very first vehicle. Design a competitive GT car from scratch to establish your brand.",
-      targetPowerHp: 280,
-      weightReductionKg: -80,
-      dragCoefficient: 0.38,
-      targetUnitCostEur: 12000,
-      progress: { design: 0, engineering: 0, testing: 0, production: 0 },
-    },
-
     scheduledEvents: [...SEED_EVENTS],
 
     todayEvents: todayCalEvents,
@@ -256,21 +213,6 @@ export const useSimulationClockStore = create<SimulationClockState>((set, get) =
       const previous: GameDateTime = extractGameDateTime(state);
       const current = advanceByDays(previous, days);
 
-      // Compute resources change
-      const dailyRevenue = 4100;    // Era-appropriate: modest 1970 income
-      const dailyCosts = 2800;
-      const newCash = state.cash + days * (dailyRevenue - dailyCosts);
-      const newMats = Math.max(0, state.materialsTonnes - days * 0.5);
-
-      // Progress active project
-      const curProg = state.activeProject.progress;
-      const newProg = {
-        design: Math.min(100, curProg.design + days * 0.4),
-        engineering: Math.min(100, curProg.engineering + days * 0.3),
-        testing: Math.min(100, curProg.testing + days * 0.2),
-        production: Math.min(100, curProg.production + days * 0.15),
-      };
-
       // Determine today's events at the new date
       const newDateStr = gameEventDateStr(current);
       const todaySched = state.scheduledEvents.filter(e => e.dateStr === newDateStr);
@@ -278,20 +220,10 @@ export const useSimulationClockStore = create<SimulationClockState>((set, get) =
       const allCal = state.scheduledEvents.map(e => toCalendarEvent(e, current));
 
       // Fire subscriber callbacks
-      const payload: ClockTickPayload = {
-        previous, current, elapsedDays: days,
-        todayEvents: todaySched,
-      };
-      const changedCadences = clockListeners.getChangedCadences(previous, current);
-      for (const cadence of changedCadences) {
-        clockListeners.notify(cadence, payload);
-      }
+      dispatchClockCadences(previous, current, days, todaySched);
 
       set({
         ...current,
-        cash: newCash,
-        materialsTonnes: newMats,
-        activeProject: { ...state.activeProject, progress: newProg },
         todayEvents: newTodayEvents,
         allCalendarEvents: allCal,
       });
@@ -311,14 +243,7 @@ export const useSimulationClockStore = create<SimulationClockState>((set, get) =
         const newDateStr = gameEventDateStr(current);
         const todaySched = state.scheduledEvents.filter(e => e.dateStr === newDateStr);
 
-        const payload: ClockTickPayload = {
-          previous, current, elapsedDays,
-          todayEvents: todaySched,
-        };
-        const changedCadences = clockListeners.getChangedCadences(previous, current);
-        for (const cadence of changedCadences) {
-          clockListeners.notify(cadence, payload);
-        }
+        dispatchClockCadences(previous, current, elapsedDays, todaySched);
 
         const todayCalEvts = todaySched.map(e => toCalendarEvent(e, current));
         set({
@@ -330,6 +255,14 @@ export const useSimulationClockStore = create<SimulationClockState>((set, get) =
         // Just update time fields
         set({ hour: current.hour, minute: current.minute });
       }
+    },
+
+    advanceMonths: (months = 1) => {
+      const state = get();
+      const previous: GameDateTime = extractGameDateTime(state);
+      const targetDate = new Date(Date.UTC(previous.year, previous.month - 1 + months, previous.day, previous.hour, previous.minute));
+      const daysDiff = Math.max(1, Math.round((targetDate.getTime() - toJSDate(previous).getTime()) / 86_400_000));
+      get().advanceDays(daysDiff);
     },
 
     skipToNextEvent: () => {
@@ -377,15 +310,6 @@ export const useSimulationClockStore = create<SimulationClockState>((set, get) =
       }));
     },
 
-    updateProjectProgress: (patch) => {
-      set(state => ({
-        activeProject: {
-          ...state.activeProject,
-          progress: { ...state.activeProject.progress, ...patch },
-        },
-      }));
-    },
-
     addFeedItem: (item) => {
       const state = get();
       const newItem: CompanyFeedItem = {
@@ -417,14 +341,7 @@ export const useSimulationClockStore = create<SimulationClockState>((set, get) =
         allCalendarEvents: allCal,
       });
 
-      const payload: ClockTickPayload = {
-        previous, current, elapsedDays: 0,
-        todayEvents: todaySched,
-      };
-      const changedCadences = clockListeners.getChangedCadences(previous, current);
-      for (const cadence of changedCadences) {
-        clockListeners.notify(cadence, payload);
-      }
+      dispatchClockCadences(previous, current, 0, todaySched);
     },
 
     simulateUntilDate: (targetYear: number, targetMonth = 1, targetDay = 1) => {
@@ -439,13 +356,6 @@ export const useSimulationClockStore = create<SimulationClockState>((set, get) =
       } else if (totalDays < 0) {
         get().setDate(targetYear, targetMonth, targetDay);
       }
-    },
-
-    addResources: (cashToAdd: number, materialsToAdd: number) => {
-      set(state => ({
-        cash: state.cash + cashToAdd,
-        materialsTonnes: Math.max(0, state.materialsTonnes + materialsToAdd),
-      }));
     },
 
     getGameDateTime: () => extractGameDateTime(get()),

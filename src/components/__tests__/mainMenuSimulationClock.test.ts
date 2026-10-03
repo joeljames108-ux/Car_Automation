@@ -1,9 +1,13 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { useSimulationClockStore, formatSimDate } from "../../state/simulationClockStore";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
+import { useTradeStore } from "../../state/tradeStore";
+import { useReputationStore } from "../../state/reputationStore";
+import { useVehicleProjectStore } from "../../state/vehicleProjectStore";
 
 describe("Main Menu & Simulation Clock Master Suite", () => {
   beforeEach(() => {
-    // Reset simulation clock store to a test-friendly 1978 state
+    // Reset simulation clock store to a test-friendly 1978 time-only state
     useSimulationClockStore.setState({
       year: 1978,
       month: 5,
@@ -16,9 +20,17 @@ describe("Main Menu & Simulation Clock Master Suite", () => {
       monthNameShort: "MAY",
       isPlaying: false,
       speed: 1,
+    });
+
+    // Reset domain-specific stores
+    useCompanyFinanceStore.setState({
       cash: 12400000,
-      materialsTonnes: 8320,
-      reputation: 66,
+    });
+    useTradeStore.getState().resetTo1970();
+    useReputationStore.setState({
+      overallReputation: 66,
+    });
+    useVehicleProjectStore.setState({
       activeProject: {
         id: "proj_gt_coupe",
         name: "GT COUPE DEVELOPMENT",
@@ -45,9 +57,8 @@ describe("Main Menu & Simulation Clock Master Suite", () => {
     expect(state.day).toBe(15);
     expect(state.dayOfWeek).toBe("MONDAY");
     expect(state.week).toBe(20);
-    expect(state.cash).toBe(12400000);
-    expect(state.materialsTonnes).toBe(8320);
-    expect(state.reputation).toBe(66);
+    expect(useCompanyFinanceStore.getState().cash).toBe(12400000);
+    expect(useReputationStore.getState().overallReputation).toBe(66);
   });
 
   it("formats date matching the visual mockup (e.g. '15 MAY 1978')", () => {
@@ -55,7 +66,7 @@ describe("Main Menu & Simulation Clock Master Suite", () => {
     expect(formatSimDate(1982, 10, 4)).toBe("4 OCT 1982");
   });
 
-  it("advances calendar days and recalculates day of week, week number, and cash flow", () => {
+  it("advances calendar days and recalculates day of week and week number", () => {
     const { advanceDays } = useSimulationClockStore.getState();
     
     // Advance 1 day from 15 May to 16 May
@@ -71,7 +82,6 @@ describe("Main Menu & Simulation Clock Master Suite", () => {
     state = useSimulationClockStore.getState();
     expect(state.month).toBe(6);
     expect(state.day).toBe(5);
-    expect(state.cash).toBeGreaterThan(0);
   });
 
   it("toggles play/pause state and cycles simulation speed", () => {
@@ -91,8 +101,8 @@ describe("Main Menu & Simulation Clock Master Suite", () => {
     expect(useSimulationClockStore.getState().speed).toBe(50);
   });
 
-  it("contains all active project attributes matching the GT Coupe Development mockup", () => {
-    const { activeProject } = useSimulationClockStore.getState();
+  it("contains all active project attributes matching the GT Coupe Development mockup in vehicleProjectStore", () => {
+    const { activeProject } = useVehicleProjectStore.getState();
     expect(activeProject.name).toBe("GT COUPE DEVELOPMENT");
     expect(activeProject.targetPowerHp).toBe(1100);
     expect(activeProject.weightReductionKg).toBe(-150);
@@ -110,14 +120,14 @@ describe("Main Menu & Simulation Clock Master Suite", () => {
     expect(feedItems.length).toBeGreaterThanOrEqual(1);
   });
 
-  it("advances active project testing and production percentages when time passes", () => {
-    const initialTesting = useSimulationClockStore.getState().activeProject.progress.testing;
-    const initialProd = useSimulationClockStore.getState().activeProject.progress.production;
+  it("advances active project testing and production percentages when time passes via clock cadences", () => {
+    const initialTesting = useVehicleProjectStore.getState().activeProject.progress.testing;
+    const initialProd = useVehicleProjectStore.getState().activeProject.progress.production;
 
     useSimulationClockStore.getState().advanceDays(5);
 
-    const updatedTesting = useSimulationClockStore.getState().activeProject.progress.testing;
-    const updatedProd = useSimulationClockStore.getState().activeProject.progress.production;
+    const updatedTesting = useVehicleProjectStore.getState().activeProject.progress.testing;
+    const updatedProd = useVehicleProjectStore.getState().activeProject.progress.production;
 
     expect(updatedTesting).toBeGreaterThan(initialTesting);
     expect(updatedProd).toBeGreaterThan(initialProd);

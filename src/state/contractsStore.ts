@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { useSimulationClockStore } from "./simulationClockStore";
+import { clockListeners } from "./gameClockEngine";
 import {
   ActiveTieredContract,
   TieredContractTemplate,
@@ -741,11 +742,17 @@ export const useContractsStore = create<ContractsState>((set, get) => ({
     const penalty = con.terms.earlyTerminationPenalty;
     const clockStore = useSimulationClockStore.getState();
 
-    // Deduct penalty from company cash
-    useSimulationClockStore.setState({
-      cash: Math.max(0, clockStore.cash - penalty),
-      reputation: Math.max(10, clockStore.reputation - 4),
-    });
+    // Deduct penalty from company finance and commercial reputation
+    useCompanyFinanceStore.getState().spendDirectCash(
+      penalty,
+      "CONTRACT_PENALTY",
+      `Early termination penalty fee: ${con.partnerName}`
+    );
+    useReputationStore.getState().modifyDimension(
+      "commercialTrust",
+      -4,
+      `Contract terminated: ${con.partnerName}`
+    );
 
     clockStore.addFeedItem({
       type: "supplier",
@@ -819,28 +826,11 @@ export const useContractsStore = create<ContractsState>((set, get) => ({
   },
 }));
 
-// Automatic reactive synchronization with Simulation Clock
-// Uses dual approach: legacy Zustand subscription + proper clockListeners registration
+// Automatic reactive synchronization with Simulation Clock (Daily Cadence)
 if (typeof window !== "undefined") {
-  // Legacy subscription (tracks raw day field changes)
-  let lastDay = useSimulationClockStore.getState().day;
-  let lastMonth = useSimulationClockStore.getState().month;
-  let lastYear = useSimulationClockStore.getState().year;
-
-  useSimulationClockStore.subscribe((state) => {
-    const dayChanged = state.day !== lastDay || state.month !== lastMonth || state.year !== lastYear;
-    if (dayChanged) {
-      // Calculate actual days elapsed (handles month/year boundaries)
-      const prevDate = new Date(Date.UTC(lastYear, lastMonth - 1, lastDay));
-      const currDate = new Date(Date.UTC(state.year, state.month - 1, state.day));
-      const diff = Math.max(1, Math.round((currDate.getTime() - prevDate.getTime()) / 86_400_000));
-      
-      lastDay = state.day;
-      lastMonth = state.month;
-      lastYear = state.year;
-      
-      useContractsStore.getState().tickContracts(diff);
-      useContractsStore.getState().tickTieredContracts(diff, state.year);
-    }
+  clockListeners.subscribe("day", "contractsDailyTick", (payload) => {
+    const elapsedDays = payload.elapsedDays || 1;
+    useContractsStore.getState().tickContracts(elapsedDays);
+    useContractsStore.getState().tickTieredContracts(elapsedDays, payload.current.year);
   });
 }

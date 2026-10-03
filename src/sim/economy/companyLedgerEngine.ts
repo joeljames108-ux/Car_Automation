@@ -46,7 +46,8 @@ export type OtherExpenseCategory =
   | "WARRANTY_RECALL"
   | "MARKETING"
   | "MOTORSPORT_EXPENSE"
-  | "TAX";
+  | "TAX"
+  | "CONTRACT_PENALTY";
 
 export type TransactionCategory =
   | RevenueCategory

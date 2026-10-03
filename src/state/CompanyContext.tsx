@@ -2,95 +2,32 @@
 // COMPANY CONTEXT — Manages all new game mechanics state
 // ===================================================================
 
-import React, { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode } from "react";
 import { initialEconomyState, advanceEconomy } from "../sim/economyEngine";
 import { initialAICompetitors, advanceCompetitors } from "../sim/aiCompetitors";
-import { initialMotorsportState, createTeam, assignDriver, simulateSeason, transferTech, getAvailableDrivers, scoutDriver, signScoutedDriver, upgradeTeamFacility, updateTeamStrategy, releaseDriver, renewDriverContract, attractSponsor as attractSponsorFn, generateSponsorMarket } from "../sim/motorsportEngine";
+import { clockListeners } from "./gameClockEngine";
+import { useSimulationClockStore } from "./simulationClockStore";
+import { useMotorsportStore } from "./motorsportStore";
 import type {
   CompanyState, GarageVehicle, VehicleDesign, SimResult,
   VehicleVariantType, TwinEvent,
+  VehicleDevelopmentLifecycle, VehicleDevelopmentStep, VehicleDevelopmentLifecycleStage,
   WorkflowPipeline, WorkflowStep, WorkflowStage,
   CustomerFeedback, SalesConfig, SalesResult,
   SafetyConfig, SafetySimResult,
   MotorsportCategory, RaceDriver, TeamStrategy,
 } from "../sim/types";
 
-// ---------- Safety simulation ----------
+// ---------- Safety Domain (Extracted to safetyStore.ts) ----------
+export { simulateSafety, defaultSafetyConfig, useSafetyStore } from "./safetyStore";
+import { useSafetyStore } from "./safetyStore";
 
-const CRUMPLE_SCORES: Record<string, number> = { none: 0, basic: 40, progressive: 65, advanced: 85, adaptive: 95 };
-const AIRBAG_SCORES: Record<string, number> = { none: 0, front: 30, front_side: 55, full_curtain: 75, full_360: 90, external: 98 };
-const CAGE_SCORES: Record<string, number> = { none: 0, reinforced_pillars: 35, safety_cell: 60, carbon_monocoque: 85, full_cage: 95 };
-const BELT_SCORES: Record<string, number> = { three_point: 40, pretensioner: 55, load_limiter: 70, active_belt: 85, four_point: 95 };
-const PED_SCORES: Record<string, number> = { none: 0, active_hood: 50, bumper_airbag: 75, full_pedestrian: 95 };
 
-export function simulateSafety(config: SafetyConfig): SafetySimResult {
-  const frontCrumple = CRUMPLE_SCORES[config.frontCrumple] || 0;
-  const rearCrumple = CRUMPLE_SCORES[config.rearCrumple] || 0;
-  const sideCrumple = CRUMPLE_SCORES[config.sideCrumple] || 0;
-  const airbag = AIRBAG_SCORES[config.airbagType] || 0;
-  const cage = CAGE_SCORES[config.safetyCage] || 0;
-  const belt = BELT_SCORES[config.seatbeltType] || 0;
-  const ped = PED_SCORES[config.pedestrianSafety] || 0;
+// ---------- Vehicle Development Lifecycle ----------
+// Product-development lifecycle: Where is this vehicle in its development and market lifecycle?
+// Distinct from EngineeringPipeline ("What am I configuring in the studio?")
 
-  const airbagCountBonus = Math.min(config.airbagCount / 12, 1) * 15;
-  const doorBeamBonus = config.doorBeams ? 8 : 0;
-  const rolloverBonus = config.rolloverProtection ? 10 : 0;
-  const steeringBonus = config.energyAbsorbingSteeringColumn ? 5 : 0;
-  const fireBonus = config.fireSuppressionSystem ? 5 : 0;
-  const batteryBonus = config.postCrashBatteryDisconnect ? 4 : 0;
-  const childAnchors = Math.min(config.childSafetyAnchors / 4, 1) * 100;
-
-  const frontalScore = Math.min((frontCrumple * 0.5 + airbag * 0.25 + cage * 0.15 + belt * 0.1 + airbagCountBonus + steeringBonus), 100);
-  const sideScore = Math.min((sideCrumple * 0.4 + airbag * 0.3 + cage * 0.2 + doorBeamBonus + airbagCountBonus), 100);
-  const rearScore = Math.min((rearCrumple * 0.5 + cage * 0.2 + belt * 0.2 + fireBonus + batteryBonus) + 10, 100);
-  const rolloverScore = Math.min((cage * 0.5 + rolloverBonus * 3 + belt * 0.2), 100);
-  const pedestrianScore = Math.min(ped + steeringBonus, 100);
-
-  const overallScore = Math.round(frontalScore * 0.3 + sideScore * 0.25 + rearScore * 0.15 + rolloverScore * 0.15 + pedestrianScore * 0.15);
-  const ncapStars = overallScore >= 90 ? 5 : overallScore >= 75 ? 4 : overallScore >= 55 ? 3 : overallScore >= 35 ? 2 : 1;
-
-  // Weight: more safety = more weight
-  const baseWeight = 15;
-  const crumpleWeight = (frontCrumple + rearCrumple + sideCrumple) / 100 * 30;
-  const airbagWeight = config.airbagCount * 1.5;
-  const cageWeight = cage / 100 * 45;
-  const miscWeight = (config.doorBeams ? 8 : 0) + (config.rolloverProtection ? 12 : 0) + (config.fireSuppressionSystem ? 5 : 0);
-  const safetyWeight = Math.round(baseWeight + crumpleWeight + airbagWeight + cageWeight + miscWeight);
-
-  // Cost
-  const safetyCost = Math.round(overallScore * 80 + config.airbagCount * 150 + cageWeight * 50 + miscWeight * 30);
-
-  return {
-    frontalCrashScore: Math.round(frontalScore),
-    sideCrashScore: Math.round(sideScore),
-    rearCrashScore: Math.round(rearScore),
-    rolloverScore: Math.round(rolloverScore),
-    pedestrianScore: Math.round(pedestrianScore),
-    childSafetyScore: Math.round(childAnchors),
-    overallScore,
-    ncapStars,
-    safetyWeight,
-    safetyCost,
-    activeFeatureBonus: 0,
-  };
-}
-
-// ---------- Default safety config ----------
-
-export function defaultSafetyConfig(): SafetyConfig {
-  return {
-    frontCrumple: "progressive", rearCrumple: "basic", sideCrumple: "basic",
-    airbagType: "front_side", airbagCount: 6, safetyCage: "safety_cell",
-    seatbeltType: "pretensioner", pedestrianSafety: "active_hood",
-    childSafetyAnchors: 2, rolloverProtection: true, doorBeams: true,
-    energyAbsorbingSteeringColumn: true, collapsiblePedals: true,
-    fireSuppressionSystem: false, eCallSystem: true, postCrashBatteryDisconnect: false,
-  };
-}
-
-// ---------- Workflow pipeline ----------
-
-const WORKFLOW_STAGES: { stage: WorkflowStage; monthsRequired: number; skipPenalty: number }[] = [
+const DEVELOPMENT_LIFECYCLE_STAGES: { stage: VehicleDevelopmentLifecycleStage; monthsRequired: number; skipPenalty: number }[] = [
   { stage: "research", monthsRequired: 2, skipPenalty: 0.15 },
   { stage: "concept", monthsRequired: 1, skipPenalty: 0.10 },
   { stage: "design", monthsRequired: 3, skipPenalty: 0.20 },
@@ -104,8 +41,11 @@ const WORKFLOW_STAGES: { stage: WorkflowStage; monthsRequired: number; skipPenal
   { stage: "next_gen", monthsRequired: 1, skipPenalty: 0.0 },
 ];
 
-function createWorkflow(vehicleId: string): WorkflowPipeline {
-  const steps: WorkflowStep[] = WORKFLOW_STAGES.map((ws, i) => ({
+/** @deprecated Use DEVELOPMENT_LIFECYCLE_STAGES to distinguish from EngineeringPipeline */
+const WORKFLOW_STAGES = DEVELOPMENT_LIFECYCLE_STAGES;
+
+function createVehicleLifecycle(vehicleId: string): VehicleDevelopmentLifecycle {
+  const steps: VehicleDevelopmentStep[] = DEVELOPMENT_LIFECYCLE_STAGES.map((ws, i) => ({
     stage: ws.stage,
     status: i === 0 ? "available" : "locked",
     startedMonth: null,
@@ -118,13 +58,16 @@ function createWorkflow(vehicleId: string): WorkflowPipeline {
   return { vehicleId, steps, currentStage: "research", overallProgress: 0, qualityMultiplier: 1.0 };
 }
 
+/** @deprecated Use createVehicleLifecycle */
+const createWorkflow = createVehicleLifecycle;
+
 // ---------- Initial company state ----------
 
 function initialCompanyState(): CompanyState {
   return {
     garage: [],
     economy: initialEconomyState(),
-    motorsport: initialMotorsportState(),
+    motorsport: useMotorsportStore.getState().getMotorsportState(),
     digitalTwins: {},
     aiCompetitors: initialAICompetitors(),
     competitorActions: [],
@@ -170,9 +113,15 @@ interface CompanyContextValue {
   safetyConfig: SafetyConfig;
   safetySim: SafetySimResult;
   updateSafety: (patch: Partial<SafetyConfig>) => void;
-  // Workflow
+  // Vehicle Development Lifecycle (Product-Development Lifecycle)
+  startVehicleLifecycle: (vehicleId: string) => void;
+  advanceVehicleLifecycleStep: (vehicleId: string) => void;
+  skipVehicleLifecycleStep: (vehicleId: string) => void;
+  /** @deprecated Use startVehicleLifecycle */
   startWorkflow: (vehicleId: string) => void;
+  /** @deprecated Use advanceVehicleLifecycleStep */
   advanceWorkflowStep: (vehicleId: string) => void;
+  /** @deprecated Use skipVehicleLifecycleStep */
   skipWorkflowStep: (vehicleId: string) => void;
   // Sales
   launchVehicle: (vehicleId: string, salesConfig: SalesConfig) => void;
@@ -186,13 +135,22 @@ const CompanyContext = createContext<CompanyContextValue | null>(null);
 
 export function CompanyProvider({ children }: { children: ReactNode }) {
   const [company, setCompany] = useState<CompanyState>(() => initialCompanyState());
-  const [safetyConfig, setSafetyConfig] = useState<SafetyConfig>(() => defaultSafetyConfig());
+  const { safetyConfig, safetySim, updateSafety } = useSafetyStore();
 
-  const safetySim = useMemo(() => simulateSafety(safetyConfig), [safetyConfig]);
+  const motorsportStore = useMotorsportStore();
+  const motorsportState = useMemo(() => motorsportStore.getMotorsportState(), [
+    motorsportStore.teams,
+    motorsportStore.currentSeason,
+    motorsportStore.techTransferHistory,
+    motorsportStore.totalTechTransferred,
+    motorsportStore.scoutedDrivers,
+    motorsportStore.sponsorMarket,
+  ]);
 
-  const updateSafety = useCallback((patch: Partial<SafetyConfig>) => {
-    setSafetyConfig(s => ({ ...s, ...patch }));
-  }, []);
+  const effectiveCompany = useMemo(() => ({
+    ...company,
+    motorsport: motorsportState,
+  }), [company, motorsportState]);
 
   // --- Garage ---
   const saveToGarage = useCallback((
@@ -232,60 +190,60 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     return saveToGarage(source.design, source.sim, source.modelName, newName, "trim", id);
   }, [company.garage, saveToGarage]);
 
-  // --- Economy ---
+  // --- Economy (Master Clock Authority) ---
   const advanceEconomyMonth = useCallback(() => {
-    setCompany(s => ({ ...s, economy: advanceEconomy(s.economy) }));
+    useSimulationClockStore.getState().advanceMonths(1);
   }, []);
 
-  // --- Motorsport ---
+  // --- Motorsport (Delegated to independent motorsportStore) ---
   const createMotorsportTeam = useCallback((name: string, category: MotorsportCategory, budget: number, baseVehicleId: string | null) => {
-    setCompany(s => ({ ...s, motorsport: createTeam(s.motorsport, name, category, budget, baseVehicleId) }));
+    useMotorsportStore.getState().createMotorsportTeam(name, category, budget, baseVehicleId);
   }, []);
 
   const assignMotorsportDriver = useCallback((teamId: string, driverIdx: number) => {
-    setCompany(s => ({ ...s, motorsport: assignDriver(s.motorsport, teamId, driverIdx) }));
+    useMotorsportStore.getState().assignMotorsportDriver(teamId, driverIdx);
   }, []);
 
   const simulateMotorsportSeason = useCallback((power: number, weight: number, aeroScore: number, reliability: number) => {
-    setCompany(s => ({ ...s, motorsport: simulateSeason(s.motorsport, power, weight, aeroScore, reliability) }));
+    useMotorsportStore.getState().simulateMotorsportSeason(power, weight, aeroScore, reliability);
   }, []);
 
   const transferMotorsportTech = useCallback((teamId: string, direction: "race_to_production" | "production_to_race", points: number) => {
-    setCompany(s => ({ ...s, motorsport: transferTech(s.motorsport, teamId, direction, points, s.economy.month) }));
+    useMotorsportStore.getState().transferMotorsportTech(teamId, direction, points);
   }, []);
 
-  const availableDrivers = useMemo(() => getAvailableDrivers(company.motorsport.teams), [company.motorsport.teams]);
+  const availableDrivers = useMemo(() => useMotorsportStore.getState().getAvailableDrivers(), [motorsportStore.teams]);
 
   const scoutNewDriver = useCallback(() => {
-    setCompany(s => ({ ...s, motorsport: scoutDriver(s.motorsport, s.motorsport.currentSeason) }));
+    useMotorsportStore.getState().scoutNewDriver();
   }, []);
 
   const signScouted = useCallback((driverId: string, teamId: string) => {
-    setCompany(s => ({ ...s, motorsport: signScoutedDriver(s.motorsport, driverId, teamId) }));
+    useMotorsportStore.getState().signScouted(driverId, teamId);
   }, []);
 
   const upgradeFacility = useCallback((teamId: string) => {
-    setCompany(s => ({ ...s, motorsport: upgradeTeamFacility(s.motorsport, teamId) }));
+    useMotorsportStore.getState().upgradeFacility(teamId);
   }, []);
 
   const updateStrategyFn = useCallback((teamId: string, strategy: Partial<TeamStrategy>) => {
-    setCompany(s => ({ ...s, motorsport: updateTeamStrategy(s.motorsport, teamId, strategy) }));
+    useMotorsportStore.getState().updateStrategy(teamId, strategy);
   }, []);
 
   const releaseMotorsportDriver = useCallback((teamId: string, driverId: string) => {
-    setCompany(s => ({ ...s, motorsport: releaseDriver(s.motorsport, teamId, driverId) }));
+    useMotorsportStore.getState().releaseMotorsportDriver(teamId, driverId);
   }, []);
 
   const renewMotorsportContract = useCallback((teamId: string, driverId: string, seasons: number) => {
-    setCompany(s => ({ ...s, motorsport: renewDriverContract(s.motorsport, teamId, driverId, seasons) }));
+    useMotorsportStore.getState().renewMotorsportContract(teamId, driverId, seasons);
   }, []);
 
   const attractMotorsportSponsor = useCallback((teamId: string, sponsorId: string) => {
-    setCompany(s => ({ ...s, motorsport: attractSponsorFn(s.motorsport, teamId, sponsorId) }));
+    useMotorsportStore.getState().attractMotorsportSponsor(teamId, sponsorId);
   }, []);
 
   const refreshSponsorMarket = useCallback(() => {
-    setCompany(s => ({ ...s, motorsport: generateSponsorMarket(s.motorsport) }));
+    useMotorsportStore.getState().refreshSponsorMarket();
   }, []);
 
   // --- Digital Twin ---
@@ -384,53 +342,68 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     setCompany(s => ({ ...s, companyName: name }));
   }, []);
 
-  // --- Advance all systems ---
+  // --- Advance all systems (Master Clock Authority) ---
   const advanceAllSystems = useCallback(() => {
-    setCompany(s => {
-      const economy = advanceEconomy(s.economy);
-      const { companies, actions } = advanceCompetitors(s.aiCompetitors, economy.month, economy, s.reputation, 0.1);
+    useSimulationClockStore.getState().advanceMonths(1);
+  }, []);
 
-      // Generate customer feedback for launched vehicles
-      const newFeedback = { ...s.customerFeedback };
-      for (const v of s.garage.filter(g => g.isLaunched)) {
-        const fb: CustomerFeedback = {
-          vehicleId: v.id, month: economy.month,
-          satisfaction: Math.round(50 + v.overallRating * 0.4 + (Math.random() - 0.3) * 15),
-          reliability: Math.round(60 + v.sim.reliability * 30 + (Math.random() - 0.5) * 10),
-          valueForMoney: Math.round(50 + (1 - v.price / 200000) * 30 + (Math.random() - 0.5) * 15),
-          performance: Math.round(v.sim.peakPower / 15 + (Math.random() - 0.5) * 10),
-          comfort: Math.round(v.sim.comfortRating * 100),
-          technology: Math.round(v.sim.infotainment.technologyScore * 100),
-          design: Math.round(50 + v.overallRating * 0.3 + (Math.random() - 0.5) * 20),
-          complaints: [], praises: [],
-          recommendRate: Math.min(0.9, 0.3 + v.overallRating / 200),
-          warrantyClaims: Math.round(Math.max(0, (1 - v.sim.reliability) * 5)),
-          totalReviews: Math.round(10 + Math.random() * 40),
+  // ── Unified Master Game Clock monthly subscription ──
+  useEffect(() => {
+    return clockListeners.subscribe("month", "companyContextMonthlyTick", (payload) => {
+      setCompany(s => {
+        const gameMonth = (payload.current.year - 1970) * 12 + (payload.current.month - 1);
+        // Macro economy updates on Jan/Jul biannual schedule (months 1 & 7)
+        const isBiannualEconomyTick = payload.current.month === 1 || payload.current.month === 7;
+        const nextEconomy = isBiannualEconomyTick ? advanceEconomy(s.economy) : { ...s.economy };
+        nextEconomy.month = gameMonth;
+
+        const { companies, actions } = advanceCompetitors(s.aiCompetitors, gameMonth, nextEconomy, s.reputation, 0.1);
+
+        // Generate customer feedback for launched vehicles
+        const newFeedback = { ...s.customerFeedback };
+        for (const v of s.garage.filter(g => g.isLaunched)) {
+          const fb: CustomerFeedback = {
+            vehicleId: v.id, month: gameMonth,
+            satisfaction: Math.round(50 + v.overallRating * 0.4 + (Math.random() - 0.3) * 15),
+            reliability: Math.round(60 + v.sim.reliability * 30 + (Math.random() - 0.5) * 10),
+            valueForMoney: Math.round(50 + (1 - v.price / 200000) * 30 + (Math.random() - 0.5) * 15),
+            performance: Math.round(v.sim.peakPower / 15 + (Math.random() - 0.5) * 10),
+            comfort: Math.round(v.sim.comfortRating * 100),
+            technology: Math.round(v.sim.infotainment.technologyScore * 100),
+            design: Math.round(50 + v.overallRating * 0.3 + (Math.random() - 0.5) * 20),
+            complaints: [], praises: [],
+            recommendRate: Math.min(0.9, 0.3 + v.overallRating / 200),
+            warrantyClaims: Math.round(Math.max(0, (1 - v.sim.reliability) * 5)),
+            totalReviews: Math.round(10 + Math.random() * 40),
+          };
+          newFeedback[v.id] = [...(newFeedback[v.id] || []), fb];
+        }
+
+        return {
+          ...s,
+          economy: nextEconomy,
+          aiCompetitors: companies,
+          competitorActions: [...s.competitorActions, ...actions].slice(-200),
+          customerFeedback: newFeedback,
         };
-        newFeedback[v.id] = [...(newFeedback[v.id] || []), fb];
-      }
-
-      return {
-        ...s,
-        economy,
-        aiCompetitors: companies,
-        competitorActions: [...s.competitorActions, ...actions].slice(-200),
-        customerFeedback: newFeedback,
-      };
+      });
     });
   }, []);
 
   const value: CompanyContextValue = useMemo(() => ({
-    company, saveToGarage, removeFromGarage, duplicateVehicle,
+    company: effectiveCompany, saveToGarage, removeFromGarage, duplicateVehicle,
     advanceEconomyMonth, createMotorsportTeam, assignMotorsportDriver,
     simulateMotorsportSeason, transferMotorsportTech, availableDrivers,
     scoutNewDriver, signScouted, upgradeFacility, updateStrategy: updateStrategyFn,
     releaseMotorsportDriver, renewMotorsportContract, attractMotorsportSponsor, refreshSponsorMarket,
     addTwinEvent, safetyConfig, safetySim, updateSafety,
+    startVehicleLifecycle: startWorkflow,
+    advanceVehicleLifecycleStep: advanceWorkflowStep,
+    skipVehicleLifecycleStep: skipWorkflowStep,
     startWorkflow, advanceWorkflowStep, skipWorkflowStep,
     launchVehicle, setCompanyName, advanceAllSystems,
   }), [
-    company, saveToGarage, removeFromGarage, duplicateVehicle,
+    effectiveCompany, saveToGarage, removeFromGarage, duplicateVehicle,
     advanceEconomyMonth, createMotorsportTeam, assignMotorsportDriver,
     simulateMotorsportSeason, transferMotorsportTech, availableDrivers,
     scoutNewDriver, signScouted, upgradeFacility, updateStrategyFn,

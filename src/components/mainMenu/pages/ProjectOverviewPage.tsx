@@ -1,7 +1,7 @@
 import React from "react";
 import { Car, Gauge, Scale, Wind, DollarSign, ChevronRight, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
 import { SubPageLayout } from "../SubPageLayout";
-import { useSimulationClockStore } from "../../../state/simulationClockStore";
+import { useVehicleProjectStore } from "../../../state/vehicleProjectStore";
 import type { Stage } from "../../StageSwitcher";
 
 interface ProjectOverviewPageProps {
@@ -9,7 +9,7 @@ interface ProjectOverviewPageProps {
 }
 
 export const ProjectOverviewPage: React.FC<ProjectOverviewPageProps> = ({ onSelectStage }) => {
-  const { activeProject } = useSimulationClockStore();
+  const activeProject = useVehicleProjectStore((s) => s.activeProject);
 
   return (
     <SubPageLayout

@@ -48,6 +48,7 @@ import {
 import { useTradeStore } from "../../state/tradeStore";
 import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
 import { useSimulationClockStore } from "../../state/simulationClockStore";
+import { useReputationStore } from "../../state/reputationStore";
 import {
   DEFAULT_MATERIAL_QUALITIES,
   computeMaterialQualityComposite,
@@ -123,10 +124,11 @@ export const TradePage: React.FC<TradePageProps> = ({ onSelectStage, onBackToMen
   const tradeStore = useTradeStore();
   const financeStore = useCompanyFinanceStore();
   const clockStore = useSimulationClockStore();
+  const { overallReputation } = useReputationStore();
 
   const warehouseUI = useMemo(() => {
-    return tradeStore.getWarehouseUI(clockStore.year, clockStore.reputation, financeStore.cash);
-  }, [tradeStore, clockStore.year, clockStore.reputation, financeStore.cash]);
+    return tradeStore.getWarehouseUI(clockStore.year, overallReputation, financeStore.cash);
+  }, [tradeStore, clockStore.year, overallReputation, financeStore.cash]);
 
   const handleUpgradeWarehouse = () => {
     const res = tradeStore.initiateWarehouseUpgrade(clockStore.month, clockStore.year);
@@ -192,7 +194,7 @@ export const TradePage: React.FC<TradePageProps> = ({ onSelectStage, onBackToMen
   const totalMonthlyContractCost = adjustedUnitPrice * contractVolume;
 
   const handleSignContract = () => {
-    const bids = getCompetitiveBids(contractItem, contractVolume, contractDuration, clockStore.reputation);
+    const bids = getCompetitiveBids(contractItem, contractVolume, contractDuration, overallReputation);
     const chosenBid = bids.find((b) => b.supplier.id === selectedSupplier.id) ?? bids[0];
 
     const newContract = createActiveSupplierContract(

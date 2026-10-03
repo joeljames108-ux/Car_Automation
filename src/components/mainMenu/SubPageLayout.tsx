@@ -1,6 +1,10 @@
 import React from "react";
 import { ArrowLeft, Gauge, Zap, Star } from "lucide-react";
 import { useSimulationClockStore, formatSimDate } from "../../state/simulationClockStore";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
+import { useTradeStore, selectTotalMaterialsTonnes } from "../../state/tradeStore";
+import { useReputationStore } from "../../state/reputationStore";
+import { useVehicleProjectStore } from "../../state/vehicleProjectStore";
 import type { Stage } from "../StageSwitcher";
 
 interface SubPageLayoutProps {
@@ -21,7 +25,11 @@ export const SubPageLayout: React.FC<SubPageLayoutProps> = ({
   children,
   rightAction,
 }) => {
-  const { year, month, day, activeProject, cash, materialsTonnes, reputation } = useSimulationClockStore();
+  const { year, month, day } = useSimulationClockStore();
+  const cash = useCompanyFinanceStore((s) => s.cash);
+  const materialsTonnes = useTradeStore(selectTotalMaterialsTonnes);
+  const reputation = useReputationStore((s) => s.overallReputation);
+  const activeProject = useVehicleProjectStore((s) => s.activeProject);
 
   const formatCurrency = (val: number) => {
     return "$" + val.toLocaleString("en-US");

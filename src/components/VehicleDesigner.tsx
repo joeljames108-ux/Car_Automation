@@ -36,7 +36,7 @@ export function VehicleDesigner({ initialSubTab = "modular_builder", onSelectSta
   const [activeTab, setActiveTab] = useState<VehicleStudioSubTab>(initialSubTab);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
 
-  const vehAssembly = useVehicleAssemblyStore(v);
+  const vehAssembly = useVehicleAssemblyStore(v, design, sim);
 
   useEffect(() => {
     if (initialSubTab) {

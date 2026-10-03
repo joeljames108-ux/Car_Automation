@@ -16,8 +16,10 @@ import math
 import os
 from mathutils import Vector, Euler
 
-ARTIFACTS_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\acd43136-462b-4bcc-95d3-b92439716605"
+ARTIFACTS_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\478c931e-36b1-4ebf-bfba-261498949c7c"
+SCREENSHOTS_DIR = r"e:\Car_Automation\assets\screenshots\bmw_e39"
 os.makedirs(ARTIFACTS_DIR, exist_ok=True)
+os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
 
 # Remove any existing studio cameras/lights to avoid clutter
 for obj in list(bpy.data.objects):
@@ -113,6 +115,8 @@ for name, loc, target, lens in angles:
     out_file = os.path.join(ARTIFACTS_DIR, f"{name}.png")
     scene.render.filepath = out_file
     bpy.ops.render.render(write_still=True)
+    import shutil
+    shutil.copy2(out_file, os.path.join(SCREENSHOTS_DIR, f"{name}.png"))
     print(f"[RENDERED] {name} -> {out_file} ({os.path.getsize(out_file)} bytes)")
 
 # Clean up ground plane after render

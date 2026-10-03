@@ -1,16 +1,22 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { useContractsStore } from "../../state/contractsStore";
 import { useSimulationClockStore } from "../../state/simulationClockStore";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
+import { useReputationStore } from "../../state/reputationStore";
 
 describe("Contracts & B2B Negotiation Master Engine", () => {
   beforeEach(() => {
-    // Reset simulation clock store
+    // Reset simulation clock store to pure time
     useSimulationClockStore.setState({
-      cash: 12400000,
-      reputation: 66,
       day: 15,
       month: 5,
       year: 1978,
+    });
+    useCompanyFinanceStore.setState({
+      cash: 12400000,
+    });
+    useReputationStore.setState({
+      overallReputation: 66,
     });
   });
 

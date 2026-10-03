@@ -28,7 +28,6 @@ describe("Company Reputation & Economic Engine Master Suite", () => {
       year: 1970,
       month: 1,
       day: 1,
-      reputation: 68,
     });
     useReputationStore.getState().resetReputation();
   });

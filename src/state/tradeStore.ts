@@ -210,7 +210,18 @@ export interface TradeStoreState {
     year: number,
     plannedVehicleProduction: number
   ) => MonthlySupplyChainSummary;
+  addRawMaterialsTonnes: (tonnes: number) => void;
   resetTo1970: () => void;
+}
+
+export function selectTotalMaterialsTonnes(state: TradeStoreState): number {
+  return Math.round(
+    state.warehouseInventory.reduce((acc, item) => {
+      if (item.unitOfMeasure === "tonnes") return acc + item.unitsOnHand;
+      if (item.unitOfMeasure === "kg") return acc + item.unitsOnHand / 1000;
+      return acc;
+    }, 0)
+  );
 }
 
 export const useTradeStore = create<TradeStoreState>((set, get) => ({
@@ -586,6 +597,22 @@ export const useTradeStore = create<TradeStoreState>((set, get) => ({
     });
 
     return summary;
+  },
+
+  addRawMaterialsTonnes: (tonnes: number) => {
+    set((state) => {
+      const inv = [...state.warehouseInventory];
+      const steelIdx = inv.findIndex(
+        (i) => i.id === "inv_steel_coils" || i.itemType === "BASIC_CARBON_STEEL"
+      );
+      if (steelIdx >= 0) {
+        inv[steelIdx] = {
+          ...inv[steelIdx],
+          unitsOnHand: Math.max(0, inv[steelIdx].unitsOnHand + tonnes),
+        };
+      }
+      return { warehouseInventory: inv };
+    });
   },
 
   resetTo1970: () => {

@@ -12,6 +12,8 @@ import {
   generateMonthGrid,
   GAME_START_DATE,
   ClockListenerRegistry,
+  clockListeners,
+  dispatchClockCadences,
   type GameDateTime,
 } from "../../state/gameClockEngine";
 
@@ -227,5 +229,49 @@ describe("Game Clock Engine", () => {
     unsub();
     reg.notify("day", payload);
     expect(count).toBe(1); // Should not have increased
+  });
+
+  // ── Master Clock Cadence Dispatcher ───────────────────────
+
+  it("dispatchClockCadences dispatches sequential monthly ticks when skipping multiple months", () => {
+    const firedMonths: Array<{ month: number; year: number }> = [];
+    const unsub = clockListeners.subscribe("month", "test_seq_month", (payload) => {
+      firedMonths.push({ month: payload.current.month, year: payload.current.year });
+    });
+
+    try {
+      const jan15 = fromJSDate(new Date(Date.UTC(1970, 0, 15)));
+      const apr10 = fromJSDate(new Date(Date.UTC(1970, 3, 10)));
+
+      dispatchClockCadences(jan15, apr10, 85, []);
+
+      // Expect Feb (month 2), Mar (month 3), Apr (month 4) to have fired sequentially
+      expect(firedMonths).toEqual([
+        { month: 2, year: 1970 },
+        { month: 3, year: 1970 },
+        { month: 4, year: 1970 },
+      ]);
+    } finally {
+      unsub();
+    }
+  });
+
+  it("dispatchClockCadences dispatches sequential yearly ticks when skipping years", () => {
+    const firedYears: number[] = [];
+    const unsub = clockListeners.subscribe("year", "test_seq_year", (payload) => {
+      firedYears.push(payload.current.year);
+    });
+
+    try {
+      const dec1970 = fromJSDate(new Date(Date.UTC(1970, 11, 15)));
+      const feb1973 = fromJSDate(new Date(Date.UTC(1973, 1, 10)));
+
+      dispatchClockCadences(dec1970, feb1973, 780, []);
+
+      // Expect 1971, 1972, 1973 to have fired sequentially
+      expect(firedYears).toEqual([1971, 1972, 1973]);
+    } finally {
+      unsub();
+    }
   });
 });

@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { useDeveloperModeStore, TEST_SCENARIOS, type TestScenarioId } from "./developerModeStore";
 import { useSimulationClockStore } from "./simulationClockStore";
+import { useCompanyFinanceStore } from "./companyFinanceStore";
+import { useTradeStore, selectTotalMaterialsTonnes } from "./tradeStore";
 import { formatGameDate } from "./gameClockEngine";
 import { saveGame, listSaves, loadGame, type SaveNamespace } from "./saveManager";
 import {
@@ -135,10 +137,12 @@ function registerBuiltinCommands() {
     usage: "time.now",
     execute: () => {
       const clock = useSimulationClockStore.getState();
+      const cash = useCompanyFinanceStore.getState().cash;
+      const materialsTonnes = selectTotalMaterialsTonnes(useTradeStore.getState());
       return [
         { type: "info", message: `📅 Date: ${formatGameDate(clock.getGameDateTime())}` },
-        { type: "info", message: `💰 Cash: $${clock.cash.toLocaleString()}` },
-        { type: "info", message: `🏗️ Materials: ${clock.materialsTonnes.toLocaleString()} tonnes` },
+        { type: "info", message: `💰 Cash: $${cash.toLocaleString()}` },
+        { type: "info", message: `🏗️ Materials: ${materialsTonnes.toLocaleString()} tonnes` },
       ];
     },
   });
@@ -153,8 +157,9 @@ function registerBuiltinCommands() {
       if (isNaN(amount) || amount <= 0) {
         return { type: "error", message: "Invalid amount. Usage: cash.add <amount>" };
       }
-      useSimulationClockStore.getState().addResources(amount, 0);
-      return { type: "success", message: `💵 Injected $${amount.toLocaleString()} → Balance: $${useSimulationClockStore.getState().cash.toLocaleString()}` };
+      const clock = useSimulationClockStore.getState();
+      useCompanyFinanceStore.getState().injectCapital(amount, "DevConsole Cash Injection", clock.month, clock.year);
+      return { type: "success", message: `💵 Injected $${amount.toLocaleString()} → Balance: $${useCompanyFinanceStore.getState().cash.toLocaleString()}` };
     },
   });
 
@@ -169,8 +174,8 @@ function registerBuiltinCommands() {
         return { type: "error", message: "Invalid amount. Usage: cash.set <amount>" };
       }
       const clock = useSimulationClockStore.getState();
-      const diff = amount - clock.cash;
-      clock.addResources(diff, 0);
+      const currentCash = useCompanyFinanceStore.getState().cash;
+      useCompanyFinanceStore.getState().injectCapital(amount - currentCash, "DevConsole Cash Adjustment", clock.month, clock.year);
       return { type: "success", message: `💰 Cash set to $${amount.toLocaleString()}` };
     },
   });
@@ -185,8 +190,9 @@ function registerBuiltinCommands() {
       if (isNaN(tonnes) || tonnes <= 0) {
         return { type: "error", message: "Invalid amount. Usage: materials.add <tonnes>" };
       }
-      useSimulationClockStore.getState().addResources(0, tonnes);
-      return { type: "success", message: `🏗️ Added ${tonnes.toLocaleString()}t → Total: ${useSimulationClockStore.getState().materialsTonnes.toLocaleString()}t` };
+      useTradeStore.getState().addRawMaterialsTonnes(tonnes);
+      const total = selectTotalMaterialsTonnes(useTradeStore.getState());
+      return { type: "success", message: `🏗️ Added ${tonnes.toLocaleString()}t → Total: ${total.toLocaleString()}t` };
     },
   });
 
@@ -347,7 +353,8 @@ function registerBuiltinCommands() {
       useDeveloperModeStore.getState().applyScenario(id);
       useSimulationClockStore.getState().setDate(scenario.year, 1, 1);
       if (scenario.cash) {
-        useSimulationClockStore.getState().addResources(scenario.cash, scenario.materialsTonnes || 1000);
+        useCompanyFinanceStore.getState().injectCapital(scenario.cash, "Scenario Setup", 1, scenario.year);
+        useTradeStore.getState().addRawMaterialsTonnes(scenario.materialsTonnes || 1000);
       }
       return { type: "success", message: `🎬 Loaded scenario: ${scenario.name} (Year ${scenario.year}, $${((scenario.cash || 0) / 1_000_000).toFixed(0)}M)` };
     },
@@ -380,6 +387,8 @@ function registerBuiltinCommands() {
     execute: () => {
       const dev = useDeveloperModeStore.getState();
       const clock = useSimulationClockStore.getState();
+      const cash = useCompanyFinanceStore.getState().cash;
+      const materials = selectTotalMaterialsTonnes(useTradeStore.getState());
       const activeCount = Object.values(dev.overrides).filter(Boolean).length;
       const totalCount = Object.keys(dev.overrides).length;
       return [
@@ -388,8 +397,8 @@ function registerBuiltinCommands() {
         { type: "info", message: `  Overrides: ${activeCount}/${totalCount} active` },
         { type: "info", message: `  Scenario:  ${dev.activeScenario || "Custom"}` },
         { type: "info", message: `  Year:      ${clock.year}` },
-        { type: "info", message: `  Cash:      $${clock.cash.toLocaleString()}` },
-        { type: "info", message: `  Materials: ${clock.materialsTonnes.toLocaleString()}t` },
+        { type: "info", message: `  Cash:      $${cash.toLocaleString()}` },
+        { type: "info", message: `  Materials: ${materials.toLocaleString()}t` },
       ];
     },
   });
@@ -409,8 +418,8 @@ function registerBuiltinCommands() {
         year: clock.year,
         month: clock.month,
         day: clock.day,
-        cash: clock.cash,
-        materialsTonnes: clock.materialsTonnes,
+        cash: useCompanyFinanceStore.getState().cash,
+        materialsTonnes: selectTotalMaterialsTonnes(useTradeStore.getState()),
       };
       const json = dumpFullStateJSON();
       if (typeof navigator !== "undefined" && navigator.clipboard) {

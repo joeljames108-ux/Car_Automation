@@ -3,7 +3,6 @@
 // ===================================================================
 import { useState, memo } from "react";
 import { Users, Award, Shield, DollarSign, UserCheck, Flame } from "lucide-react";
-import { useCompany } from "../../state/CompanyContext";
 import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import type { MotorsportTeam } from "../../sim/types";
 
@@ -28,7 +27,6 @@ const DEFAULT_STAFF: StaffMember[] = [
 ];
 
 export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
-  const { company } = useCompany();
   const [staff, setStaff] = useState<StaffMember[]>(DEFAULT_STAFF);
   const [bonusActiveId, setBonusActiveId] = useState<string | null>(null);
 

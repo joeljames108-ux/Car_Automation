@@ -30,7 +30,7 @@ views = [
     ('rear', 'mission_x_before_rear.png'),
 ]
 
-out_dir = r"C:\Users\acer\.gemini\antigravity-ide\brain\92f881cd-3dcf-4c07-ad54-41fc3095121a"
+out_dir = r"C:\Users\acer\.gemini\antigravity-ide\brain\a7eed851-2962-4f9e-a40d-bf1769875cd5"
 
 for view_name, fname in views:
     code = f"""

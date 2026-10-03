@@ -5,7 +5,9 @@ import {
   getVehicleAssemblyComponents,
 } from "../sim/vehicleAssemblyTypes";
 import { AssemblyPhase, MaterialGrade } from "../sim/assemblyTypes";
-import { VehicleConfig, EnginePosition, DriveType } from "../sim/types";
+import { VehicleConfig, EnginePosition, DriveType, VehicleDesign, SimResult } from "../sim/types";
+import { simulate } from "../sim/engine";
+import { defaultDesign } from "../sim/constants";
 
 export interface VehicleAssemblyState {
   installedComponents: VehicleComponentId[];
@@ -20,7 +22,11 @@ export interface VehicleAssemblyState {
   driveType: DriveType;
 }
 
-export function useVehicleAssemblyStore(vehicleConfig?: Partial<VehicleConfig>) {
+export function useVehicleAssemblyStore(
+  vehicleConfig?: Partial<VehicleConfig>,
+  canonicalDesign?: VehicleDesign,
+  canonicalSim?: SimResult
+) {
   const [installedComponents, setInstalledComponents] = useState<VehicleComponentId[]>([]);
   const [activeComponentId, setActiveComponentId] = useState<VehicleComponentId | null>(null);
   const [phase, setPhase] = useState<AssemblyPhase>("idle");
@@ -74,40 +80,22 @@ export function useVehicleAssemblyStore(vehicleConfig?: Partial<VehicleConfig>) 
     return Math.round((installedComponents.length / componentsList.length) * 100);
   }, [installedComponents, componentsList]);
 
-  // Compute live cumulative stats for vehicle
+  // Derive canonical simulation baseline from VehicleDesign -> simulate(design) -> SimResult
+  const canonicalSimResult = useMemo((): SimResult => {
+    if (canonicalSim) return canonicalSim;
+    const base = canonicalDesign || defaultDesign();
+    return simulate(base);
+  }, [canonicalSim, canonicalDesign]);
+
+  // Compute live cumulative stats for vehicle strictly derived from canonical SimResult
   const currentStats = useMemo(() => {
-    let hp = 450; // Base engine power
-    let torque = 520;
-    let weight = 0; // Cumulative curb weight kg
-    let reliability = 100;
-    let cost = 0;
-
-    installedComponents.forEach((id) => {
-      const meta = componentsList.find((c) => c.id === id);
-      if (meta) {
-        const variantId = selectedVariants[id] || "cast";
-        const variantObj = meta.variants.find((v) => v.id === variantId) || meta.variants[0];
-        const hpMult = variantObj ? variantObj.hpMultiplier : 1;
-        const weightMult = variantObj ? variantObj.weightMultiplier : 1;
-        const costMult = variantObj ? variantObj.costMultiplier : 1;
-        const relDelta = variantObj ? variantObj.reliabilityDelta : 0;
-
-        hp += Math.round(meta.statDeltas.hp * hpMult);
-        torque += Math.round(meta.statDeltas.torque * hpMult);
-        weight += Math.round(meta.statDeltas.weight * weightMult);
-        reliability += relDelta;
-        cost += Math.round(meta.statDeltas.cost * costMult);
-      }
+    return computeAssembledVehicleStats({
+      installedComponents,
+      componentsList,
+      selectedVariants,
+      canonicalSimResult,
     });
-
-    return {
-      hp: Math.max(0, hp),
-      torque: Math.max(0, torque),
-      weight: Math.max(0, weight),
-      reliability: Math.min(100, Math.max(0, reliability)),
-      cost: Math.max(0, cost),
-    };
-  }, [installedComponents, componentsList, selectedVariants]);
+  }, [installedComponents, componentsList, selectedVariants, canonicalSimResult]);
 
   const startInstall = useCallback(
     (componentId: VehicleComponentId) => {
@@ -193,3 +181,68 @@ export function useVehicleAssemblyStore(vehicleConfig?: Partial<VehicleConfig>) 
     isAssemblyComplete,
   };
 }
+
+/**
+ * Pure function to compute assembled vehicle metrics derived strictly from canonical SimResult.
+ * Ensures 100% convergence with VehicleDesign -> simulate(design) -> SimResult.
+ */
+export function computeAssembledVehicleStats({
+  installedComponents,
+  componentsList,
+  selectedVariants,
+  canonicalSimResult,
+}: {
+  installedComponents: VehicleComponentId[];
+  componentsList: VehicleAssemblyComponentMeta[];
+  selectedVariants: Record<string, MaterialGrade>;
+  canonicalSimResult: SimResult;
+}) {
+  const hasEngineInstalled = installedComponents.includes("engine_bay");
+  const canonicalHp = canonicalSimResult.peakPower ?? 320;
+  const canonicalTorque = canonicalSimResult.peakTorque ?? 380;
+  const canonicalWeight = canonicalSimResult.weight ?? 1450;
+  const canonicalReliability = canonicalSimResult.reliability ?? 85;
+  const canonicalCost = canonicalSimResult.totalCost ?? 25000;
+
+  const totalCount = Math.max(1, componentsList.length);
+  const installedFraction = installedComponents.length / totalCount;
+
+  let totalWeightMult = 0;
+  let totalCostMult = 0;
+  let reliabilityDelta = 0;
+
+  installedComponents.forEach((id) => {
+    const meta = componentsList.find((c) => c.id === id);
+    if (meta) {
+      const variantId = selectedVariants[id] || "cast";
+      const variantObj = meta.variants.find((v) => v.id === variantId) || meta.variants[0];
+      if (variantObj) {
+        totalWeightMult += variantObj.weightMultiplier;
+        totalCostMult += variantObj.costMultiplier;
+        reliabilityDelta += variantObj.reliabilityDelta;
+      } else {
+        totalWeightMult += 1;
+        totalCostMult += 1;
+      }
+    }
+  });
+
+  const count = Math.max(1, installedComponents.length);
+  const avgWeightMult = totalWeightMult / count;
+  const avgCostMult = totalCostMult / count;
+
+  const hp = hasEngineInstalled ? Math.round(canonicalHp) : 0;
+  const torque = hasEngineInstalled ? Math.round(canonicalTorque) : 0;
+  const weight = Math.round(canonicalWeight * installedFraction * avgWeightMult);
+  const reliability = Math.min(100, Math.max(10, Math.round(canonicalReliability + (reliabilityDelta / count))));
+  const cost = Math.round(canonicalCost * installedFraction * avgCostMult);
+
+  return {
+    hp: Math.max(0, hp),
+    torque: Math.max(0, torque),
+    weight: Math.max(0, weight),
+    reliability,
+    cost: Math.max(0, cost),
+  };
+}
+

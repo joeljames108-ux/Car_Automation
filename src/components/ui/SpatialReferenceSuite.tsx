@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, memo } from "react";
 import * as THREE from "three";
 import { ModernAnalogDial } from "./ModernAnalogDial";
-import { EngineeringLog } from "../EngineeringLog";
 import { CFDView } from "./CFDView";
 import { useDesign } from "../../state/DesignContext";
 import { HelpCircle, User, Box } from "lucide-react";
@@ -148,7 +147,7 @@ function SpatialReferenceSuiteComponent() {
         </div>
 
         {/* Column 2 (Center): CFD Live Simulation Window + 3 Sub-Cards */}
-        <div className="lg:col-span-6 flex flex-col gap-4">
+        <div className="lg:col-span-9 flex flex-col gap-4">
           {/* CFD Wind Tunnel Live View */}
           <div className="relative rounded-2xl overflow-hidden border border-white/75 shadow-lg">
             <CFDView
@@ -352,11 +351,6 @@ function SpatialReferenceSuiteComponent() {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Column 3 (Right): ENGINEERING LOG Panel */}
-        <div className="lg:col-span-3">
-          <EngineeringLog />
         </div>
       </div>
 

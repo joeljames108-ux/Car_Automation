@@ -3,7 +3,6 @@
 // ===================================================================
 import { useState, memo } from "react";
 import { Building2, Zap, Wind, Cpu, Gauge, Users, Wrench, Shield, CheckCircle } from "lucide-react";
-import { useCompany } from "../../state/CompanyContext";
 import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import type { MotorsportTeam } from "../../sim/types";
 
@@ -19,11 +18,10 @@ const DEFAULT_BUILDINGS = [
 ];
 
 export const HQInfrastructurePanel = memo(function HQInfrastructurePanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
-  const { company } = useCompany();
   const [buildings, setBuildings] = useState(DEFAULT_BUILDINGS);
   const [upgradedId, setUpgradedId] = useState<string | null>(null);
 
-  const availableFunds = selectedTeam ? selectedTeam.budget : (company.totalRevenue || 50_000_000);
+  const availableFunds = selectedTeam ? selectedTeam.budget : 50_000_000;
 
   const handleUpgrade = (id: string, cost: number) => {
     if (availableFunds < cost) return;

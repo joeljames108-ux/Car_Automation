@@ -7,7 +7,7 @@ import {
   getAssemblyComponents,
   MaterialGrade,
 } from "../sim/assemblyTypes";
-import { EngineConfig } from "../sim/types";
+import { EngineConfig, SimResult } from "../sim/types";
 
 export interface AssemblyState {
   installedComponents: ComponentId[];
@@ -20,7 +20,10 @@ export interface AssemblyState {
   selectedVariants: Record<string, MaterialGrade>;
 }
 
-export function useAssemblyStore(engineConfig?: Partial<EngineConfig>) {
+export function useAssemblyStore(
+  engineConfig?: Partial<EngineConfig>,
+  canonicalSim?: SimResult
+) {
   const [installedComponents, setInstalledComponents] = useState<ComponentId[]>([]);
   const [activeComponentId, setActiveComponentId] = useState<ComponentId | null>(null);
   const [phase, setPhase] = useState<AssemblyPhase>("idle");
@@ -74,40 +77,15 @@ export function useAssemblyStore(engineConfig?: Partial<EngineConfig>) {
     return Math.round((installedComponents.length / componentsList.length) * 100);
   }, [installedComponents, componentsList]);
 
-  // Calculate live cumulative stat totals from installed components & material variants
+  // Calculate live cumulative stat totals derived from canonical SimResult
   const currentStats = useMemo(() => {
-    let hp = 100; // Base bare engine block HP
-    let torque = 120; // Base Nm
-    let weight = 0; // kg
-    let reliability = 100; // %
-    let cost = 0; // $
-
-    installedComponents.forEach((id) => {
-      const meta = componentsList.find((c) => c.id === id);
-      if (meta) {
-        const variantId = selectedVariants[id] || "cast";
-        const variantObj = meta.variants.find((v) => v.id === variantId) || meta.variants[0];
-        const hpMult = variantObj ? variantObj.hpMultiplier : 1;
-        const weightMult = variantObj ? variantObj.weightMultiplier : 1;
-        const costMult = variantObj ? variantObj.costMultiplier : 1;
-        const relDelta = variantObj ? variantObj.reliabilityDelta : 0;
-
-        hp += Math.round(meta.statDeltas.hp * hpMult);
-        torque += Math.round(meta.statDeltas.torque * hpMult);
-        weight += Math.round(meta.statDeltas.weight * weightMult);
-        reliability += relDelta;
-        cost += Math.round(meta.statDeltas.cost * costMult);
-      }
+    return computeAssembledEngineStats({
+      installedComponents,
+      componentsList,
+      selectedVariants,
+      canonicalSim,
     });
-
-    return {
-      hp: Math.max(0, hp),
-      torque: Math.max(0, torque),
-      weight: Math.max(0, weight),
-      reliability: Math.min(100, Math.max(0, reliability)),
-      cost: Math.max(0, cost),
-    };
-  }, [installedComponents, componentsList, selectedVariants]);
+  }, [installedComponents, componentsList, selectedVariants, canonicalSim]);
 
   // Start installation sequence for a component
   const startInstall = useCallback(
@@ -194,5 +172,105 @@ export function useAssemblyStore(engineConfig?: Partial<EngineConfig>) {
     setIsAutoAssembling,
     nextRecommendedComponent,
     isAssemblyComplete,
+  };
+}
+
+/**
+ * Pure function to compute assembled engine metrics derived strictly from canonical SimResult.
+ * Eliminates rogue second simulation calculations and guarantees convergence with SimResult.
+ */
+export function computeAssembledEngineStats({
+  installedComponents,
+  componentsList,
+  selectedVariants,
+  canonicalSim,
+}: {
+  installedComponents: ComponentId[];
+  componentsList: AssemblyComponentMeta[];
+  selectedVariants: Record<string, MaterialGrade>;
+  canonicalSim?: SimResult;
+}) {
+  if (canonicalSim) {
+    const hasCore = installedComponents.includes("block");
+    const canonicalHp = canonicalSim.peakPower ?? 300;
+    const canonicalTorque = canonicalSim.peakTorque ?? 350;
+    const canonicalWeight = canonicalSim.engineWeight ?? 180;
+    const rawRel = canonicalSim.reliability ?? 0.85;
+    const canonicalReliability = rawRel <= 1.0 ? Math.round(rawRel * 100) : Math.round(rawRel);
+    const canonicalCost = canonicalSim.engineCost ?? 8000;
+
+    const totalCount = Math.max(1, componentsList.length);
+    const installedFraction = installedComponents.length / totalCount;
+
+    let totalWeightMult = 0;
+    let totalCostMult = 0;
+    let relDeltaTotal = 0;
+
+    installedComponents.forEach((id) => {
+      const meta = componentsList.find((c) => c.id === id);
+      if (meta) {
+        const variantId = selectedVariants[id] || "cast";
+        const variantObj = meta.variants.find((v) => v.id === variantId) || meta.variants[0];
+        if (variantObj) {
+          totalWeightMult += variantObj.weightMultiplier;
+          totalCostMult += variantObj.costMultiplier;
+          relDeltaTotal += variantObj.reliabilityDelta;
+        } else {
+          totalWeightMult += 1;
+          totalCostMult += 1;
+        }
+      }
+    });
+
+    const count = Math.max(1, installedComponents.length);
+    const avgWeightMult = totalWeightMult / count;
+    const avgCostMult = totalCostMult / count;
+
+    const hp = hasCore ? Math.round(canonicalHp * (0.4 + 0.6 * installedFraction)) : 0;
+    const torque = hasCore ? Math.round(canonicalTorque * (0.4 + 0.6 * installedFraction)) : 0;
+    const weight = Math.round(canonicalWeight * installedFraction * avgWeightMult);
+    const reliability = Math.min(100, Math.max(10, Math.round(canonicalReliability + (relDeltaTotal / count))));
+    const cost = Math.round(canonicalCost * installedFraction * avgCostMult);
+
+    return {
+      hp: Math.max(0, hp),
+      torque: Math.max(0, torque),
+      weight: Math.max(0, weight),
+      reliability,
+      cost: Math.max(0, cost),
+    };
+  }
+
+  // Fallback if canonicalSim is not provided
+  let hp = 100;
+  let torque = 120;
+  let weight = 0;
+  let reliability = 100;
+  let cost = 0;
+
+  installedComponents.forEach((id) => {
+    const meta = componentsList.find((c) => c.id === id);
+    if (meta) {
+      const variantId = selectedVariants[id] || "cast";
+      const variantObj = meta.variants.find((v) => v.id === variantId) || meta.variants[0];
+      const hpMult = variantObj ? variantObj.hpMultiplier : 1;
+      const weightMult = variantObj ? variantObj.weightMultiplier : 1;
+      const costMult = variantObj ? variantObj.costMultiplier : 1;
+      const relDelta = variantObj ? variantObj.reliabilityDelta : 0;
+
+      hp += Math.round(meta.statDeltas.hp * hpMult);
+      torque += Math.round(meta.statDeltas.torque * hpMult);
+      weight += Math.round(meta.statDeltas.weight * weightMult);
+      reliability += relDelta;
+      cost += Math.round(meta.statDeltas.cost * costMult);
+    }
+  });
+
+  return {
+    hp: Math.max(0, hp),
+    torque: Math.max(0, torque),
+    weight: Math.max(0, weight),
+    reliability: Math.min(100, Math.max(0, reliability)),
+    cost: Math.max(0, cost),
   };
 }

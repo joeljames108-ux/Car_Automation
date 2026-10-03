@@ -3,12 +3,14 @@
 // ===================================================================
 import { useState, memo } from "react";
 import { ArrowRightLeft, ArrowRight, ArrowLeft, Clock, Zap } from "lucide-react";
-import { useCompany } from "../../state/CompanyContext";
+import { useMotorsportStore } from "../../state/motorsportStore";
 import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import type { MotorsportTeam } from "../../sim/types";
 
 export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
-  const { company, transferMotorsportTech } = useCompany();
+  const transferMotorsportTech = useMotorsportStore(s => s.transferMotorsportTech);
+  const techTransferHistory = useMotorsportStore(s => s.techTransferHistory);
+  const totalTechTransferred = useMotorsportStore(s => s.totalTechTransferred);
   const [direction, setDirection] = useState<"race_to_production" | "production_to_race">("race_to_production");
   const [points, setPoints] = useState(10);
 
@@ -84,13 +86,13 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
       </div>
 
       {/* Transfer History */}
-      {company.motorsport.techTransferHistory.length > 0 && (
+      {techTransferHistory.length > 0 && (
         <div className="glass-panel p-4">
           <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Clock size={12} className="text-amber-400" /> Transfer History
           </h3>
           <div className="space-y-2 max-h-64 overflow-y-auto">
-            {[...company.motorsport.techTransferHistory].reverse().map((entry, i) => (
+            {[...techTransferHistory].reverse().map((entry, i) => (
               <div key={i} className="flex items-start gap-3 bg-base-850/50 rounded-lg p-3 border border-base-800/50">
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                   entry.direction === "race_to_production"
@@ -115,7 +117,7 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
           </div>
           <div className="mt-3 pt-2 border-t border-base-800/50 text-center">
             <span className="text-xs text-slate-500">Total transferred: </span>
-            <span className="text-sm font-bold font-mono text-amber-300">{company.motorsport.totalTechTransferred}pts</span>
+            <span className="text-sm font-bold font-mono text-amber-300">{totalTechTransferred}pts</span>
           </div>
         </div>
       )}

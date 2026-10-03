@@ -1,6 +1,6 @@
 import React from "react";
 import { X, Building2, Wind, Factory, Wrench, ShieldCheck, Trophy, Sparkles, ChevronRight } from "lucide-react";
-import { useSimulationClockStore } from "../../state/simulationClockStore";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
 
 interface HQFacilitiesModalProps {
   isOpen: boolean;
@@ -9,7 +9,7 @@ interface HQFacilitiesModalProps {
 }
 
 export const HQFacilitiesModal: React.FC<HQFacilitiesModalProps> = ({ isOpen, onClose, onSelectStage }) => {
-  const { cash } = useSimulationClockStore();
+  const cash = useCompanyFinanceStore((s) => s.cash);
 
   if (!isOpen) return null;
 

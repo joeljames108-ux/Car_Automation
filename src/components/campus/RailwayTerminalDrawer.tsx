@@ -20,7 +20,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useCampusStore } from "../../state/campusStore";
-import { useSimulationClockStore } from "../../state/simulationClockStore";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
 import { useReputationStore } from "../../state/reputationStore";
 import {
   RAILWAY_LEVEL_SPECS,
@@ -52,7 +52,7 @@ export const RailwayTerminalDrawer: React.FC<RailwayTerminalDrawerProps> = ({
     lastActionMessage,
   } = useCampusStore();
 
-  const { cash } = useSimulationClockStore();
+  const { cash } = useCompanyFinanceStore();
   const { overallReputation } = useReputationStore();
 
   const currentLevel = railwayTerminalState.level;

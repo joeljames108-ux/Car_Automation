@@ -21,7 +21,7 @@ import { MonthEndSummaryModal } from "./MonthEndSummaryModal";
 import { BudgetAllocationModal } from "./BudgetAllocationModal";
 import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
 import { useSimulationClockStore } from "../../state/simulationClockStore";
-import { runMonthlyEconomicTick, MonthlyTickResult } from "../../sim/economy/monthlyTickOrchestrator";
+import type { MonthlyTickResult } from "../../sim/economy/monthlyTickOrchestrator";
 import { getEraForYear } from "../../sim/economy/eraProgressionEngine";
 import type { Stage } from "../StageSwitcher";
 
@@ -57,12 +57,13 @@ export const FinancePage: React.FC<FinancePageProps> = ({ onSelectStage }) => {
   } = useCompanyFinanceStore();
 
   const handleSimulateMonth = () => {
-    // Run the full monthly economic tick sequence
-    const result = runMonthlyEconomicTick(month, year);
-    setLastTickResult(result);
-    setIsSummaryModalOpen(true);
-    // Also advance the clock by 30 days
-    useSimulationClockStore.getState().advanceDays(30);
+    // Advance the master clock by 1 month — dispatches sequential monthly cadence to all game subsystems
+    useSimulationClockStore.getState().advanceMonths(1);
+    const result = useCompanyFinanceStore.getState().lastTickResult;
+    if (result) {
+      setLastTickResult(result);
+      setIsSummaryModalOpen(true);
+    }
   };
 
   const currentMonthName = MONTH_NAMES[(month - 1) % 12];

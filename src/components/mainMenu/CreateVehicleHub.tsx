@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import { useSimulationClockStore, formatSimDate } from "../../state/simulationClockStore";
+import { useVehicleProjectStore } from "../../state/vehicleProjectStore";
 import { useDeveloperModeStore } from "../../state/developerModeStore";
 import { useGuidedEngineeringStore } from "../../state/guidedEngineeringStore";
 import type { Stage } from "../StageSwitcher";
@@ -50,7 +51,8 @@ interface CreationDivision {
 
 export const CreateVehicleHub: React.FC<CreateVehicleHubProps> = ({ onSelectStage }) => {
   const { company } = useCompany();
-  const { year, month, day, activeProject } = useSimulationClockStore();
+  const { year, month, day } = useSimulationClockStore();
+  const activeProject = useVehicleProjectStore((s) => s.activeProject);
   const { devMode, toggleModal } = useDeveloperModeStore();
   const {
     engineStatus,

@@ -10,7 +10,7 @@ import {
   Search, TrendingUp, Award, Settings, Wrench, Radio, Calendar,
   Building2, Gavel, Flag, Flame, Layers, Filter, ChevronDown
 } from "lucide-react";
-import { useCompany } from "../state/CompanyContext";
+import { useMotorsportStore } from "../state/motorsportStore";
 import { useDesign } from "../state/DesignContext";
 import { getSeasonCalendar } from "../sim/motorsportEngine";
 import { TRACKS } from "../sim/constants";
@@ -142,9 +142,9 @@ const SERIES_FILTERS: { id: "all" | MotorsportCategory | "works"; label: string 
 
 function MotorsportDivisionComponent() {
   const {
-    company, releaseMotorsportDriver, renewMotorsportContract,
+    teams, currentSeason, releaseMotorsportDriver, renewMotorsportContract,
     simulateMotorsportSeason,
-  } = useCompany();
+  } = useMotorsportStore();
   const { sim } = useDesign();
 
   const [activeTab, setActiveTab] = useState<MotorsportTabId>("teams");
@@ -163,15 +163,15 @@ function MotorsportDivisionComponent() {
   const [visibleTeamCount, setVisibleTeamCount] = useState(8);
 
   const selectedTeam = useMemo(() => {
-    return company.motorsport.teams.find(t => t.id === selectedTeamId) ?? company.motorsport.teams[0] ?? null;
-  }, [company.motorsport.teams, selectedTeamId]);
+    return teams.find(t => t.id === selectedTeamId) ?? teams[0] ?? null;
+  }, [teams, selectedTeamId]);
 
   const activeCategory = useMemo(() => {
     return HUB_CATEGORIES.find(cat => cat.tabs.some(t => t.id === activeTab)) || HUB_CATEGORIES[0];
   }, [activeTab]);
 
   const filteredTeams = useMemo(() => {
-    let list = company.motorsport.teams;
+    let list = teams;
     if (seriesFilter !== "all") {
       list = list.filter(t => t.category === seriesFilter);
     }
@@ -180,7 +180,7 @@ function MotorsportDivisionComponent() {
       list = list.filter(t => t.name.toLowerCase().includes(q));
     }
     return list;
-  }, [company.motorsport.teams, seriesFilter, searchQuery]);
+  }, [teams, seriesFilter, searchQuery]);
 
   const visibleTeams = useMemo(() => {
     return filteredTeams.slice(0, visibleTeamCount);
@@ -212,13 +212,13 @@ function MotorsportDivisionComponent() {
 
   const { totalWins, totalTitles, totalFastestLaps } = useMemo(() => {
     let wins = 0, titles = 0, fl = 0;
-    for (const t of company.motorsport.teams) {
+    for (const t of teams) {
       wins += t.wins;
       titles += t.championships;
       fl += t.fastestLaps;
     }
     return { totalWins: wins, totalTitles: titles, totalFastestLaps: fl };
-  }, [company.motorsport.teams]);
+  }, [teams]);
 
   return (
     <div className="space-y-4 animate-fade-in text-white">
@@ -237,7 +237,7 @@ function MotorsportDivisionComponent() {
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-mono font-black text-yellow-400 uppercase tracking-widest">WORLD MOTORSPORT DIVISION</span>
                 <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/25 border border-amber-400/50 text-amber-300">
-                  Season {company.motorsport.currentSeason}
+                  Season {currentSeason}
                 </span>
               </div>
               <h2 className="text-lg font-black text-white mt-0.5 tracking-wide">Grand Prix Racing Operations & Engineering</h2>
@@ -248,7 +248,7 @@ function MotorsportDivisionComponent() {
           {/* Key Championship Statistics */}
           <div className="grid grid-cols-4 gap-2 text-center bg-black/70 p-3 rounded-2xl border border-white/10 shrink-0 shadow-lg">
             <div className="px-2.5">
-              <div className="text-xl font-black font-mono text-amber-300">{company.motorsport.teams.length}</div>
+              <div className="text-xl font-black font-mono text-amber-300">{teams.length}</div>
               <div className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">Teams</div>
             </div>
             <div className="px-2.5 border-l border-white/10">
@@ -433,7 +433,7 @@ function MotorsportDivisionComponent() {
             </button>
           )}
 
-          {company.motorsport.teams.length === 0 && !showCreateForm && (
+          {teams.length === 0 && !showCreateForm && (
             <div className="p-10 text-center rounded-2xl bg-slate-900/60 border border-white/10">
               <Trophy size={36} className="mx-auto text-slate-600 mb-3" />
               <p className="text-slate-300 text-sm font-semibold">No race teams formed yet.</p>
@@ -442,7 +442,7 @@ function MotorsportDivisionComponent() {
           )}
 
           {/* Series Filtering & Search Bar */}
-          {company.motorsport.teams.length > 0 && (
+          {teams.length > 0 && (
             <div className="flex flex-col md:flex-row items-center justify-between gap-3 bg-slate-900/80 p-3 rounded-2xl border border-white/10">
               {/* Category Pills */}
               <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar w-full md:w-auto">
@@ -526,7 +526,7 @@ function MotorsportDivisionComponent() {
                 ) : (
                   <div className="space-y-2">
                     {selectedTeam.drivers.map(d => {
-                      const seasonsRemaining = Math.max(0, d.contractEndSeason - company.motorsport.currentSeason);
+                      const seasonsRemaining = Math.max(0, d.contractEndSeason - currentSeason);
                       return (
                         <div key={d.id} className="flex flex-col sm:flex-row sm:items-center justify-between bg-black/60 rounded-xl p-3.5 gap-3 border border-white/5 hover:border-amber-500/40 transition-all">
                           <div>

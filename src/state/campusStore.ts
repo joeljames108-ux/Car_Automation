@@ -22,6 +22,8 @@ import {
 import { CampusEngine } from "../sim/campus/campusEngine";
 import { FactoryProgressionEngine } from "../sim/campus/factoryProgressionEngine";
 import { useSimulationClockStore } from "./simulationClockStore";
+import { useCompanyFinanceStore } from "./companyFinanceStore";
+import { clockListeners } from "./gameClockEngine";
 import {
   CampusPlotDefinition,
   CAMPUS_PLOTS,
@@ -326,10 +328,14 @@ export const useCampusStore = create<CampusStoreState>()(
       },
 
       constructPlot: (unitId) => {
-        const cash = useSimulationClockStore.getState().cash;
+        const cash = useCompanyFinanceStore.getState().cash;
         const result = CampusEngine.constructLockedPlot(get().units, unitId, cash);
         if (result.success) {
-          useSimulationClockStore.getState().addResources(-result.cost, 0);
+          useCompanyFinanceStore.getState().spendDirectCash(
+            result.cost,
+            "HQ_CONSTRUCTION",
+            `Commissioned ${get().units[unitId]?.name} on campus`
+          );
           useSimulationClockStore.getState().addFeedItem({
             type: "production",
             title: "Facility Constructed",
@@ -348,10 +354,14 @@ export const useCampusStore = create<CampusStoreState>()(
       },
 
       upgradeUnit: (unitId) => {
-        const cash = useSimulationClockStore.getState().cash;
+        const cash = useCompanyFinanceStore.getState().cash;
         const result = CampusEngine.upgradeUnit(get().units, unitId, cash);
         if (result.success) {
-          useSimulationClockStore.getState().addResources(-result.cost, 0);
+          useCompanyFinanceStore.getState().spendDirectCash(
+            result.cost,
+            "RD_INVESTMENT",
+            `Upgraded ${get().units[unitId]?.name} to Level ${result.nextUnits[unitId]?.level}`
+          );
           useSimulationClockStore.getState().addFeedItem({
             type: "rnd",
             title: "Campus Pavilion Upgraded",
@@ -370,10 +380,14 @@ export const useCampusStore = create<CampusStoreState>()(
       },
 
       upgradeSubDepartment: (unitId, subDeptId) => {
-        const cash = useSimulationClockStore.getState().cash;
+        const cash = useCompanyFinanceStore.getState().cash;
         const result = CampusEngine.upgradeSubDepartment(get().units, unitId, subDeptId, cash);
         if (result.success) {
-          useSimulationClockStore.getState().addResources(-result.cost, 0);
+          useCompanyFinanceStore.getState().spendDirectCash(
+            result.cost,
+            "RD_INVESTMENT",
+            `Expanded ${subDeptId} in ${get().units[unitId]?.name}`
+          );
           useSimulationClockStore.getState().addFeedItem({
             type: "rnd",
             title: "Facility Expanded",
@@ -408,11 +422,12 @@ export const useCampusStore = create<CampusStoreState>()(
           contractorTier
         );
         if (result.success && result.createdJob) {
-          if (clock.cash < result.createdJob.totalCost) {
+          const financeStore = useCompanyFinanceStore.getState();
+          if (financeStore.cash < result.createdJob.totalCost) {
             set({ lastActionMessage: `Insufficient capital ($${result.createdJob.totalCost.toLocaleString()} required).` });
             return false;
           }
-          clock.addResources(-result.createdJob.totalCost, 0);
+          financeStore.injectCapital(-result.createdJob.totalCost, "HQ Construction Job", clock.month, clock.year);
           set({
             constructionJobs: result.updatedJobs,
             units: {
@@ -458,7 +473,12 @@ export const useCampusStore = create<CampusStoreState>()(
           clock.year
         );
         if (campusFinances.revenue.totalMonthlyRevenue > 0) {
-          clock.addResources(campusFinances.revenue.totalMonthlyRevenue * deltaMonths, 0);
+          useCompanyFinanceStore.getState().injectCapital(
+            campusFinances.revenue.totalMonthlyRevenue * deltaMonths,
+            "Campus Passive Revenue",
+            clock.month,
+            clock.year
+          );
         }
 
         // Automatic HQ visual beautification & prestige evolution driven by company reputation
@@ -509,10 +529,14 @@ export const useCampusStore = create<CampusStoreState>()(
       },
 
       purchaseFactoryLand: () => {
-        const cash = useSimulationClockStore.getState().cash;
+        const cash = useCompanyFinanceStore.getState().cash;
         const result = FactoryProgressionEngine.purchaseLandPlot(get().factoryState, cash);
         if (result.success) {
-          useSimulationClockStore.getState().addResources(-result.cost, 0);
+          useCompanyFinanceStore.getState().spendDirectCash(
+            result.cost,
+            "FACTORY_CONSTRUCTION",
+            `Acquired ${result.state.landLocationName} for Factory Construction`
+          );
           useSimulationClockStore.getState().addFeedItem({
             type: "production",
             title: "Industrial Land Acquired",
@@ -564,11 +588,15 @@ export const useCampusStore = create<CampusStoreState>()(
       },
 
       advanceFactoryConstructionMonth: () => {
-        const cash = useSimulationClockStore.getState().cash;
+        const cash = useCompanyFinanceStore.getState().cash;
         const monthlyCost = 1750000;
         if (cash >= monthlyCost) {
           const result = FactoryProgressionEngine.advanceConstructionMonth(get().factoryState, monthlyCost);
-          useSimulationClockStore.getState().addResources(-result.monthCost, 0);
+          useCompanyFinanceStore.getState().spendDirectCash(
+            result.monthCost,
+            "FACTORY_CONSTRUCTION",
+            "Factory Civil Construction Monthly Draw"
+          );
           useSimulationClockStore.getState().addFeedItem({
             type: "production",
             title: "Factory Construction Draw",
@@ -607,10 +635,14 @@ export const useCampusStore = create<CampusStoreState>()(
       },
 
       upgradeFactoryTier: () => {
-        const cash = useSimulationClockStore.getState().cash;
+        const cash = useCompanyFinanceStore.getState().cash;
         const result = FactoryProgressionEngine.upgradeFactoryTier(get().factoryState, cash);
         if (result.success) {
-          useSimulationClockStore.getState().addResources(-result.cost, 0);
+          useCompanyFinanceStore.getState().spendDirectCash(
+            result.cost,
+            "FACTORY_CONSTRUCTION",
+            `Upgraded factory to Tier ${result.state.factoryLevel}`
+          );
           useSimulationClockStore.getState().addFeedItem({
             type: "production",
             title: "Manufacturing Plant Upgraded",
@@ -629,10 +661,14 @@ export const useCampusStore = create<CampusStoreState>()(
       },
 
       upgradeFactoryShop: (shopKey) => {
-        const cash = useSimulationClockStore.getState().cash;
+        const cash = useCompanyFinanceStore.getState().cash;
         const result = FactoryProgressionEngine.upgradeFactoryShop(get().factoryState, shopKey, cash);
         if (result.success) {
-          useSimulationClockStore.getState().addResources(-result.cost, 0);
+          useCompanyFinanceStore.getState().spendDirectCash(
+            result.cost,
+            "TOOLING",
+            `Upgraded ${shopKey} in Manufacturing Plant`
+          );
           useSimulationClockStore.getState().addFeedItem({
             type: "production",
             title: "Factory Shop Upgraded",
@@ -652,12 +688,16 @@ export const useCampusStore = create<CampusStoreState>()(
 
       // ── Railway Terminal Operations & Upgrades ──
       upgradeRailwayTerminal: (targetLevel) => {
-        const cash = useSimulationClockStore.getState().cash;
+        const cash = useCompanyFinanceStore.getState().cash;
         const currentState = get().railwayTerminalState;
         const result = RailwayTerminalEngine.upgradeTerminalTier(currentState, targetLevel, cash);
         if (result.success) {
           const cost = cash - result.remainingCash;
-          useSimulationClockStore.getState().addResources(-cost, 0);
+          useCompanyFinanceStore.getState().spendDirectCash(
+            cost,
+            "RAIL_INFRASTRUCTURE",
+            `Upgraded HQ Cargo Railway Terminal to Level ${targetLevel}`
+          );
           useSimulationClockStore.getState().addFeedItem({
             type: "production",
             title: "Railway Terminal Upgraded",
@@ -676,12 +716,16 @@ export const useCampusStore = create<CampusStoreState>()(
       },
 
       installRailwaySiding: (sidingId) => {
-        const cash = useSimulationClockStore.getState().cash;
+        const cash = useCompanyFinanceStore.getState().cash;
         const currentState = get().railwayTerminalState;
         const result = RailwayTerminalEngine.installSpecializedSiding(currentState, sidingId, cash);
         if (result.success) {
           const cost = cash - result.remainingCash;
-          useSimulationClockStore.getState().addResources(-cost, 0);
+          useCompanyFinanceStore.getState().spendDirectCash(
+            cost,
+            "RAIL_INFRASTRUCTURE",
+            `Installed specialized siding: ${sidingId}`
+          );
           useSimulationClockStore.getState().addFeedItem({
             type: "production",
             title: "Rail Siding Installed",
@@ -703,10 +747,11 @@ export const useCampusStore = create<CampusStoreState>()(
         const clockStore = useSimulationClockStore.getState();
         const rep = useReputationStore.getState().overallReputation ?? 15;
         const currentState = get().railwayTerminalState;
-        const result = RailwayTerminalEngine.upgradeNetworkTier(currentState, tier, rep, clockStore.cash);
+        const financeStore = useCompanyFinanceStore.getState();
+        const result = RailwayTerminalEngine.upgradeNetworkTier(currentState, tier, rep, financeStore.cash);
         if (result.success) {
-          const cost = clockStore.cash - result.remainingCash;
-          clockStore.addResources(-cost, 0);
+          const cost = financeStore.cash - result.remainingCash;
+          financeStore.injectCapital(-cost, `Rail Network Upgrade (${tier})`, clockStore.month, clockStore.year);
           clockStore.addFeedItem({
             type: "supplier",
             title: "Rail Network Connected",
@@ -787,3 +832,13 @@ export const useCampusStore = create<CampusStoreState>()(
     }
   )
 );
+
+// Automatic monthly subscription for factory construction progress and campus beautification
+clockListeners.subscribe("month", "campusMonthlyTick", (payload) => {
+  const store = useCampusStore.getState();
+  const factoryState = store.factoryState;
+  if (factoryState && factoryState.constructionMonthsRemaining > 0) {
+    store.advanceFactoryConstructionMonth();
+  }
+  store.recalculateBeautification(undefined, payload.current.month);
+});

@@ -1,10 +1,10 @@
 // ============================================================================
-// GUIDED ENGINEERING WORKFLOW STORE
+// GUIDED ENGINEERING PIPELINE STORE (Engineering Configuration Pipeline)
 // ============================================================================
-// Enforces the "Build From Zero" philosophy:
-// ENGINE → VEHICLE → AERODYNAMICS → INTERIOR → FINAL BUILD
-// Tracks stage lifecycle (unconfigured, configuring, configured, invalidated),
-// manages dependency invalidation, and enforces stage access gating.
+// Enforces the "Build From Zero" engineering configuration pipeline:
+// ENGINE → VEHICLE → AERODYNAMICS → INTERIOR → SAFETY → SIMULATION → MANUFACTURING → FINAL BUILD
+// Answers: "What am I technically configuring in the studio?"
+// Distinct from VehicleDevelopmentLifecycle ("Where is this vehicle in its product lifecycle?")
 // ============================================================================
 
 import { create } from "zustand";
@@ -16,7 +16,11 @@ export type ConfigurationStatus =
   | "configured"
   | "invalidated";
 
-export type WorkflowStage =
+/**
+ * EngineeringPipelineStage — Technical vehicle configuration stages in the CAD/assembly studio.
+ * Answers: "What am I technically configuring right now?"
+ */
+export type EngineeringPipelineStage =
   | "engine"
   | "vehicle"
   | "aero"
@@ -26,15 +30,46 @@ export type WorkflowStage =
   | "manufacturing"
   | "final_build";
 
+/** @deprecated Use EngineeringPipelineStage to distinguish from VehicleDevelopmentLifecycleStage */
+export type WorkflowStage = EngineeringPipelineStage;
+
+/**
+ * CAR_CREATION_STAGES — the canonical list of App Stage IDs where
+ * engineering-specific UI chrome (Live Stats Rail, workflow breadcrumbs,
+ * sidebar collapse controls) should be visible.
+ *
+ * These map to the sequential "Build From Zero" pipeline stages where
+ * the user is actively designing/configuring a vehicle.
+ */
+export const CAR_CREATION_STAGES = [
+  "engine",
+  "transmission3d",
+  "vehicle",
+  "aero_studio",
+  "interior",
+  "safety",
+  "simulation",
+  "testing",
+  "manufacturing",
+  "factory",
+] as const;
+
+const CAR_CREATION_STAGES_SET = new Set<string>(CAR_CREATION_STAGES);
+
+/** Returns true if `stage` is an active car-creation pipeline stage. */
+export function isCarCreationStageId(stage: string): boolean {
+  return CAR_CREATION_STAGES_SET.has(stage);
+}
+
 export interface StageGateResult {
   allowed: boolean;
   reason?: string;
-  requiredStage?: WorkflowStage;
+  requiredStage?: EngineeringPipelineStage;
   devBypassed?: boolean;
 }
 
-export interface WorkflowStageMeta {
-  id: WorkflowStage;
+export interface EngineeringPipelineStageMeta {
+  id: EngineeringPipelineStage;
   stageNumber: number;
   label: string;
   buildStoryTitle: string;
@@ -44,7 +79,10 @@ export interface WorkflowStageMeta {
   appStageId: string; // Corresponding id in App.tsx STAGES
 }
 
-export const WORKFLOW_STAGES_META: Record<WorkflowStage, WorkflowStageMeta> = {
+/** @deprecated Use EngineeringPipelineStageMeta */
+export type WorkflowStageMeta = EngineeringPipelineStageMeta;
+
+export const ENGINEERING_PIPELINE_STAGES_META: Record<EngineeringPipelineStage, EngineeringPipelineStageMeta> = {
   engine: {
     id: "engine",
     stageNumber: 1,
@@ -127,6 +165,9 @@ export const WORKFLOW_STAGES_META: Record<WorkflowStage, WorkflowStageMeta> = {
   },
 };
 
+/** @deprecated Use ENGINEERING_PIPELINE_STAGES_META to distinguish from VehicleDevelopmentLifecycle */
+export const WORKFLOW_STAGES_META = ENGINEERING_PIPELINE_STAGES_META;
+
 interface GuidedEngineeringState {
   // Stage Statuses
   engineStatus: ConfigurationStatus;
@@ -139,22 +180,26 @@ interface GuidedEngineeringState {
   manufacturingStatus: ConfigurationStatus;
   finalBuildStatus: ConfigurationStatus;
 
-  // Active Stage
-  activeWorkflowStage: WorkflowStage;
+  // Active Engineering Pipeline Stage
+  activePipelineStage: EngineeringPipelineStage;
+  /** @deprecated Use activePipelineStage to distinguish from VehicleDevelopmentLifecycle */
+  activeWorkflowStage: EngineeringPipelineStage;
 
   // Powertrain Architecture Selection Status
   isPowertrainSelecting: boolean;
 
   // Navigation & Permission Checks
-  canEnterStage: (targetStage: WorkflowStage) => StageGateResult;
+  canEnterStage: (targetStage: EngineeringPipelineStage) => StageGateResult;
 
   // Actions
-  setActiveWorkflowStage: (stage: WorkflowStage) => void;
-  setStageStatus: (stage: WorkflowStage, status: ConfigurationStatus) => void;
+  setActivePipelineStage: (stage: EngineeringPipelineStage) => void;
+  /** @deprecated Use setActivePipelineStage */
+  setActiveWorkflowStage: (stage: EngineeringPipelineStage) => void;
+  setStageStatus: (stage: EngineeringPipelineStage, status: ConfigurationStatus) => void;
   setTransmissionStatus: (status: ConfigurationStatus) => void;
   markTransmissionComplete: () => void;
   setPowertrainSelecting: (selecting: boolean) => void;
-  markStageComplete: (stage: WorkflowStage) => void;
+  markStageComplete: (stage: EngineeringPipelineStage) => void;
 
   // Invalidation Triggers (when user edits an earlier stage)
   notifyEngineModified: () => void;
@@ -178,10 +223,11 @@ export const useGuidedEngineeringStore = create<GuidedEngineeringState>((set, ge
   manufacturingStatus: "unconfigured",
   finalBuildStatus: "unconfigured",
 
+  activePipelineStage: "engine",
   activeWorkflowStage: "engine",
   isPowertrainSelecting: true,
 
-  canEnterStage: (targetStage: WorkflowStage): StageGateResult => {
+  canEnterStage: (targetStage: EngineeringPipelineStage): StageGateResult => {
     const s = get();
     return AccessManager.canAccessStage(targetStage, {
       engineStatus: s.engineStatus,
@@ -196,11 +242,15 @@ export const useGuidedEngineeringStore = create<GuidedEngineeringState>((set, ge
     });
   },
 
-  setActiveWorkflowStage: (stage: WorkflowStage) => {
+  setActivePipelineStage: (stage: EngineeringPipelineStage) => {
     const check = get().canEnterStage(stage);
     if (check.allowed) {
-      set({ activeWorkflowStage: stage });
+      set({ activePipelineStage: stage, activeWorkflowStage: stage });
     }
+  },
+
+  setActiveWorkflowStage: (stage: EngineeringPipelineStage) => {
+    get().setActivePipelineStage(stage);
   },
 
   setStageStatus: (stage: WorkflowStage, status: ConfigurationStatus) => {
@@ -247,7 +297,7 @@ export const useGuidedEngineeringStore = create<GuidedEngineeringState>((set, ge
   markStageComplete: (stage: WorkflowStage) => {
     switch (stage) {
       case "engine":
-        set({ engineStatus: "configured", isPowertrainSelecting: false });
+        set({ engineStatus: "configured", transmissionStatus: "configured", isPowertrainSelecting: false });
         break;
       case "vehicle":
         set({ vehicleStatus: "configured" });
@@ -322,6 +372,7 @@ export const useGuidedEngineeringStore = create<GuidedEngineeringState>((set, ge
       simulationStatus: "unconfigured",
       manufacturingStatus: "unconfigured",
       finalBuildStatus: "unconfigured",
+      activePipelineStage: "engine",
       activeWorkflowStage: "engine",
       isPowertrainSelecting: true,
     });

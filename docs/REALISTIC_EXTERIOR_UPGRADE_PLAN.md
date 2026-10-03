@@ -304,24 +304,116 @@ $$\text{Capture 5 Angles} \longrightarrow \text{Compare with Real Photo} \longri
     - Articulating rear engine display hatch featuring lightweight vented polycarbonate rear window with embossed Maserati Trident heat extractor slots.
     - Mid-mounted Maserati "Nettuno" 3.0L 90° Twin-Turbo V6 engine (630 hp, F1 twin-spark pre-chamber combustion) with trident-embossed carbon intake plenums and titanium exhaust manifolds.
     - 20-inch staggered forged alloy wheels in signature "Birdcage" tri-spoke design with Brembo CCM-R carbon-ceramic brakes and blue calipers.
-    - Minimalist driver-centric cockpit with dual 10.25-inch high-definition digital displays, carbon-fiber center console with rotary drive-mode selector (GT, Wet, Sport, Corsa, ESC Off), and Sabelt carbon-backed sports bucket seats.
-
-24. **Polestar Synergy Concept (Coupe Future)**:
+    - Minimalist driver-centric cockpit with dual 10.25-inch high-definition digital displays, carbon-fiber center console with rotary drive-mode selector (GT, Wet, Sport, Corsa, ESC Off), and Sabelt carbon-backed sports bucket sea24. **Polestar Synergy Concept (Coupe Future)**:
     - True Class-A CAD procedural bmesh generation (`generate_polestar_synergy_master_cad.py`).
+    - 100.0% Grade A Production Certification (19.40 MB uncompressed, 4.04 MB companion meshopt, 1,418,676 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 7 NLA Actions, 4 Cameras, 23 PBR materials).
     - Ultra-low futuristic electric supercar proportions (length 4,560mm, height 1,070mm, wheelbase 2,800mm).
     - Aerospace-inspired fighter jet single-piece forward-tilting canopy greenhouse with crystal dielectric optical glass, eliminating conventional side doors and providing panoramic cockpit visibility.
-    - Open flow-through pontoon air bypass channels cutting between the central survival cell and outer wheel sponsons for zero-turbulence aerodynamic efficiency.
+    - Open flow-through pontoon air bypass channels cutting between the central survival cell and outer wheel sponsons with internal carbon flow vanes for zero-turbulence aerodynamic efficiency.
     - Minimalist dual-blade ultra-thin laser LED front lighting signature and full-width razor-edge rear floating aerodynamic lightblade spoiler.
-    - 22-inch flush aerodynamic turbine wheels with directional airflow induction vanes and integrated regenerative braking units.
+    - 22-inch flush aerodynamic turbine wheels with 32 directional airflow induction vanes, stepped outer rim lips, Brembo CCM brakes with Swedish Gold calipers, and internal cooling vanes.
     - Bio-composite unibody monocoque housing a decentralized 800V solid-state battery architecture and high-output dual permanent magnet synchronous e-motors.
-    - Single-seat central cockpit featuring Formula-style reclined seating position, yoke steer-by-wire flight control with integrated telemetry displays, and AR holographic head-up projection.
+    - Single-seat central cockpit featuring Formula-style reclined seating position, yoke steer-by-wire flight control with integrated curved OLED telemetry display, Swedish Gold 5-point harness, and AR holographic head-up projection.
+
+25. **Alfa Romeo Spider Veloce (Convertible 1970s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_alfa_spider_veloce_master_cad.py`).
+    - Classic Pininfarina boat-tail open roadster styling with distinctive side scallops, truncated Kamm tail, and iconic Alfa Romeo trilobo heart grille.
+    - Separated articulating doors with chrome lift handles and authentic 3.5mm shutlines.
+    - Folding canvas soft-top tonneau cover, polished chrome windshield surround frame, and 14-inch Campagnolo magnesium alloy wheels.
+    - 2.0L Twin Cam Inline-4 engine with dual side-draft Weber 40 DCOE carburetors and equal-length exhaust header collectors.
+
+26. **Mercedes-Benz 560SL R107 (Convertible 1980s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_mercedes_560sl_master_cad.py`).
+    - 100.0% Grade A Production Certification (27.84 MB uncompressed, 5.12 MB companion meshopt, 1,882,248 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 7 NLA Actions, 4 Cameras, 23 PBR materials).
+    - Bruno Sacco sculptural unibody monocoque with semicircular wheel arches, flush rocker sills, and continuous protective side rubbing strips with chrome bead inserts.
+    - Iconic chrome grille with central 180mm upright Three-Pointed Star emblem, horizontal chrome wing crossbars, and dark radiator matrix recess.
+    - Chrome rectangular headlamp bezels housing twin round sealed-beam halogen projector reflectors with fluted glass covers and wraparound amber turn indicator capsules.
+    - Patented Mercedes-Benz ribbed dirt-shedding tri-color taillamp clusters featuring 6 horizontal grooved ribs across amber, ruby, and reverse white lens sections.
+    - Authentic 15-inch forged "Gullideckel" (manhole cover) alloy wheels with 15 radial circular cooling holes, central star hubcaps, 5 recessed chrome lug bolts, cross-drilled cast iron brake rotors, and ATE 4-piston calipers.
+    - Longitudinal 5.6L (5547cc) M117 SOHC 90° V8 engine with dual-snorkel air cleaner housing, chrome center wing nut, ribbed alloy valve covers, and tubular stainless exhaust headers.
+    - Luxury German roadster cockpit with soft-padded dash, full horizontal Zebrano striped wood veneer fascia, 3-gauge VDO cluster, gated auto shifter, 4-spoke safety steering wheel, and Palomino fluted bucket seats with lateral bolsters and headrests on telescoping chrome stanchions.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+27. **Honda S2000 AP1 (Convertible 2000s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_honda_s2000_master_cad.py`).
+    - 100.0% Grade A Production Certification (17.81 MB uncompressed, 3.46 MB companion meshopt, 1,232,914 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 7 NLA Actions, 4 Cameras, 23 PBR materials).
+    - Lightweight, rigid "High X-Bone" frame unibody monocoque with clean open cockpit aperture and 50:50 front mid-engine weight distribution.
+    - Low-slung wedge nose with wide smiling lower intake mouth, red Honda "H" badge, and swept aerodynamic halogen projector headlamps with chrome housings, amber indicators, and fluted polycarbonate lenses.
+    - Muscular rear haunches wrapping upright 16-inch 5-spoke staggered alloy wheels with recessed 5-lug bolts, Honda center caps, cross-drilled rotors, and silver calipers.
+    - Iconic rear fascia with triple-cluster taillights (amber turn / clear reverse / circular ruby tail), subtle integrated ducktail decklid spoiler, and dual large-bore 90mm polished stainless steel exhaust cannons.
+    - Separated articulating frameless doors with forward physical hinges (`export_apply=False`), inner door cards with brushed aluminum handles, and frameless optical dielectric safety side glass.
+    - High-revving longitudinal F20C 2.0L naturally aspirated DOHC VTEC Inline-4 engine (9,000 RPM redline) with wrinkle-red valve cover, cast intake plenum, titanium front strut brace, and aluminum radiator.
+    - Driver-centric roadster cockpit featuring digital F1-style LED bar-graph tachometer and digital speedometer cluster, start engine red push button, short-throw titanium teardrop 6-speed manual shifter, contoured black leather sport bucket seats, and twin aerodynamic roll-over protection hoops.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+28. **Jaguar F-Type V8 R Convertible (Convertible 2010s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_jaguar_ftype_master_cad.py`).
+    - 100.0% Grade A Production Certification (23.70 MB uncompressed, 3.62 MB companion meshopt, 1,494,160 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 7 NLA Actions, 4 Cameras, 22 PBR materials).
+    - Muscular British luxury roadster unibody with sweeping feline fender lines, rear power haunches, and signature J-blade adaptive LED headlamps with outer optical polycarbonate lenses.
+    - Dramatic open-mouth front oval grille with gloss black mesh, chrome surround ring, red Jaguar Heritage Growler emblem, and twin lower aerodynamic air intakes with splitter winglets.
+    - Clamshell hood with twin functional heat extractor vents and side fender aerodynamic power vents with polished chrome strakes.
+    - Separated articulating frameless doors with flush pop-out door handles, physical hinge vectors (`export_apply=False`), and frameless optical dielectric safety side glass.
+    - Quad outboard 95mm polished stainless steel active sport exhaust cannons with dark inner soot bores and 4-strake rear diffuser.
+    - 20-inch forged "Gyrodyne" diamond-turned split-spoke alloy wheels with red center caps, red Jaguar monobloc calipers, and cross-drilled carbon-ceramic brake rotors.
+    - Longitudinal 5.0L Supercharged AJ-V8 engine with Roots twin-vortex supercharger casing, carbon fiber engine appearance cover, and aluminum strut tower braces.
+    - Luxury driver-focused cockpit with asymmetric passenger grab handle, digital instrument binnacle, Ignis Orange paddle shifters and start button, contoured Nappa leather sport bucket seats, and twin satin silver roll-over protection hoops with acrylic wind deflector screen.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+29. **Bentley Continental GT Speed Convertible (Convertible 2020s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_bentley_continental_gt_speed_master_cad.py`).
+    - Imposing ultra-luxury British Grand Tourer convertible unibody with sharp "power line" crease sweeping rearward from front wheels into voluminous rear haunches.
+    - Signature Dark Tint Matrix radiator grille flanked by iconic twin circular cut-crystal matrix LED projector headlamps with diamond-faceted internal optics.
+    - Tailored multi-layer acoustic convertible fabric roof boot (tonneau deck) with elegant double-horseshoe decklid surfacing.
+    - Sculpted elliptical LED taillights echoing the shape of the dual large-bore oval Speed exhaust cannons.
+    - Separated articulating frameless doors with physical hinge vector (`export_apply=False`), knurled aluminum inner handles, and acoustic laminated side glass.
+    - 22-inch Speed directional multi-spoke dark tint forged alloy wheels with self-righting Bentley "B" center caps, 440mm carbon-silicon-carbide (CSiC) brake rotors, and black 10-piston front calipers.
+    - Hand-assembled 6.0L Twin-Turbo W12 TSI engine with ribbed intake plenums, twin turbo plumbing, and quad oval active sports exhaust.
+    - Handcrafted cabin with Bentley Rotating Display (12.3" OLED / 3 analog dials / clean veneer), diamond-in-diamond quilted hides, Breitling dashboard clock, and knurled organ stop vent controls.
+    - 100.0% Grade A Production Certification (22.47 MB uncompressed, 3.64 MB companion meshopt, 1,558,096 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 7 NLA Actions, 4 Cameras, 23 PBR materials).
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+30. **Genesis X Convertible Concept (Convertible Future)**:
+    - True Class-A CAD procedural bmesh generation (`generate_genesis_x_convertible_master_cad.py`).
+    - Athletic Elegance avant-garde Korean luxury grand tourer convertible unibody with pure parabolic character line, anti-wedge downward sweep, and clean open cabin aperture.
+    - Signature Quad Lamp horizontal parallel two-line LED light guides wrapping across the crest grille silhouette and sweeping into the front quarter panels.
+    - Sculpted concave elliptical Kamm tail with matching two-line LED full-width horizontal taillamps and integrated V-shaped rear ducktail brake light.
+    - Separated articulating frameless GT doors with forward physical hinge vectors (`export_apply=False`), frameless optical dielectric safety side glass, and tailored interior door cards with Dancheong orange ambient lighting ribbons.
+    - 21-inch Aero Dish aerodynamic turbine wheels with G-Matrix concave lattice pattern, stepped outer rim lips, copper Genesis monobloc calipers, and 420mm carbon-silicon-carbide rotors.
+    - Decentralized 800V E-GMP dual-motor electric powertrain with 99.8 kWh skateboard battery pack enclosure, orange high-voltage busbars, and illuminated charge port.
+    - Handcrafted Korean luxury cockpit featuring wraparound curved Free-Form OLED cluster, crystal sphere shift-by-wire controller, Giwa Navy leather, Dancheong orange contrast stitching, and two-spoke GT steering wheel.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+31. **Mercedes-Benz S-Class 450 SEL (W116) (Sedan 1970s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_mercedes_benz_w116_master_cad.py`).
+    - 100.0% Grade A Production Certification (16.68 MB uncompressed, 3.02 MB companion meshopt, 1,115,972 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 8 NLA Actions, 4 Cameras, 24 PBR materials).
+    - Long-wheelbase executive sedan unibody with 4 fully articulated doors (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`), Cognac leather door cards, chrome beltline trim, rubber side rub-strips, and green tinted optical dielectric glass (`export_apply=False`).
+    - Upright chrome radiator grille with 7 horizontal louvers, center vertical chrome spine, and three-pointed star hood ornament mascot.
+    - Double chrome front/rear bumpers with black impact rubber inserts and vertical bumper overriders.
+    - Béla Barényi patented dirt-shedding ribbed horizontal taillight clusters across amber, ruby, and reverse white sections.
+    - 14-inch Bundt "Barock" 15-flute forged alloy wheels with 205/70 VR14 tires, recessed tread sipes, cast iron brake rotors, and ATE calipers.
+    - 4.5L Mercedes-Benz M117 V8 engine with dual-snorkel air cleaner housing, ribbed alloy valve covers, and tubular exhaust headers.
+    - Zebrano wood veneer dashboard with 3-gauge VDO instrument cluster, 4-spoke safety steering wheel, ribbed Cognac leather seats, and center console.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+32. **Mercedes-Benz 190E 2.3-16 Cosworth W201 (Sedan 1980s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_mercedes_benz_190e_master_cad.py`).
+    - 100.0% Grade A Production Certification (19.64 MB uncompressed, 3.03 MB companion meshopt, 1,131,536 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 6 NLA Actions, 4 Cameras, 23 PBR materials).
+    - Compact sports saloon unibody (Bruno Sacco design) featuring continuous watertight cross-sectional quad cage, flared DTM box blister arches, solid crowned roof with cantrails, and contrasting Bruno Sacco lower side protective cladding ("Sacco-Bretter" #5a5f64).
+    - Raked chrome radiator grille with 6 horizontal louvers, center vertical chrome spine, and three-pointed star hood ornament mascot.
+    - Deep aerodynamic front air dam bumper with integrated fog lamps and chin splitter, plus rear aerodynamic bumper skirt with polished dual stainless steel exhaust cannons.
+    - Rectangular Bosch composite headlamps with fluted glass lenses and amber wraparound corner turn indicators; patented Béla Barényi 5-flute self-cleaning ribbed taillights (ruby red, amber, white).
+    - Cosworth pedestal rear aerodynamic wing mounted on the rear decklid with integrated black gurney flap.
+    - 15-inch 15-hole Fuchs "Gullideckel" forged alloy wheels with star hubcaps, Michelin 205/55 VR15 siped radials, cross-drilled ventilated cast iron brake rotors, and gold 4-piston calipers.
+    - 2.3L 16V Cosworth M102 DOHC twin-cam engine bay with wrinkle black valve cover, raised aluminum lettering, equal-length 4-into-2-into-1 tubular exhaust headers, and front cooling radiator.
+    - Recaro sports cockpit with high-bolstered leather bucket seats, Zebrano wood trim, 3-gauge VDO cluster, 3 Cosworth center aux gauges, dogleg 5-speed shifter, and 4-spoke sport steering wheel.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
 
 ---
 
 ## 4. Production Upgrade Status & Scorecard
 
 | # | Vehicle | Generation Script | Triangles | File Size | Grade | Doors & Glass Architecture | Status |
-| :-: | :--- | :--- | :-: | :--- | :-: | :--- | :-: |
+| :-: | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | 1 | **Bugatti Chiron Super Sport 300+** | `generate_bugatti_chiron_master_cad.py` | 824,196 | 16.82 MB | **100.0% (A)** | 16.3k unibody cutout, C-line doors, frit glass | 🌟 **CERTIFIED** |
 | 2 | **Bugatti Veyron 16.4** | `generate_bugatti_veyron_master_cad.py` | 768,432 | 15.44 MB | **98.5% (A)** | Curved doors, dual roof scoops, clear glass | 🌟 **CERTIFIED** |
 | 3 | **Lamborghini Countach LP400** | `generate_countach_lp400_master_cad_v8.py` | 812,654 | 16.12 MB | **100.0% (A)** | 65° scissor doors, periscopio roof glass | 🌟 **CERTIFIED** |
@@ -345,7 +437,17 @@ $$\text{Capture 5 Angles} \longrightarrow \text{Compare with Real Photo} \longri
 | 21 | **Nissan GT-R R35** | `generate_nissan_gtr_r35_master_cad.py` | 1,289,264 | 22.72 MB | **100.0% (A)** | Sharp C-pillar kink, double-bubble roof, quad afterburners, 20" Rays wheels, VR38DETT | 🌟 **CERTIFIED** |
 | 22 | **BMW M4 GTS F82** | `generate_bmw_m4_gts_master_cad.py` | 1,214,134 | 20.33 MB | **100.0% (A)** | Frozen Dark Grey unibody, Acid Orange splitter & 666M wheels, roll cage, 3D OLED taillamps, S55 Turbo | 🌟 **CERTIFIED** |
 | 23 | **Maserati MC20** | `generate_maserati_mc20_master_cad.py` | 825,784 | 13.42 MB | **95.5% (A)** | Dallara carbon monocoque, butterfly doors, Nettuno V6, Sabelt seats, Trident louvers | 🌟 **CERTIFIED** |
-| 24 | **Polestar Synergy Concept** | `generate_polestar_synergy_master_cad.py` | *Pending* | *Pending* | *Pending* | Fighter canopy, pontoon tunnels, laser blades, 22" turbine wheels, EV powertrain | 🔄 **IN PROGRESS** |
+| 24 | **Polestar Synergy Concept** | `generate_polestar_synergy_master_cad.py` | 1,418,676 | 19.40 MB | **100.0% (A)** | Fighter canopy, pontoon tunnels, laser blades, 22" turbine wheels, EV powertrain | 🌟 **CERTIFIED** |
+| 25 | **Alfa Romeo Spider Veloce** | `generate_alfa_spider_veloce_master_cad.py` | 1,445,960 | 21.08 MB | **100.0% (A)** | Pininfarina Coda Tronca unibody, Scudetto heart, Campagnolo Turbina wheels, Twin Cam I4 | 🌟 **CERTIFIED** |
+| 26 | **Mercedes-Benz 560SL (R107)** | `generate_mercedes_560sl_master_cad.py` | 1,882,248 | 27.84 MB | **100.0% (A)** | Bruno Sacco unibody, upright chrome star grille, quad halogens, ribbed taillamps, 15-hole Gullideckel wheels, 5.6L M117 V8 | 🌟 **CERTIFIED** |
+| 27 | **Honda S2000 AP1** | `generate_honda_s2000_master_cad.py` | 1,232,914 | 17.81 MB | **100.0% (A)** | High X-Bone unibody, raked frameless doors, F20C VTEC engine, 16" 5-spoke alloys, digital cluster | 🌟 **CERTIFIED** |
+| 28 | **Jaguar F-Type V8 R Convertible** | `generate_jaguar_ftype_master_cad.py` | 1,494,160 | 23.70 MB | **100.0% (A)** | Feline haunches, clamshell hood, J-blade LEDs, quad outboard exhausts, 5.0L Supercharged V8, deployable spoiler | 🌟 **CERTIFIED** |
+| 29 | **Bentley Continental GT Speed Convertible** | `generate_bentley_continental_gt_speed_master_cad.py` | 1,558,096 | 22.47 MB | **100.0% (A)** | Power line crease, cut-crystal matrix LEDs, acoustic tonneau, 6.0L W12 TSI, 22" Speed alloys | 🌟 **CERTIFIED** |
+| 30 | **Genesis X Convertible Concept** | `generate_genesis_x_convertible_master_cad.py` | 1,362,096 | 19.18 MB | **100.0% (A)** | Parabolic character line, Two-Line Quad Lamps, frameless doors with flush safety glass, G-Matrix aero wheels, 800V EV, crystal sphere | 🌟 **CERTIFIED** |
+| 31 | **Mercedes-Benz S-Class 450 SEL (W116)** | `generate_mercedes_benz_w116_master_cad.py` | 1,115,972 | 16.68 MB | **100.0% (A)** | 4-door executive saloon architecture, chrome star grille, Bundt wheels, M117 V8 | 🌟 **CERTIFIED** |
+| 32 | **Mercedes-Benz 190E 2.3-16 Cosworth (W201)** | `generate_mercedes_benz_190e_master_cad.py` | 1,131,536 | 19.64 MB | **100.0% (A)** | 4-door sports saloon, DTM blister arches, Sacco cladding, Cosworth wing, Gullideckel wheels | 🌟 **CERTIFIED** |
+
+
 
 
 

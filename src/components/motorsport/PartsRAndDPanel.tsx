@@ -3,7 +3,6 @@
 // ===================================================================
 import { useState, memo } from "react";
 import { Wrench, Zap, Shield, AlertTriangle, CheckCircle, Clock, Flame } from "lucide-react";
-import { useCompany } from "../../state/CompanyContext";
 import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import type { MotorsportTeam } from "../../sim/types";
 
@@ -29,10 +28,9 @@ const DEFAULT_PARTS: MotorsportPart[] = [
 ];
 
 export const PartsRAndDPanel = memo(function PartsRAndDPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
-  const { company } = useCompany();
   const [parts, setParts] = useState<MotorsportPart[]>(DEFAULT_PARTS);
 
-  const availableFunds = selectedTeam ? selectedTeam.budget : (company.totalRevenue || 50_000_000);
+  const availableFunds = selectedTeam ? selectedTeam.budget : 50_000_000;
 
   const handleDevelop = (id: string) => {
     playHMIClickSound();

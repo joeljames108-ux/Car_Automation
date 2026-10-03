@@ -1,26 +1,18 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import {
-  Cog, Car, Activity, Flag, BarChart3, Save, FolderOpen, RotateCcw,
-  Sofa, Factory, Ruler, Wind, Newspaper,
-  Monitor, Microscope, Trophy, GitCompare,
-  TrendingUp, ShieldCheck, DollarSign, Cpu, GitBranch,
-  Bell, SlidersHorizontal, Box, Volume2, Gauge, Navigation, Home, ChevronRight
-} from "lucide-react";
-import { DesignProvider, useDesign } from "./state/DesignContext";
+import { DesignProvider } from "./state/DesignContext";
 import { RDProvider } from "./state/RDContext";
-import { CompanyProvider, useCompany } from "./state/CompanyContext";
+import { CompanyProvider } from "./state/CompanyContext";
 import { ToastProvider } from "./components/ToastSystem";
 import { StageSwitcher, type Stage } from "./components/StageSwitcher";
 import { scheduleIdleWork } from "./utils/performanceOptimizer";
 
 // Deferred imports — only loaded when their UI sections are visible
-const EngineeringLog = React.lazy(() => import("./components/EngineeringLog").then(m => ({ default: m.EngineeringLog })));
 const StatRail = React.lazy(() => import("./components/StatRail").then(m => ({ default: m.StatRail })));
 const ThermalAlertMonitor = React.lazy(() => import("./components/ThermalAlertMonitor").then(m => ({ default: m.ThermalAlertMonitor })));
 
-import { Search, Command as CmdIcon, Wrench, RefreshCw, PanelRightOpen, ChevronLeft } from "lucide-react";
-import { useGuidedEngineeringStore } from "./state/guidedEngineeringStore";
+import { PanelRightOpen, ChevronLeft } from "lucide-react";
 import { StageLoadingSkeleton } from "./components/ui/StageLoadingSkeleton";
+import { GlobalSimulationTicker } from "./components/GlobalSimulationTicker";
 
 const SaveLoadDialog = React.lazy(() => import("./components/SaveLoadDialog").then(m => ({ default: m.SaveLoadDialog })));
 const CommandPalette = React.lazy(() => import("./components/CommandPalette").then(m => ({ default: m.CommandPalette })));
@@ -29,56 +21,14 @@ import { DevModeBanner } from "./components/dev/DevModeBanner";
 import { DevConsole } from "./components/dev/DevConsole";
 import { useDeveloperModeStore } from "./state/developerModeStore";
 import { useDevConsoleStore } from "./state/devConsoleStore";
-import { useSimulationClockStore } from "./state/simulationClockStore";
 import { useLiveStatsRailStore } from "./state/liveStatsRailStore";
-
-
-export type WorkspaceCategory = "engineering" | "studios" | "simulation" | "world";
-
-interface StageItem {
-  id: Stage;
-  label: string;
-  icon: React.ReactNode;
-  category: WorkspaceCategory;
-}
-
-const STAGES: StageItem[] = [
-  // --- Main Menu Hub & Overview ---
-  { id: "main_menu", label: "Main Menu", icon: <Home size={14} />, category: "engineering" },
-  { id: "create_vehicle_hub", label: "Creation Hub", icon: <Car size={14} />, category: "engineering" },
-
-  // --- Engineering Sequential Workflow (8 Divisions) ---
-  { id: "engine", label: "1. Engine", icon: <Cog size={14} />, category: "engineering" },
-  { id: "vehicle", label: "2. Vehicle Studio", icon: <Car size={14} />, category: "engineering" },
-  { id: "aero_studio", label: "3. Aero Studio", icon: <Wind size={14} />, category: "engineering" },
-  { id: "interior", label: "4. Interior", icon: <Sofa size={14} />, category: "engineering" },
-  { id: "safety", label: "5. Safety Center", icon: <ShieldCheck size={14} />, category: "engineering" },
-  { id: "simulation", label: "6. Sim & Testing", icon: <Activity size={14} />, category: "engineering" },
-  { id: "manufacturing", label: "7. Manufacture", icon: <Factory size={14} />, category: "engineering" },
-  { id: "factory", label: "8. Factory Floor", icon: <Factory size={14} />, category: "engineering" },
-
-  // --- Design Studios Hub ---
-  { id: "transmission3d", label: "3D Transmission Studio", icon: <Cog size={14} />, category: "studios" },
-  { id: "track_layout", label: "Track Layouts Studio", icon: <Navigation size={14} />, category: "studios" },
-  { id: "f1_constructor", label: "🏎️ F1 Constructor Studio", icon: <Flag size={14} />, category: "studios" },
-  { id: "hypercar_constructor", label: "🏆 Hypercar WEC Studio", icon: <Trophy size={14} />, category: "studios" },
-  { id: "suspension3d", label: "3D Suspension Studio", icon: <Activity size={14} />, category: "studios" },
-
-  // --- Simulation & Testing ---
-  { id: "simulation", label: "Simulation", icon: <Activity size={14} />, category: "simulation" },
-  { id: "nvh", label: "NVH Audio Lab", icon: <Volume2 size={14} />, category: "simulation" },
-  { id: "race", label: "Race Track", icon: <Flag size={14} />, category: "simulation" },
-  { id: "stats", label: "Telemetry Stats", icon: <BarChart3 size={14} />, category: "simulation" },
-
-  // --- World & Racing ---
-  { id: "reputation", label: "Reputation", icon: <Trophy size={14} />, category: "world" },
-  { id: "compare", label: "Compare", icon: <GitCompare size={14} />, category: "world" },
-  { id: "economy", label: "Economy", icon: <TrendingUp size={14} />, category: "world" },
-  { id: "twin", label: "Digital Twin", icon: <Cpu size={14} />, category: "world" },
-  { id: "sales", label: "Sales", icon: <DollarSign size={14} />, category: "world" },
-  { id: "press", label: "Press Reviews", icon: <Newspaper size={14} />, category: "world" },
-  { id: "competitors", label: "Rivals", icon: <GitBranch size={14} />, category: "world" },
-];
+import {
+  STAGES,
+  type WorkspaceCategory,
+  isMainMenuOrSubPage,
+  isCarCreationStage,
+  resolveStageCategory,
+} from "./navigation/navigationRegistry";
 
 // Error Boundary to catch runtime crashes
 class VisionGlassErrorBoundary extends React.Component<
@@ -159,11 +109,7 @@ function AppInner() {
       return false;
     }
   });
-  const { design, sim, carConcept, updateEngine, resetDesign, units, setUnits, uiTheme, setUiTheme } = useDesign();
-  const { company, advanceAllSystems } = useCompany();
   const { isCollapsedToRight, setIsCollapsedToRight, toggleCollapseToRight } = useLiveStatsRailStore();
-  const isPowertrainSelecting = useGuidedEngineeringStore((s) => s.isPowertrainSelecting);
-  const isSelectingPowertrain = stage === "engine" && isPowertrainSelecting;
   const [booted, setBooted] = useState(false);
 
   // Stable Memoized Handlers for UI Performance
@@ -184,33 +130,8 @@ function AppInner() {
     });
     setCmdPaletteOpen(false);
   }, []);
-  const isMainMenuOrSubPage = useCallback((s: Stage) => {
-    return [
-      "main_menu",
-      "create_vehicle_hub",
-      "powertrain_studio_select",
-      "operations",
-      "project_overview",
-      "hq",
-      "calendar",
-      "contracts",
-      "settings",
-      "reputation",
-      "garage",
-      "motorsport",
-      "rd",
-    ].includes(s);
-  }, []);
-
   const handleSelectStage = useCallback((st: string) => {
-    const selectedStage = STAGES.find((item) => item.id === st);
-    if (selectedStage) {
-      setActiveCategory(selectedStage.category);
-    } else if (st === "garage" || st === "motorsport" || st === "supplyChain") {
-      setActiveCategory("world");
-    } else if (["operations", "project_overview", "hq", "calendar", "contracts", "settings", "reputation"].includes(st)) {
-      setActiveCategory("world");
-    }
+    setActiveCategory(resolveStageCategory(st));
     React.startTransition(() => {
       setStage(st as Stage);
     });
@@ -314,11 +235,11 @@ function AppInner() {
 
   // Sync category when stage changes (e.g. from CommandPalette)
   useEffect(() => {
-    const currentStageItem = STAGES.find(s => s.id === stage);
-    if (currentStageItem && currentStageItem.category !== activeCategory) {
-      setActiveCategory(currentStageItem.category);
+    const nextCategory = resolveStageCategory(stage);
+    if (nextCategory !== activeCategory) {
+      setActiveCategory(nextCategory);
     }
-  }, [stage]);
+  }, [stage, activeCategory]);
 
   // Global Ctrl+K / Cmd+K key listener
   useEffect(() => {
@@ -331,19 +252,18 @@ function AppInner() {
         handleToggleFocusMode();
       } else if ((e.ctrlKey || e.metaKey) && e.key === "]") {
         e.preventDefault();
-        toggleCollapseToRight();
+        if (isCarCreationStage(stage)) {
+          toggleCollapseToRight();
+        }
       }
     }
     window.addEventListener("keydown", handleGlobalKeydown);
     return () => window.removeEventListener("keydown", handleGlobalKeydown);
-  }, [handleToggleFocusMode, toggleCollapseToRight]);
+  }, [handleToggleFocusMode, toggleCollapseToRight, isCarCreationStage, stage]);
 
-  const designRef = React.useRef(design);
-  designRef.current = design;
-  const simRef = React.useRef(sim);
-  simRef.current = sim;
-  const carConceptRef = React.useRef(carConcept);
-  carConceptRef.current = carConcept;
+
+
+  const showLiveStatsSidebar = !focusMode && isCarCreationStage(stage);
 
 
 
@@ -412,13 +332,9 @@ function AppInner() {
               className="vision-glass-content vision-scroll-momentum"
               style={{
                 flex: 1,
-                overflowY: (isSelectingPowertrain || stage === "main_menu" || stage === "create_vehicle_hub" || stage === "powertrain_studio_select") ? "hidden" : "auto",
+                overflowY: isMainMenuOrSubPage(stage) ? "hidden" : "auto",
                 overflowX: "hidden",
-                padding: isMainMenuOrSubPage(stage)
-                  ? "0px"
-                  : (isSelectingPowertrain
-                    ? "12px 20px"
-                    : "16px 24px 24px 24px"),
+                padding: isMainMenuOrSubPage(stage) ? "0px" : "16px 24px 24px 24px",
               }}
             >
               <div className="sr-only" aria-live="polite">
@@ -427,13 +343,13 @@ function AppInner() {
               <div className="sr-only" aria-live="polite">
                 {focusMode ? "Focus workspace mode enabled. Navigation chrome hidden." : "Focus workspace mode disabled."}
               </div>
-              <div style={{ display: "flex", gap: isCollapsedToRight || isSelectingPowertrain ? 0 : 16, transition: "gap 280ms cubic-bezier(0.4, 0, 0.2, 1)", height: isMainMenuOrSubPage(stage) ? "100%" : "auto", flex: 1 }}>
+              <div style={{ display: "flex", gap: !showLiveStatsSidebar || isCollapsedToRight ? 0 : 16, transition: "gap 280ms cubic-bezier(0.4, 0, 0.2, 1)", height: isMainMenuOrSubPage(stage) ? "100%" : "auto", flex: 1 }}>
                 <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: isMainMenuOrSubPage(stage) ? 0 : 16, height: isMainMenuOrSubPage(stage) ? "100%" : "auto" }}>
                   <StageSwitcher stage={stage} onSelectStage={handleSelectStage} />
                 </div>
 
-                {/* Right Sidebar — hidden for F1/Hypercar/MainMenu/SubPages/PowertrainSelect (they have their own full-width layout) */}
-                {!focusMode && stage !== "f1_constructor" && stage !== "hypercar_constructor" && !isMainMenuOrSubPage(stage) && !isSelectingPowertrain && (
+                {/* Right Sidebar — visible ONLY during car creation stages (Engine, Transmission, Exterior, Safety, Sim & Testing, Manufacturing) */}
+                {showLiveStatsSidebar && (
                   <aside
                     aria-label="Live Telemetry and Stats Sidebar"
                     className="hidden xl:flex flex-col gap-4"
@@ -450,19 +366,17 @@ function AppInner() {
                     }}
                   >
                     <div style={{ width: 300, position: "sticky", top: 8, display: "flex", flexDirection: "column", gap: 12 }}>
-                      {/* Live Stat Rail (Top) */}
+                      {/* Live Stat Rail */}
                       <div className="stat-rail-container">
                         <StatRail />
                       </div>
-                      {/* Engineering Log Panel (Bottom) */}
-                      <EngineeringLog />
                     </div>
                   </aside>
                 )}
               </div>
 
               {/* Floating Docked Pull-Tab on Right Edge when sidebar is collapsed to the right */}
-              {!focusMode && stage !== "f1_constructor" && stage !== "hypercar_constructor" && !isMainMenuOrSubPage(stage) && !isSelectingPowertrain && isCollapsedToRight && (
+              {showLiveStatsSidebar && isCollapsedToRight && (
                 <button
                   type="button"
                   onClick={() => setIsCollapsedToRight(false)}
@@ -507,28 +421,6 @@ function AppInner() {
         </div>
       </VisionGlassErrorBoundary>
     );
-}
-
-/**
- * Continuous Global Simulation Clock Ticker — Time always runs across all views
- */
-function GlobalSimulationTicker() {
-  const { isPlaying, speed, advanceDays, advanceHours } = useSimulationClockStore();
-
-  useEffect(() => {
-    if (!isPlaying) return;
-    const intervalMs = 1000;
-    const timer = setInterval(() => {
-      if (speed >= 25) {
-        advanceDays(speed >= 50 ? 7 : 1);
-      } else {
-        advanceHours(speed);
-      }
-    }, intervalMs);
-    return () => clearInterval(timer);
-  }, [isPlaying, speed, advanceDays, advanceHours]);
-
-  return null;
 }
 
 export default function App() {

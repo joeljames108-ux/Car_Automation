@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { useCampusStore } from "../../state/campusStore";
 import { useSimulationClockStore } from "../../state/simulationClockStore";
+import { useCompanyFinanceStore } from "../../state/companyFinanceStore";
 import { useReputationStore } from "../../state/reputationStore";
 import { FactoryProgressionEngine } from "../../sim/campus/factoryProgressionEngine";
 import { CAMPUS_PLOTS } from "../../sim/campus/campusPlotCoordinates";
@@ -68,8 +69,8 @@ export const CampusAnalyticsModal: React.FC<CampusAnalyticsModalProps> = ({
   } = useCampusStore();
 
   const { overallReputation, dimensions } = useReputationStore();
-
-  const { cash, year, month } = useSimulationClockStore();
+  const { cash } = useCompanyFinanceStore();
+  const { year, month } = useSimulationClockStore();
   const telemetry = getTelemetrySummary();
   const factoryEcon = FactoryProgressionEngine.getEconomicsSummary(factoryState);
   const bonuses = calculateCampusBonuses(units);

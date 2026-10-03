@@ -50,7 +50,7 @@ export function useEngineBuilderFlow({
   initialStage,
 }: UseEngineBuilderFlowProps) {
   // Underlying physics & robotic assembly state
-  const assembly = useAssemblyStore(engineConfig);
+  const assembly = useAssemblyStore(engineConfig, sim);
 
   // Initial powertrain detection
   const initialMode: PowertrainMode =

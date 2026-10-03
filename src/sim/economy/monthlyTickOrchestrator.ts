@@ -767,11 +767,6 @@ export function runMonthlyEconomicTick(month: number, year: number): MonthlyTick
     activeProductionLines[0]?.listPrice ?? 1250000
   );
 
-  // Sync back to simulationClockStore so UI headers reflect accurate liquid cash
-  useSimulationClockStore.getState().addResources(
-    snapshot.closingCash - useSimulationClockStore.getState().cash,
-    0
-  );
 
   pipelineSteps.push({
     step: 11,
