@@ -49,7 +49,6 @@ export const STAGES: StageItem[] = [
   { id: "compare", label: "Compare", icon: <GitCompare size={14} />, category: "world" },
   { id: "economy", label: "Economy", icon: <TrendingUp size={14} />, category: "world" },
   { id: "twin", label: "Digital Twin", icon: <Cpu size={14} />, category: "world" },
-  { id: "sales", label: "Sales", icon: <DollarSign size={14} />, category: "world" },
   { id: "press", label: "Press Reviews", icon: <Newspaper size={14} />, category: "world" },
   { id: "competitors", label: "Rivals", icon: <GitBranch size={14} />, category: "world" },
 ];

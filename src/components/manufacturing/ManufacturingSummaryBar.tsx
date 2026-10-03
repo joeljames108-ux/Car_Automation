@@ -1,5 +1,5 @@
 import React from "react";
-import { ShieldCheck, TrendingUp, DollarSign, ArrowRight, ArrowLeft, Store } from "lucide-react";
+import { ShieldCheck, TrendingUp, DollarSign, ArrowRight, ArrowLeft, Warehouse } from "lucide-react";
 import { fmtCurrency } from "../../state/DesignContext";
 
 interface ManufacturingSummaryBarProps {
@@ -80,11 +80,11 @@ export function ManufacturingSummaryBar({
 
             <button
               type="button"
-              onClick={() => onSelectStage("sales")}
+              onClick={() => onSelectStage("garage")}
               className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-600 hover:from-emerald-500 hover:to-teal-500 text-white font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Store size={15} />
-              <span>COMMENCE COMMERCIAL SALES →</span>
+              <Warehouse size={15} />
+              <span>VIEW FLEET IN GARAGE →</span>
             </button>
           </div>
         )}

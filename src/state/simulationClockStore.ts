@@ -105,7 +105,7 @@ const SEED_EVENTS: ScheduledGameEvent[] = [
   { id: "ev_factory_ground", dateStr: "1970-02-15", time: "08:00", title: "Factory Groundbreaking Ceremony", category: "factory", actionStage: "manufacturing", description: "Construction begins on first production facility" },
 
   // Market / Regulation
-  { id: "ev_auto_show", dateStr: "1970-10-01", time: "09:00", title: "International Motor Show",    category: "market",    actionStage: "sales",       description: "Debut your vehicles to the global press and buyers" },
+  { id: "ev_auto_show", dateStr: "1970-10-01", time: "09:00", title: "International Motor Show",    category: "market",    actionStage: "economy",     description: "Debut your vehicles to the global press and buyers" },
   { id: "ev_regulation", dateStr: "1970-07-01", time: "10:00", title: "New Emission Regulations",   category: "regulation", actionStage: "rd",         description: "Government mandates new exhaust emission standards" },
 ];
 

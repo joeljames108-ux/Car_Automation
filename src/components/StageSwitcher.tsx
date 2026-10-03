@@ -65,7 +65,6 @@ const EngineeringComparison = lazy(() => import("./EngineeringComparison").then(
 const DynamicEconomy = lazy(() => import("./DynamicEconomy").then(m => ({ default: m.DynamicEconomy })));
 const MotorsportDivision = lazy(() => import("./MotorsportDivision").then(m => ({ default: m.MotorsportDivision })));
 const DigitalTwin = lazy(() => import("./DigitalTwin").then(m => ({ default: m.DigitalTwin })));
-const SalesLaunch = lazy(() => import("./SalesLaunch").then(m => ({ default: m.SalesLaunch })));
 const Competitors = lazy(() => import("./Competitors").then(m => ({ default: m.Competitors })));
 const RDCenter = lazy(() => import("./RDCenter").then(m => ({ default: m.RDCenter })));
 const SupplyChainWorkshop = lazy(() => import("./SupplyChainWorkshop").then(m => ({ default: m.SupplyChainWorkshop })));
@@ -84,13 +83,17 @@ const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectS
   const previousStageRef = React.useRef<Stage>(stage);
 
   React.useEffect(() => {
+    if (stage === ("sales" as Stage)) {
+      onSelectStage("main_menu");
+      return;
+    }
     if (stage !== previousStageRef.current) {
       previousStageRef.current = stage;
       React.startTransition(() => {
         setIsTransitioning(true);
       });
     }
-  }, [stage]);
+  }, [stage, onSelectStage]);
 
   // Idle Pre-fetching Warming for smooth zero-lag tab transitions
   React.useEffect(() => {
@@ -237,7 +240,6 @@ const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectS
         {displayedStage === "compare" && <EngineeringComparison />}
         {(displayedStage === "economy" || displayedStage === "finance") && <FinancePage onSelectStage={(st) => onSelectStage(st as Stage)} />}
         {displayedStage === "twin" && <DigitalTwin />}
-        {displayedStage === "sales" && <SalesLaunch />}
         {displayedStage === "competitors" && <Competitors />}
         {displayedStage === "supplyChain" && <SupplyChainWorkshop onSelectStage={(st) => onSelectStage(st as Stage)} />}
         {displayedStage === "nvh" && <NvhSoundLab />}
