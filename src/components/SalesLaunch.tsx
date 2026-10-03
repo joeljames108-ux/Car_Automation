@@ -52,7 +52,7 @@ function fmt(n: number) {
 
 export function SalesLaunch() {
   const { company, launchVehicle } = useCompany();
-  const [activeTab, setActiveTab] = useState<"position" | "marketing" | "projection" | "dashboard">("position");
+  const [activeTab, setActiveTab] = useState<"position" | "marketing" | "projection">("position");
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null);
   const [config, setConfig] = useState<SalesConfig>({
     vehicleId: "",
@@ -69,8 +69,6 @@ export function SalesLaunch() {
   });
 
   const vehicle = selectedVehicleId ? company.garage.find(g => g.id === selectedVehicleId) : null;
-  const salesHistory = selectedVehicleId ? (company.salesData[selectedVehicleId] ?? []) : [];
-
 
   const projection = useMemo(() => {
     const eventBoost = LAUNCH_EVENTS.find(e => e.value === config.launchEvent)?.boost ?? 1;
@@ -97,18 +95,12 @@ export function SalesLaunch() {
   function handleLaunch() {
     if (!selectedVehicleId) return;
     launchVehicle(selectedVehicleId, { ...config, vehicleId: selectedVehicleId });
-    setActiveTab("dashboard");
   }
-
-  const totalRevenue = salesHistory.reduce((s, r) => s + r.revenue, 0);
-  const totalProfit = salesHistory.reduce((s, r) => s + r.profit, 0);
-  const totalUnits = salesHistory.reduce((s, r) => s + r.unitsSold, 0);
 
   const tabs = [
     { id: "position"   as const, label: "1. Market & Positioning" },
     { id: "marketing"  as const, label: "2. Marketing & Regions" },
     { id: "projection" as const, label: "3. Pre-Launch Projections" },
-    { id: "dashboard"  as const, label: `4. Sales Dashboard${salesHistory.length > 0 ? ` (${salesHistory.length} periods)` : ""}` },
   ];
 
   return (
@@ -311,7 +303,7 @@ export function SalesLaunch() {
             <div className="panel p-6 text-center border-ok-500/40 bg-ok-500/10">
               <CheckCircle2 size={28} className="mx-auto text-ok-400 mb-2" />
               <p className="text-ok-300 text-sm font-bold">{vehicle.name} is active on the global commercial market!</p>
-              <p className="text-slate-400 text-xs mt-1">View revenue, profit, and monthly customer feedback in Tab 4 (Sales Dashboard).</p>
+              <p className="text-slate-400 text-xs mt-1">Commercial market launch is active. Market positioning and distribution live.</p>
             </div>
           ) : (
             <div className="panel p-5 border-2 border-accent-500/40 bg-gradient-to-r from-accent-500/10 via-base-900 to-accent-500/10">
@@ -328,94 +320,6 @@ export function SalesLaunch() {
                 className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-r from-ok-500/30 via-emerald-500/20 to-ok-500/30 border border-ok-500/50 text-ok-300 hover:from-ok-500/40 hover:to-ok-500/40 transition-all text-sm font-bold shadow-[0_0_20px_rgba(34,197,94,0.2)]">
                 <Rocket size={18} /> Official Commercial Market Launch ➔
               </button>
-            </div>
-          )}
-        </div>
-      )}
-
-      {activeTab === "dashboard" && (
-        <div className="space-y-4">
-          {/* All launched vehicles */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {company.garage.filter(g => g.isLaunched).map(v => {
-              const vSales = company.salesData[v.id] ?? [];
-              const vRevenue = vSales.reduce((s, r) => s + r.revenue, 0);
-              const vProfit = vSales.reduce((s, r) => s + r.profit, 0);
-              const vUnits = vSales.reduce((s, r) => s + r.unitsSold, 0);
-              const lastFb = (company.customerFeedback[v.id] ?? []).slice(-1)[0];
-              return (
-                <div key={v.id} onClick={() => setSelectedVehicleId(v.id)}
-                  className={`panel p-4 cursor-pointer transition-all hover:border-base-700 ${selectedVehicleId === v.id ? "border-ok-500/50" : ""}`}>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-slate-100">{v.name}</span>
-                    <CheckCircle2 size={13} className="text-ok-400" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-1.5 text-xs">
-                    <div className="bg-base-850 rounded p-1.5 text-center">
-                      <div className="font-mono text-ok-400">{fmt(vRevenue)}</div>
-                      <div className="text-slate-600 text-[9px]">Revenue</div>
-                    </div>
-                    <div className="bg-base-850 rounded p-1.5 text-center">
-                      <div className={`font-mono ${vProfit >= 0 ? "text-ok-400" : "text-danger-400"}`}>{fmt(vProfit)}</div>
-                      <div className="text-slate-600 text-[9px]">Profit</div>
-                    </div>
-                    <div className="bg-base-850 rounded p-1.5 text-center">
-                      <div className="font-mono text-slate-200">{vUnits.toLocaleString()}</div>
-                      <div className="text-slate-600 text-[9px]">Units</div>
-                    </div>
-                    <div className="bg-base-850 rounded p-1.5 text-center">
-                      <div className="font-mono text-accent-300">{lastFb?.satisfaction ?? "—"}</div>
-                      <div className="text-slate-600 text-[9px]">Satisfaction</div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Selected vehicle detail */}
-          {selectedVehicleId && salesHistory.length > 0 && (
-            <div className="panel p-4">
-              <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">Period Sales Performance</h3>
-              <table className="w-full text-xs">
-                <thead>
-                  <tr className="border-b border-base-800">
-                    <th className="text-left px-2 py-2 text-slate-500 font-mono">Month</th>
-                    <th className="text-right px-2 py-2 text-slate-500 font-mono">Units</th>
-                    <th className="text-right px-2 py-2 text-slate-500 font-mono">Revenue</th>
-                    <th className="text-right px-2 py-2 text-slate-500 font-mono">Profit</th>
-                    <th className="text-right px-2 py-2 text-slate-500 font-mono">Market Share</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {salesHistory.map((r, i) => (
-                    <tr key={i} className="border-b border-base-800/50 hover:bg-base-850/30">
-                      <td className="px-2 py-2 font-mono text-slate-400">{r.month}</td>
-                      <td className="px-2 py-2 text-right font-mono text-slate-200">{r.unitsSold.toLocaleString()}</td>
-                      <td className="px-2 py-2 text-right font-mono text-ok-400">{fmt(r.revenue)}</td>
-                      <td className={`px-2 py-2 text-right font-mono ${r.profit >= 0 ? "text-ok-400" : "text-danger-400"}`}>{fmt(r.profit)}</td>
-                      <td className="px-2 py-2 text-right font-mono text-slate-400">{(r.marketShare * 100).toFixed(1)}%</td>
-                    </tr>
-                  ))}
-                </tbody>
-                <tfoot className="border-t border-base-700">
-                  <tr>
-                    <td className="px-2 py-2 text-xs font-semibold text-slate-300">TOTAL</td>
-                    <td className="px-2 py-2 text-right font-mono font-bold text-slate-200">{totalUnits.toLocaleString()}</td>
-                    <td className="px-2 py-2 text-right font-mono font-bold text-ok-400">{fmt(totalRevenue)}</td>
-                    <td className={`px-2 py-2 text-right font-mono font-bold ${totalProfit >= 0 ? "text-ok-400" : "text-danger-400"}`}>{fmt(totalProfit)}</td>
-                    <td />
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          )}
-
-          {company.garage.filter(g => g.isLaunched).length === 0 && (
-            <div className="panel p-10 text-center">
-              <DollarSign size={36} className="mx-auto text-slate-700 mb-3" />
-              <p className="text-slate-500 text-sm">No launched vehicles yet.</p>
-              <p className="text-xs text-slate-600 mt-1">Go to the Launch tab to bring a vehicle to market.</p>
             </div>
           )}
         </div>
