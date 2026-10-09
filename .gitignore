@@ -45,3 +45,4 @@ scratch/
 projects/development/*.blend
 .glb_opt_temp/
 scripts/output/
+*.bak

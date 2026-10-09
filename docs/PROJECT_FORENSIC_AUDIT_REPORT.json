@@ -1,17 +1,17 @@
 {
-  "auditTimestamp": "2026-10-03T13:53:42.759Z",
+  "auditTimestamp": "2026-10-09T09:46:29.457Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "E:\\Car_Automation",
-  "totalSourceFiles": 1523,
-  "totalCodeLines": 374563,
-  "totalCommentLines": 33964,
-  "totalBlankLines": 42769,
-  "totalSizeBytes": 19507501,
+  "totalSourceFiles": 1522,
+  "totalCodeLines": 374171,
+  "totalCommentLines": 33961,
+  "totalBlankLines": 42739,
+  "totalSizeBytes": 19483069,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 434,
-      "codeLines": 102192,
-      "sizeBytes": 5629364
+      "codeLines": 102191,
+      "sizeBytes": 5629278
     },
     "engine_assembly": {
       "fileCount": 75,
@@ -44,9 +44,9 @@
       "sizeBytes": 129721
     },
     "ui_components": {
-      "fileCount": 304,
-      "codeLines": 89056,
-      "sizeBytes": 4652762
+      "fileCount": 303,
+      "codeLines": 88665,
+      "sizeBytes": 4628416
     },
     "asset_pipeline": {
       "fileCount": 3,
@@ -65,8 +65,8 @@
     }
   },
   "dependencyGraph": {
-    "totalNodes": 1523,
-    "totalEdges": 2918,
+    "totalNodes": 1522,
+    "totalEdges": 2916,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -167,9 +167,9 @@
         "modular_vehicle": 5,
         "exterior_3d": 13,
         "rendering_engine": 12,
-        "state_management": 243,
+        "state_management": 242,
         "ai_agent_framework": 0,
-        "ui_components": 349,
+        "ui_components": 348,
         "asset_pipeline": 4,
         "testing_verification": 0,
         "documentation_audit": 0
@@ -521,14 +521,14 @@
         "outDegree": 37
       },
       {
-        "modulePath": "src/components/ui/Controls.tsx",
-        "inDegree": 35,
-        "outDegree": 2
-      },
-      {
         "modulePath": "src/state/DesignContext.tsx",
         "inDegree": 33,
         "outDegree": 4
+      },
+      {
+        "modulePath": "src/components/ui/Controls.tsx",
+        "inDegree": 34,
+        "outDegree": 2
       },
       {
         "modulePath": "src/sim/economy/__tests__/companyEconomyReputation.test.ts",
@@ -751,11 +751,6 @@
         "outDegree": 14
       },
       {
-        "modulePath": "src/state/CompanyContext.tsx",
-        "inDegree": 9,
-        "outDegree": 6
-      },
-      {
         "modulePath": "src/state/contractsStore.ts",
         "inDegree": 10,
         "outDegree": 5
@@ -789,6 +784,11 @@
         "modulePath": "src/sim/physics/lapSimulator.ts",
         "inDegree": 3,
         "outDegree": 11
+      },
+      {
+        "modulePath": "src/state/CompanyContext.tsx",
+        "inDegree": 8,
+        "outDegree": 6
       },
       {
         "modulePath": "src/components/mainMenu/SubPageLayout.tsx",

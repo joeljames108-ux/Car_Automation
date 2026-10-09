@@ -17,8 +17,9 @@ def inspect_glb(path):
             m = gltf['meshes'][n['mesh']]
             tc = sum(gltf['accessors'][p['indices']]['count']//3 for p in m['primitives'] if 'indices' in p)
             total += tc
-            print(f"  {n.get('name', 'unnamed')}: {tc:,} tris")
+            print(f"  {n.get('name', 'unnamed'):35}: {tc:,} tris")
     print(f"TOTAL: {total:,} tris, File size: {os.path.getsize(path)/(1024*1024):.2f} MB")
 
-inspect_glb('public/models/Car_Ford_Focus_RS_Mk3_Complete.glb')
-inspect_glb('public/models/vehicles/hatchback/2020s/vehicle.glb')
+inspect_glb('public/models/vehicles/sedan/1990s/vehicle.glb')
+print()
+inspect_glb('public/models/vehicles/sedan/2000s/vehicle.glb')

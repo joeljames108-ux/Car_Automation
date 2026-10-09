@@ -21,12 +21,15 @@ from mathutils import Vector, Euler
 gen_dir = r"E:\Car_Automation\scripts\blender\generators"
 if gen_dir not in sys.path:
     sys.path.append(gen_dir)
-from generate_honda_civic_sedan import build_honda_civic_sedan_master, export_glb, PUBLIC_TARGET, PUBLIC_CAR_TARGET, EXPORTS_DIR
+import importlib
+import generate_honda_civic_sedan_master_cad
+importlib.reload(generate_honda_civic_sedan_master_cad)
+generate_honda_civic_sedan_master_cad.generate_honda_civic_sedan_master()
 
-build_honda_civic_sedan_master()
-
-ARTIFACTS_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\acd43136-462b-4bcc-95d3-b92439716605"
+ARTIFACTS_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\0a5342a6-a583-4086-aab4-20cc4428086b"
+SCREENSHOTS_DIR = r"E:\Car_Automation\assets\screenshots\civic_sedan"
 os.makedirs(ARTIFACTS_DIR, exist_ok=True)
+os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
 
 # 2. Clean previous cameras/lights
 for obj in list(bpy.data.objects):
@@ -47,7 +50,7 @@ if bg_node:
 
 # Overhead Strip Softbox (Creates rich specular reflections along waistline and roof)
 top_data = bpy.data.lights.new(name="Assessment_Overhead", type='AREA')
-top_data.energy = 2400
+top_data.energy = 750
 top_data.shape = 'RECTANGLE'
 top_data.size = 2.6
 top_data.size_y = 7.2
@@ -137,6 +140,9 @@ for name, loc, target, lens in angles:
     out_file = os.path.join(ARTIFACTS_DIR, f"{name}.png")
     scene.render.filepath = out_file
     bpy.ops.render.render(write_still=True)
-    print(f"[RENDERED] {name} -> {out_file} ({os.path.getsize(out_file)} bytes)")
+    import shutil
+    copy_file = os.path.join(SCREENSHOTS_DIR, f"{name}.png")
+    shutil.copy2(out_file, copy_file)
+    print(f"[RENDERED] {name} -> {out_file} & {copy_file} ({os.path.getsize(out_file)} bytes)")
 
 print("[COMPLETE] All 5 Honda Civic Sedan assessment views rendered successfully.")

@@ -405,15 +405,348 @@ $$\text{Capture 5 Angles} \longrightarrow \text{Compare with Real Photo} \longri
     - Cosworth pedestal rear aerodynamic wing mounted on the rear decklid with integrated black gurney flap.
     - 15-inch 15-hole Fuchs "Gullideckel" forged alloy wheels with star hubcaps, Michelin 205/55 VR15 siped radials, cross-drilled ventilated cast iron brake rotors, and gold 4-piston calipers.
     - 2.3L 16V Cosworth M102 DOHC twin-cam engine bay with wrinkle black valve cover, raised aluminum lettering, equal-length 4-into-2-into-1 tubular exhaust headers, and front cooling radiator.
-    - Recaro sports cockpit with high-bolstered leather bucket seats, Zebrano wood trim, 3-gauge VDO cluster, 3 Cosworth center aux gauges, dogleg 5-speed shifter, and 4-spoke sport steering wheel.
     - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+33. **BMW M5 (E39) (Sedan 1990s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_bmw_m5_e39_master_cad.py`).
+    - 100.0% Grade A Production Certification (22.06 MB uncompressed, 3.46 MB companion meshopt, 1,280,140 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 7 NLA Actions, 4 Cameras, 25 PBR materials).
+    - Benchmark executive sports saloon unibody (Joji Nagashima design) featuring continuous watertight monocoque shell, subtle Hofmeister kink in C-pillars, M side rub-strips, and integrated rear decklid M lip spoiler.
+    - Iconic twin kidney grilles with chrome surrounds and 10 black vertical slats per nacelle; quad "Angel Eyes" (corona rings) halo projector headlamps with fluted amber turn indicators; patented Celis neon horizontal light tube taillamp assemblies.
+    - Aerodynamic M front bumper with wide lower mesh air intake, round projector fog lamps, and chin lip; rear M aerodynamic bumper with center diffuser recess and quad 76mm polished stainless steel exhaust cannons.
+    - 18-inch Style 65 "Shadow Chrome" forged double-spoke alloy wheels, Michelin Pilot Sport 245/40 & 275/35 ZR18 siped radials, cross-drilled ventilated cast-iron brake rotors, and M monobloc calipers.
+    - 4.9L S62 DOHC 32V naturally aspirated V8 engine bay: dual cast-aluminum plenums with "BMW M Power" insignia, carbon fiber appearance cover, and equal-length tubular exhaust headers.
+    - Luxury German sports cockpit: two-tone Silverstone/Black Nappa leather contoured M sports seats with adjustable thigh supports, 3-spoke M sport steering wheel, technical brushed titanium trim, and 4-dial grey M instrument cluster.
+    - Articulating 4-door architecture (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`), hood, and trunk decklid with preserved physical hinge origins (`export_apply=False`).
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+34. **Audi RS6 Sedan (C6) (Sedan 2000s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_audi_rs6_c6_master_cad.py`).
+    - 100.0% Grade A Production Certification (15.19 MB uncompressed, 2.95 MB companion meshopt, 1,092,048 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 6 NLA Actions, 4 Cameras, 25 PBR materials).
+    - High-performance luxury sports saloon unibody featuring continuous watertight cross-sectional quad cage, flared Ur-Quattro box-blisters (+35mm wider stance), razor-sharp Tornado shoulder crease, and integrated ducktail rear lip spoiler.
+    - Iconic Hexagonal Singleframe radiator grille with matte brushed aluminum outer bezel frame, high-density 3D honeycomb diamond mesh lattice, chrome 4-rings Audi emblem, and RS 6 badge with red enamel rhombus.
+    - Bi-Xenon projector headlamps with pioneering 10-LED brilliant white Daytime Running Light strip along lower brow; dark cherry ruby rear LED taillamps with double horizontal light-guide ribbons.
+    - Front bumper massive twin intercooler cooling intakes with horizontal matte aluminum aero vanes; lower aerodynamic chin splitter; matte brushed aluminum RS mirror housings.
+    - Rear aerodynamic diffuser with satin black strakes and signature giant dual oval RS exhaust cannons (140x95mm) in polished chrome with dark soot bores.
+    - 20-inch 5-segment Rotor forged alloy wheels in titanium finish with machined rim lips, 275/35 ZR20 directional siped radials, 390mm carbon-ceramic cross-drilled brake rotors, and gloss black 6-piston Brembo calipers.
+    - Hand-assembled 5.0L Bi-Turbo V10 TFSI engine bay: twin silver cast intake plenums, carbon fiber appearance covers with "V10 5.0 TFSI" insignia, twin turbochargers, and aluminum strut tower cross-brace.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+35. **Alfa Romeo Giulia Quadrifoglio (Sedan 2010s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_alfa_romeo_giulia_quadrifoglio_master_cad.py`).
+    - 100.0% Grade A Production Certification (40.12 MB uncompressed, 4.41 MB companion meshopt, 739,464 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 6 NLA Actions, 4 Cameras, 27 PBR materials).
+    - Sensuous Italian sports saloon unibody featuring continuous watertight Coke-bottle flanks, flared muscle haunches wrapping over staggered 19" wheels, exposed carbon fiber roof panel, open cabin apertures, and Rosso Competizione tri-coat metallic finish.
+    - Iconic inverted triangular Scudetto shield grille with Dark Miron bezel frame, 3D honeycomb diamond mesh, historic Biscione serpent crest, and twin lower Trilobo radiator intakes.
+    - Feline swept Bi-Xenon projector headlamps with hooked J-blade brilliant white LED DRL light pipes and clear polycarbonate outer lenses; horizontal swept LED taillamp blades with ruby ribbons.
+    - Active carbon fiber front aero splitter with curved chin contour, aerodynamic winglet endplates, carbon side skirts, rear aerodynamic diffuser with 4 guide fins, and quad staggered 85mm circular exhaust cannons with dark soot bores.
+    - Iconic 19-inch 5-hole Tele-Dial forged alloy wheels in Technical Grey, Pirelli P Zero Corsa siped radials, 390mm carbon-ceramic brake rotors, and Rosso Alfa 6-piston Brembo calipers.
+    - Ferrari-developed 2.9L Twin-Turbo 90° V6 powertrain: twin crinkle carbon intake plenums with Alfa Romeo script, carbon appearance cover, outboard twin turbos, and titanium strut tower cross-brace.
+    - Driver-focused Italian cockpit: Sparco carbon monocoque racing bucket seats with Alcantara centers and red stitching, flat-bottom sport steering wheel with bright red start button and column-mounted aluminum shift paddles, Cannocchiale hooded instrument binnacle, and carbon center console with Alfa DNA Pro rotary selector.
+    - Articulating 4-door architecture (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`), contoured carbon hood with twin heat extractors, and rear decklid with integrated carbon ducktail lip spoiler (`export_apply=False`).
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+36. **Honda Civic Sedan (11th Gen FE/FL - Sedan 2020s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_honda_civic_sedan_master_cad.py`).
+    - 100.0% Grade A Production Certification (35.88 MB uncompressed, 4.03 MB companion meshopt, 667,430 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 6 NLA Actions, 4 Cameras, 25 PBR materials).
+    - Contemporary Japanese compact executive sports saloon: low horizontal beltline, pulled-back A-pillars, low cowl, continuous fastback roofline flowing into an integrated ducktail decklid spoiler, in Sonic Gray Pearl tri-coat metallic finish.
+    - Front fascia featuring gloss black upper grille bar with 3D chrome Honda "H" emblem, wide trapezoidal lower honeycomb radiator intake, and aerodynamic side air curtain ducts with vertical strakes.
+    - Jewel-Eye full-LED headlights with triple projector cubes and inverted-L brilliant white daytime running light eyebrows; distinctive wrap-around inverted-L Carmine Red LED taillight ribbons.
+    - 18-inch two-tone 5-spoke split sport alloy wheels with machined face highlights and gloss black inner pockets, 235/40 R18 directional siped radial tires, ventilated steel brake rotors, and cast calipers.
+    - 1.5L VTEC Turbo transverse powertrain with red engine appearance cover, aluminum strut tower brace, cross-flow radiator pack, and dual polished oval chrome exhaust cannons with dark soot bores.
+    - Minimalist cockpit interior featuring full-width metal honeycomb AC vent ribbon mesh, cantilevered floating 9-inch OLED touchscreen, 10.2-inch digital driver instrument binnacle, Anthracite sport bucket seats, and 3-spoke sport steering wheel.
+    - Articulating 4-door architecture (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with gloss black B-pillar sashes and pull handles, articulating aluminum hood, and decklid with ducktail lip spoiler (`export_apply=False`).
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+37. **Audi Grandsphere Concept (Sedan Future)**:
+    - True Class-A CAD procedural bmesh generation (`generate_audi_grandsphere_master_cad.py`).
+    - 100.0% Grade A Production Certification (18.82 MB uncompressed, 3.60 MB companion meshopt, 1,291,656 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 10 NLA Actions, 4 Cameras, 22 PBR materials).
+    - Futuristic monolithic luxury GT fastback saloon: low-slung aerodynamic silhouette (5,350mm length, 3,190mm wheelbase), continuous parabolic cantrail line tapering into a sculpted Kamm boat-tail decklid, in Nebula Blue Metallic with satin titanium accents.
+    - Front fascia featuring transparent illuminated Singleframe mask with parametric LED matrix array, 3D illuminated white Audi four-rings emblem, and aerodynamic lower titanium chin splitter.
+    - Ultra-narrow digital eye projector headlamps with pupil matrix LED optics; continuous full-width holographic Carmine Red laser lightblade ribbon across the Kamm tail with centered illuminated red four-rings emblem.
+    - 23-inch Concept Aeroblade turbine alloy wheels with diamond-cut directional spoke faces and dark tungsten aerodynamic dish inserts, 285/30 R23 low-profile siped concept tires, 420mm carbon-ceramic brake rotors, and 10-piston titanium calipers.
+    - 800V Premium Platform Electric (PPE) skateboard architecture with full flat underbody belly pan, twin Venturi diffuser expansion tunnels, and dual electric drive units (710 hp / 960 Nm).
+    - Level 4 autonomous flight lounge interior: full-width architectural bleached wood veneer projection dashboard, retractable autonomous steering yoke and column, first-class cashmere/wool relaxation lounge armchairs with cervical pillows, and rear sculpted lounge bench with chilled decanter center console.
+    - Articulating B-pillarless coach doors: front conventional doors (`DOOR_FL`, `DOOR_FR`) swinging forward $52^\circ$, reverse-hinged suicide rear coach doors (`DOOR_RL`, `DOOR_RR`) swinging rearward $50^\circ$, active Kamm tail aerodynamic spoiler (`AERO_Active_Kamm_Spoiler`), and front service hatch (`HOOD_Deployable_Hatch`) with preserved physical hinge origins (`export_apply=False`).
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+38. **Mercedes-Benz 300TD (W123T / S123) (Wagon 1970s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_mercedes_benz_300td_w123t_master_cad.py`).
+    - 100.0% Grade A Production Certification (17.74 MB uncompressed, 3.03 MB companion meshopt, 1,135,512 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 8 NLA Actions, 5 Cameras, 25 PBR materials).
+    - Authentic estate station wagon unibody in iconic DB904 Dunkelblau (Midnight Blue) finish: longitudinal roof cantrail bands, circular fender arches, continuous horizontal waistline ($Z = 0.880\,\text{m}$), flush rocker sills ($Z = 0.210\,\text{m}$), and sealed underbody floor pan with wheel tubs.
+    - Upright chrome radiator grille shell with vertical dividing spine, 6 chrome louvers, dark core mesh, and 3D standing Three-Pointed Star hood ornament.
+    - Full-length tubular polished chrome roof luggage rails ($Y = -1.050\,\text{m}$ to $-3.550\,\text{m}$) with 3 sturdy cast chrome mounting stanchions and molded rubber isolation pads per side.
+    - Heavy European double chrome bumper assemblies with black neoprene center protective impact cushions and twin vertical chrome bumper overriders with molded rubber buffers front and rear.
+    - Separated articulating 4-door architecture (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with perimeter support loops preserving crisp $90^\circ$ corner shutlines ($3.5\text{--}5\,\text{mm}$ panel tolerances), waistline chrome/rubber rub-strips, exterior pull handles with thumb triggers, framed window sashes, $4\times 4$ optical dielectric glass, and inner Palomino/Cognac MB-Tex door cards with Zebrano wood trim strips (`export_apply=False`).
+    - Upward-opening rear estate tailgate (`DOOR_Tailgate`) with twin hydraulic gas lift struts, large heated rear backlite glass with boundary creasing, rear wiper assembly, chrome grab handle, and 3D chrome "300TD" and "TURBODIESEL" badges (`export_apply=False`).
+    - Cowl-hinged clamshell hood (`HOOD_Main`) with center crown and standing star ornament, sealing flush against front fenders and radiator shell (`export_apply=False`).
+    - Rectangular headlamp chrome bezels with fluted glass lenses, parabolic halogen reflectors, and wrap-around amber corner turn signals with Barényi horizontal ribs.
+    - Patented Béla Barényi 5-flute self-cleaning ribbed taillights (amber indicator, white reverse, ruby running/brake) and single polished stainless steel downward diesel tailpipe with dark soot bore.
+    - 14-inch forged "Bundt" (Barock) light-alloy wheels with 15 radiating cooling flutes, Michelin 195/70 VR14 radials with directional tread sipes, cast iron disc rotors, and Ate zinc calipers.
+    - OM617 3.0L Inline-5 Turbo Diesel powertrain bay: Garrett T3 turbocharger, ribbed aluminum valve cover, Bosch inline injection pump, brass radiator tank, and oil bath air cleaner.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+39. **Volvo 240 Turbo Estate (245 Turbo) (Wagon 1980s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_volvo_240_turbo_estate_master_cad.py`).
+    - 100.0% Grade A Production Certification (24.40 MB uncompressed, 3.37 MB companion meshopt, 1,558,916 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 8 NLA Actions, 5 Cameras, 24 PBR materials).
+    - Iconic "The Flying Brick" rectilinear station wagon unibody in authentic 1980s Swedish Silver Metallic: flush perimeter support loops, vertical C and D-pillars, level waistline, large rectangular estate greenhouse, sealed floor pan with enclosed wheel tubs.
+    - Black Volvo Turbo performance eggcrate radiator grille with diagonal sash bar, circular Volvo Iron Mark center emblem, and rectangular H4 halogen headlamps with fluted glass lenses and amber corner turn signals.
+    - Deep aerodynamic Turbo front chin air dam spoiler with twin yellow rectangular halogen fog lamps and central oil cooler intake slot.
+    - Massive Swedish "Commando" aluminum impact bumpers with full-width black impact rubber rubbing cushions front and rear.
+    - Separated articulating 4-door architecture (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with tubular black window sash frames, perimeter support loops with edge creasing for sharp $90^\circ$ shutlines ($3.5\text{--}5\,\text{mm}$ tolerances), black door handles with thumb triggers, black bodyside rub-strips with chrome accent bead, and inner blue velour door cards with ribbed armrests (`export_apply=False`).
+    - Upward-opening rear estate tailgate (`DOOR_Tailgate`) with large heated rear backlite glass, pantograph rear wiper arm, recessed license plate housing, chrome license lamp brow, and 3D "VOLVO" and "240 TURBO" badging plates (`export_apply=False`).
+    - Cowl-hinged clamshell hood (`HOOD_Main`) sealing flush over the engine compartment (`export_apply=False`).
+    - Distinctive 3-tier vertical estate taillights flanking the tailgate (amber indicator / reverse white / red brake).
+    - Authentic 15x6-inch Volvo "Virgo" 5-spoke rally cast alloy wheels with recessed lug nuts, Volvo center caps, directional siped radial tires, disc brake rotors, and calipers.
+    - Longitudinal B21FT 2.1L turbocharged SOHC inline-4 powertrain bay: Garrett turbocharger with heat shield, cast intake plenum with "TURBO" script, intercooler, crossflow radiator, and single rear exhaust cannon.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+40. **Audi RS2 Avant (Wagon 1990s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_audi_rs2_avant_master_cad.py`).
+    - 100.0% Grade A Production Certification (14.80 MB uncompressed, 2.50 MB companion meshopt, 966,420 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 8 NLA Actions, 5 Cameras, 25 PBR materials).
+    - Authentic Audi 80 B4 Avant unibody modified by Porsche in signature Nogaro Blue (RS-Blau): flared box-wheel arches, smooth low-drag European sports estate stance, continuous stamped sheetmetal A/B/C/D-pillars and roof cantrails, sealed underbody floor pan with enclosed wheel tubs.
+    - Porsche 993 Turbo style front bumper with 3 deep recessed cooling apertures (center intercooler + dual outer brake ducts with integrated amber turn signals and round fog lamps) and lower swept aerodynamic chin splitter.
+    - Signature full-width Heckleuchtenband ruby red reflector panel with integrated German license plate recess, chrome license lamps, and 3D chrome/red "RS2" badging with "PORSCHE" script.
+    - Separated articulating 4-door architecture (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with extruded satin black window sashes, genuine Porsche 993 teardrop aerodynamic mirrors, flush lift handles, rubber rubbing strips, and interior door cards with Nogaro Blue Alcantara inserts and carbon fiber trim (`export_apply=False`).
+    - Upward-opening rear estate tailgate (`DOOR_Tailgate`) with heated rear backlite glass, pantograph rear wiper arm, twin hydraulic gas lift struts, and Audi 4-rings mascot (`export_apply=False`).
+    - Cowl-hinged clamshell hood (`HOOD_Main`) with integrated gloss black honeycomb grille, bright chrome surround frame, and 3D Audi rings and RS2 badge (`export_apply=False`).
+    - Bosch DE composite rectangular headlights with fluted lenses and chrome projector housings, plus wrap-around amber fender turn indicators.
+    - Authentic 17x7.0J Porsche Cup 1 5-spoke cast alloy wheels with sculptured radial star blades, 245/40 ZR17 directional radial tires, 304mm cross-drilled ventilated brake rotors, and Porsche Guards Red 4-piston Brembo monobloc calipers with white "PORSCHE" script.
+    - Legendary 2.2L Inline-5 20-valve Turbo "ADU" powertrain bay (315 hp): cast aluminum intake manifold with embossed "PORSCHE" lettering, KKK turbocharger, red ignition coil rail, crossflow radiator, and twin polished stainless steel exhaust cannons.
+    - High-bolster Recaro RS sports seats with blue Alcantara center flutes and anthracite leather bolsters, 3-gauge auxiliary console pod, white RS VDO instrument dials, 3-spoke sport steering wheel, and vast estate rear cargo bay.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+41. **BMW M5 Touring (E61) (Wagon 2000s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_bmw_m5_touring_e61_master_cad.py`).
+    - 100.0% Grade A Production Certification (15.57 MB uncompressed, 2.57 MB companion meshopt, 1,011,108 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 8 NLA Actions, 5 Cameras, 26 PBR materials).
+    - Authentic E61 Touring unibody with Chris Bangle flame-surfacing in signature Silverstone II Metallic (A29): flared front/rear M wheel arches, continuous stamped sheetmetal A/B/C/D-pillars and roof cantrails, flush Hofmeister kink rear cargo glass, aerodynamic Shadowline roof luggage rails, and sealed underbody floor pan with wheel tubs.
+    - M aerodynamic front bumper with large center radiator intake, outer brake cooling ducts with round micro-projector fog lamps, and swept aerodynamic chin splitter blade; rear M apron with quad 80mm polished chrome exhaust cannons and 4-strake underbody diffuser.
+    - Separated articulating 4-door architecture (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with extruded Shadowline high-gloss black window sashes, authentic dual-stalk M aerodynamic mirrors, flush pull handles, and interior door cards with Silverstone/Black Merino leather and brushed aluminum spears (`export_apply=False`).
+    - Upward-opening rear estate tailgate (`DOOR_Tailgate`) with independent opening rear window, integrated M rear roof spoiler with third brake light, heated backlite glass, rear window wiper, and 3D chrome/M tri-color M5 emblem (`export_apply=False`).
+    - Cowl-hinged clamshell hood (`HOOD_Main`) with dual subtle power bulges, BMW Roundel mascot, and integrated Twin Kidney Grilles featuring mirror chrome surround rings and 12 vertical double slats in Shadowline black (`export_apply=False`).
+    - Hawk-Eye Bi-Xenon headlights with bright chrome internal reflector bowls, amber eyebrow upper light guides, twin round corona rings ("Angel Eyes"), and crystal clear outer polycarbonate lenses; rear Celis LED horizontal ruby light tubes.
+    - High-revving 5.0L S85 naturally aspirated V10 powertrain bay (507 hp @ 8,250 RPM): 90° aluminum V10 block, dual carbon-composite intake plenums with cast "BMW M Power" script plates, equal-length stainless exhaust headers, aluminum crossflow radiator, and tubular strut tower cross-brace.
+    - Luxury M Sports cockpit: dual-cowl dashboard with iDrive display and white VDO 330 km/h instrument cluster, 3-spoke M sport steering wheel with paddle shifters, SMG-III shift console with M Drive button, contoured Silverstone Merino leather M sport seats with active side bolsters and chrome headrest stanchions, rear folding split-bench with 3 headrests, retractable cargo roller blind cassette, chrome deck skid runners, and stainless steel loading sill scuff plate.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+42. **Mercedes-AMG E63 S Estate (W212 Facelift) (Wagon 2010s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_mercedes_amg_e63s_estate_w212_master_cad.py`).
+    - 100.0% Grade A Production Certification (15.93 MB uncompressed, 2.89 MB companion meshopt, 1,104,802 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 8 NLA Actions, 5 Cameras, 28 PBR materials).
+    - Authentic W212 facelift estate unibody in signature Iridium Silver Metallic (775): muscular Ponton rear quarter blisters, high-strength steel unibody with continuous A/B/C/D-pillars, flush high-gloss Shadowline window sashes, extruded brushed aluminum aerodynamic roof rails, and full aerodynamic underfloor tray with enclosed wheel wells.
+    - Aggressive AMG A-Wing front bumper with deep gloss black outer cooling intakes, flics, central radiator aperture, and lower Silver Shadow splitter blade; rear AMG apron with gloss black 4-fin aerodynamic diffuser.
+    - Facelift single-unit multi-beam LED headlamp clusters with twin fiber-optic LED running light "eyebrows" and projector optics; rear full-width LED horizontal optical ribbon taillamps.
+    - Separated articulating 4-door architecture (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with extruded Shadowline high-gloss black window sashes, authentic AMG aerodynamic wing mirrors with LED indicator arrows, flush pull handles, and Designo Black Nappa leather interior cards with silver shadow speaker grilles (`export_apply=False`).
+    - Upward-opening rear estate tailgate (`DOOR_Tailgate`) with heated backlite glass, integrated AMG roof spoiler with high-mount third brake light, rear wiper assembly, twin hydraulic gas lift struts, and 3D chrome Mercedes Star, AMG, and E63 S emblems (`export_apply=False`).
+    - Cowl-hinged power-domed hood (`HOOD_Main`) featuring prominent twin power bulges and Mercedes-Benz star crest medallion, framing the aggressive AMG twin-blade chrome grille with central Three-Pointed Star emblem (`export_apply=False`).
+    - Authentic 19-inch AMG 10-spoke cross-spoke forged titanium-finish alloy wheels with high-sheen rim lips, 255/35 ZR19 front and 285/30 ZR19 rear directional Michelin Pilot Super Sport tires with 48 directional flush sipes, 402mm carbon-ceramic ventilated brake rotors with cross-drilled cooling holes, and AMG bronze/gold 6-piston front and 4-piston rear monobloc calipers with black AMG script.
+    - Handcrafted 5.5L M157 Biturbo V8 powertrain bay (577 hp, 590 lb-ft): carbon-fiber engine appearance cover with hand-built AMG master technician signature plaque, twin turbochargers with charge-air coolers, braided fluid lines, high-efficiency crossflow radiator, and quad trapezoidal AMG chrome exhaust tips with engraved AMG logos.
+    - Designo AMG performance cockpit: driver-oriented dashboard with AMG instrument binnacle (320 km/h speedometer with carbon-dial face), COMAND display, analog IWC Schaffhausen center clock, 3-spoke flat-bottom AMG Performance steering wheel with aluminum shift paddles and Alcantara side grips, Silver Wave contour Nappa leather sport seats with active bolsters and embossed AMG crests, rear 40:20:40 split-bench with 3 headrests, retractable cargo blind cassette, chrome luggage floor skid runners, and brushed stainless steel sill plates.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+43. **Audi RS6 Avant (C8) (Wagon 2020s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_audi_rs6_avant_c8_master_cad.py`).
+    - 100.0% Grade A Production Certification (22.21 MB uncompressed, 3.73 MB companion meshopt, 1,536,392 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 8 NLA Actions, 5 Cameras, 28 PBR materials).
+    - Authentic C8 Avant unibody in signature Nardo Grey with Black Optics package: radically flared Ur-Quattro box blisters (+40mm per side), continuous stamped A/B/C/D-pillars, low-profile Black Optics aluminum roof rails, flush volumetric glass with ceramic frit masking, and aerodynamic sealed underbody with Venturi diffuser channels.
+    - Menacing RS-specific front fascia with frameless 3D octagonal Singleframe gloss black honeycomb grille, Quattro hood air intake slit, 3D dark chrome Audi 4-rings and RS 6 mascot badges, massive lower side cooling apertures with vertical aero blades, and lower carbon-fiber chin splitter with side winglets.
+    - HD Matrix LED headlights with RS-specific dynamic laser light projectors and sequential LED brow indicators; rear full-width dark-tinted dynamic OLED light ribbon with horizontal segmentation.
+    - Separated articulating 4-door architecture (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with extruded gloss black window sashes, carbon-fiber aerodynamic mirror housings with integrated LED repeaters, flush pull handles, and RS sport Valcona leather interior door cards with diamond quilting and illuminated door sill strips (`export_apply=False`).
+    - Upward-opening rear estate tailgate (`DOOR_Tailgate`) with slope-matched flush heated backlite glass, dual-tier RS roof spoiler with third brake light, aerodynamic side blades, rear wiper, twin gas struts, and dark chrome Audi rings and RS 6 emblem (`export_apply=False`).
+    - Cowl-hinged power-domed clamshell hood (`HOOD_Main`) with aggressive dual longitudinal power strakes and front Quattro cooling aperture slit (`export_apply=False`).
+    - 22-inch 5-V-spoke trapezoid-design forged alloy wheels in gloss anthracite black with diamond-turned accents, 285/30 ZR22 Pirelli P Zero performance tires with directional tread sipes, 420mm front and 370mm rear carbon-ceramic cross-drilled ventilated brake rotors, and 10-piston front Gloss Red monobloc calipers with white "Audi Sport" script.
+    - 4.0L Twin-Turbo TFSI V8 powertrain bay (591 hp, 590 lb-ft) with 48V Mild Hybrid (MHEV) system: carbon-fiber engine cover with 3D Audi rings and "V8 TFSI" badge, twin turbochargers nestled in the "Hot-V", aluminum charge-air coolers, crossflow radiator, and signature dual massive oval RS sport exhaust tips (190mm x 110mm) flanking a 4-fin gloss black rear aerodynamic diffuser.
+    - Audi Sport RS cockpit: driver-oriented dual-screen MMI Touch Response dashboard with 12.3-inch Audi Virtual Cockpit featuring RS-specific runway tachometer display, flat-bottom RS Alcantara steering wheel with aluminum shift paddles and RS Mode satellite button, Valcona leather RS sport bucket seats with honeycomb stitching, rear 40:20:40 split-folding bench, luggage tie-down rails, and stainless steel loading sill protector.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+44. **Polestar 5 Sport Turismo (Wagon Future)**:
+    - True Class-A CAD procedural bmesh generation (`generate_polestar_5_sport_turismo_master_cad.py`).
+    - 100.0% Grade A Production Certification (15.62 MB uncompressed, 2.81 MB companion meshopt, 1,108,032 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 8 NLA Actions, 5 Cameras, 21 PBR materials).
+    - 884hp Dual-Motor bonded aluminum Grand Touring Shooting Brake unibody in Snow Matte White: athletic muscular rear haunches, continuous station-by-station unibody, roof cantrails and substantial D-pillar rear gate posts enclosing cargo compartment, flush sealed rear quarter upper decks, low-profile aerodynamic Space Black roof luggage rails, and flat underbody tray with enclosed wheel tubs.
+    - Aerodynamic Scandinavian nose with recessed SmartZone sensor panel (dark optical finish with fine satin bezel and radar window), cowl-hinged clamshell frunk hood with sculpted recessed negative-pressure aero scoop duct and flow strakes (`HOOD_Main`), and curved high-downforce front chin splitter with air-curtain winglets.
+    - Signature lighting architecture: Dual-Blade Pixel LED headlights with upper crystal DRL and lower projection blade inside recessed dark cavities, plus full-width aerodynamic rear light blade with downward air-guide endplate fins hugging the rear Kamm deck.
+    - Rear-windowless aero tailgate architecture with aerodynamic roof-mounted digital rearview camera fin, upward-opening estate tailgate (`DOOR_Tailgate`) with integrated active Kamm-tail aerodynamic spoiler wing, satin chrome Polestar star emblem, and recessed license plate pocket (`export_apply=False`).
+    - Separated articulating 4 frameless coach doors (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with forward physical hinges, motorized flush pop-out aero handles, front door digital camera wing mirrors, and Scandinavian interior door cards in WeaveTech with Swedish Gold accents (`export_apply=False`).
+    - Continuous electrochromic panoramic glass canopy spanning from windshield header to tailgate brow with acoustic privacy quarter panes (`GLASS_Panoramic_Canopy`).
+    - 22-inch forged aerodynamic turbine aero-disc wheels with directional spoke blades, 275/35 R22 tires, 410mm carbon-ceramic cross-drilled brake rotors, and Brembo Swedish Gold 6-piston front / 4-piston rear monobloc calipers.
+    - Scandinavian minimalist luxury cockpit: Android Automotive OS floating central touchscreen, curved driver OLED binnacle, flat-bottom D-cut sport yoke steering wheel, sculpted WeaveTech seats with gold safety belts, and vast cargo estate deck.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+45. **AMC Eagle 4WD Wagon (Crossover 1970s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_amc_eagle_4wd_wagon_master_cad.py`).
+    - 100.0% Grade A Production Certification (17.76 MB uncompressed, 2.93 MB companion meshopt, 1,110,296 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 6 NLA Actions, 5 Cameras, 25 PBR materials).
+    - Pioneering crossover unibody monocoque blending traditional station wagon bodywork with lifted 3-inch 4WD suspension stance, molded dark Korad wheel arch flares, and full-length protective lower rocker cladding.
+    - Authentic woodgrain side applique panelling with mirror-finish bright chrome perimeter moldings running full-length across articulating doors and rear quarter panels.
+    - Front quad sealed-beam rectangular headlamps housed in die-cast chrome bezels, fine eggcrate radiator grille with AMC tri-color emblem badge, and heavy 5-mph impact bumper with vertical bumperettes.
+    - Separated articulating 4-door architecture (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with bright chrome window sashes, exterior door handles, side mirrors, and plush Saddle Tan interior door cards with woodgrain spears (`export_apply=False`).
+    - Upward-opening rear estate tailgate (`DOOR_Tailgate`) with heated backlite glass, lower load sill seal, chrome release handle, and AMC Eagle emblems (`export_apply=False`).
+    - Cowl-hinged clamshell hood (`HOOD_Main`) with longitudinal center spine bulge (`export_apply=False`).
+    - Roof-mounted chrome estate luggage rack with dark wood slats and stanchions.
+    - Authentic 15-inch Turbocast finned aluminum alloy wheels with mirror-polished center caps and Goodyear Tiempo radial tires with white sidewall lettering rings and shared vertex quad topology.
+    - AMC 258 cu in (4.2L) Inline-6 engine bay with carburetor air cleaner, New Process NP119 full-time transfer case, front Dana 30 differential, rear leaf spring axle, skid plates, and aluminized exhaust system.
+    - Plush 1970s Saddle Tan cockpit with woodgrain instrument binnacle, 2-spoke luxury steering wheel, column shifter, front/rear bench seating with headrests, and ribbed rear cargo floor with bright skid runners.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+46. **Fiat Panda 4x4 (141A) (Crossover 1980s)**:
+    - True Class-A CAD procedural bmesh generation (`generate_fiat_panda_4x4_master_cad.py`).
+    - 100.0% Grade A Production Certification (16.23 MB uncompressed, 2.62 MB companion meshopt, 1,073,188 triangles, 7/7 populated subsystems, 10 HITBOX_* nodes, 6 NLA Actions, 5 Cameras, 24 PBR materials).
+    - Iconic Giorgetto Giugiaro utilitarian micro-crossover unibody in Bianco 210 with rugged dark textured thermoplastic lower cladding and Steyr-Puch 4x4 side/rear emblems.
+    - Rectangular sealed-beam headlamps in ribbed matte dark bezels, 5-bar diagonal Fiat slash grille, and front/rear impact bumpers with lower bash guard skid protection.
+    - Separated articulating 2-door architecture (`DOOR_FL`, `DOOR_FR`) with dark window sashes, external lift-up latch handles, rectangular aero mirrors, and Giugiaro striped cloth door cards (`export_apply=False`).
+    - Upward-opening rear utility hatch (`DOOR_Tailgate`) with heated backlite glass, lower load lip, Fiat & Steyr-Puch Panda 4x4 badging, and gas struts (`export_apply=False`).
+    - Cowl-hinged utilitarian hood (`HOOD_Main`) with offset asymmetrical ventilation louvers (`export_apply=False`).
+    - Roof-mounted heavy-duty tubular utility roof rack with front wind deflector visor plate ("4x4" decal) and 6 crossbars.
+    - Authentic 13-inch stamped steel wheels with circular cooling cutouts and Pirelli Winter 160 knobby off-road radial tires with shared vertex quad topology.
+    - 999cc FIRE 4-cylinder transverse engine bay with Steyr-Puch 4WD power take-off, engine bay spare tire mount, rear live axle with leaf springs, and skid plates.
+    - Spaciously minimalist Giugiaro "hammock" cockpit: full-width fabric parcel shelf pocket, 2-spoke square steering wheel, center console 4WD engagement lever, 3 driver foot pedals, handbrake, and reclining cloth bucket seats.
+    - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+### 47. Toyota RAV4 (XA10) 3-Door Crossover (1994–2000) (`crossover/1990s`)
+- **Generation Script**: `scripts/blender/generators/generate_toyota_rav4_xa10_master_cad.py`
+- **Output Models**:
+  - Master Uncompressed: `public/models/vehicles/crossover/1990s/vehicle.glb` (15.05 MB, 959,120 triangles)
+  - Meshopt Compressed: `public/models/vehicles/crossover/1990s/vehicle.opt.glb` (2.42 MB)
+  - Complete Replicas: `public/models/Car_Toyota_RAV4_XA10_1990s_Complete.glb` and `exports/Car_Toyota_RAV4_XA10_1990s_Complete.glb` (15.05 MB)
+- **Quality Score**: **100.0% Grade A (Production Ready)** across all 7 production quality gates.
+- **Key Architectural Features**:
+  - Sculpted compact 3-door crossover monocoque unibody with signature lower two-tone body cladding, integrated front bull-bar bumper guard, and rounded blister wheel arch flares.
+  - Separated articulating 2 side doors (`DOOR_FL`, `DOOR_FR`) with dark window frames, lift-up exterior door handles, curved aerodynamic mirrors, and two-tone door cards (`export_apply=False`).
+  - Side-hinged rear tailgate door (`DOOR_Tailgate`) with full-size exterior spare tire carrier, white "RAV4" wheel cover emblem badge, high-mount stop lamp, and heated rear windshield glass (`export_apply=False`).
+  - Cowl-hinged front hood (`HOOD_Main`) framing the dual-slot front grille with centered Toyota badge (`export_apply=False`).
+  - Tubular black longitudinal roof rails with dual aerodynamic crossbars.
+  - Authentic 16-inch 5-spoke styled alloy wheels with 215/70 R16 knobby all-terrain radial tires resting flush on ground level ($Z = 0.000\text{m}$).
+  - Transverse 2.0L 3S-FE 16-valve DOHC 4-cylinder engine bay with ribbed intake plenum, high-pressure fuel rail, distributor, air filter box, battery, and strut brace bar.
+  - Full 1990s Japanese crossover cockpit: twin front bucket seats with patterned fabric inserts, 3-spoke sports steering wheel, rounded instrument binnacle, center HVAC/audio stack, 5-speed manual shift lever, 4WD transfer selector, handbrake, and 3 foot pedals.
+  - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+### 48. Nissan Murano (Z50) Crossover (2002–2007) (`crossover/2000s`)
+- **Generation Script**: `scripts/blender/generators/generate_nissan_murano_z50_master_cad.py`
+- **Output Models**:
+  - Master Uncompressed: `public/models/vehicles/crossover/2000s/vehicle.glb` (29.05 MB, 1,974,464 triangles)
+  - Meshopt Compressed: `public/models/vehicles/crossover/2000s/vehicle.opt.glb` (3.54 MB, 1,256,824 triangles)
+  - Complete Replicas: `public/models/Car_Nissan_Murano_Z50_2000s_Complete.glb` and `exports/Car_Nissan_Murano_Z50_2000s_Complete.glb` (29.05 MB)
+- **Quality Score**: **100.0% Grade A (Production Ready)** across all 7 production quality gates.
+- **Key Architectural Features**:
+  - Avant-garde 5-door crossover unibody with 14.5° inward greenhouse tumblehome, bold character shoulders, and flared wheel arches.
+  - Signature horizontal 9-tooth brushed chrome front grille with central emblem bar, unblocked by front bumper terminating at $Z = 0.64\text{m}$.
+  - Cowl-hinged hood (`HOOD_Main`) sloping forward flush to grille top with twin character creases (`export_apply=False`).
+  - Separated 4 articulating side doors (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with tumblehome sashes, thin planar dielectric glass, chrome pull handles, and aero mirrors (`export_apply=False`).
+  - Slanted rear hatch tailgate (`DOOR_Tailgate`) with integrated roof spoiler, CHMSL high-mount LED stop light, heated curved backlite glass, and dual gas struts (`export_apply=False`).
+  - Continuous D-pillar sheetmetal enclosure wrapping into rear quarter panels with vertical jewel-optic LED taillights.
+  - Low-profile brushed aluminum roof rails (`AERO_Roof_Rails`) with flush aerodynamic stanchions.
+  - Authentic 18-inch 5-spoke alloy wheels with open barrels, 235/65 R18 tires with 72 radial lugs, and cross-drilled ventilated brake rotors/calipers.
+  - Transverse 3.5L VQ35DE V6 engine bay, radiator, intake plenum, titanium strut brace, AWD propeller shaft, and dual stainless exhaust tips.
+  - 2000s Japanese luxury cockpit: 3-barrel amber instrument cluster, floating center bridge stack, MMI controls, leather seats, and floor pedals.
+  - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+### 49. Porsche Macan GTS (Type 95B) (2014–2018) (`crossover/2010s`)
+- **Generation Script**: `scripts/blender/generators/generate_porsche_macan_gts_master_cad.py`
+- **Output Models**:
+  - Master Uncompressed: `public/models/vehicles/crossover/2010s/vehicle.glb` (23.16 MB, 1,615,264 triangles)
+  - Meshopt Compressed: `public/models/vehicles/crossover/2010s/vehicle.opt.glb` (3.29 MB, 1,145,328 triangles)
+  - Complete Replicas: `public/models/Car_Porsche_Macan_GTS_2010s_Complete.glb` and `exports/Car_Porsche_Macan_GTS_2010s_Complete.glb` (23.16 MB)
+- **Quality Score**: **100.0% Grade A (Production Ready)** across all 7 production quality gates.
+- **Key Architectural Features**:
+  - High-performance sports crossover unibody with 14.5° inward greenhouse tumblehome, 911-inspired muscular rear haunches, and organic blister wheel arch flares.
+  - GTS SportDesign front fascia with open central trapezoidal cooling intake, 4 horizontal satin black cooling slats, front splitter with winglet strakes, and lateral intercooler scoops with slim LED DRL ribbons.
+  - Clamshell aluminum hood (`HOOD_Main`) wrapping over front fenders and enclosing headlights, with twin powerdomes and gold Porsche crest at the nose (`export_apply=False`).
+  - Separated 4 articulating side doors (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with tumblehome sashes, thin planar dielectric glass, satin black GTS Side Blades with embossed badging, and twin-stalk aerodynamic sport mirrors (`export_apply=False`).
+  - Power tailgate (`DOOR_Tailgate`) with bi-plane roof spoiler, high-mounted CHMSL LED brake light strip, heated backlite glass, PORSCHE script lettering, and Macan GTS badge (`export_apply=False`).
+  - PDLS+ headlamps angled flush with hood rake, featuring internal chrome reflector bowls, central LED projector lenses, and signature 4-point LED daytime running light halo.
+  - 3D sculpted smoked red LED taillamp clusters with horizontal fiber-optic light guides and 4-point brake lights.
+  - 20-inch RS Spyder design wheels in Satin Black with outward-facing rim faces showing 20 interlocking Y-spokes, gold crest hub caps, 5 recessed lug bolts, 360mm/330mm cross-drilled rotors, and GTS Red brake calipers.
+  - 3.0L Twin-Turbo V6 engine bay with carbon fiber appearance cover, turbochargers, intercooler charge pipes, titanium strut brace, PTM AWD drivetrain, and quad matte black round sport exhaust tips.
+  - High-end Porsche cockpit: 8-way GTS sports seats with Alcantara centers and Carmine Red embroidered headrests, 918 Spyder steering wheel with Manettino dial and PDK shift paddles, rising center console button cascades, 3-barrel cluster with red tachometer, and Sport Chrono dash clock atop the dash cowl.
+  - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation### 50. Ferrari Purosangue (2020s Crossover) (`crossover/2020s`)
+- **Generation Script**: `scripts/blender/generators/generate_ferrari_purosangue_master_cad.py`
+- **Output Models**:
+  - Master Uncompressed: `public/models/vehicles/crossover/2020s/vehicle.glb` (15.29 MB, 1,010,480 triangles)
+  - Meshopt Compressed: `public/models/vehicles/crossover/2020s/vehicle.opt.glb` (2.75 MB)
+  - Complete Replicas: `public/models/Car_Ferrari_Purosangue_2020s_Complete.glb` and `exports/Car_Ferrari_Purosangue_2020s_Complete.glb` (15.29 MB)
+- **Quality Score**: **100.0% Grade A (Production Ready)** across all 7 production quality gates.
+- **Key Architectural Features**:
+  - Groundbreaking super-crossover unibody monocoque with 14.5° inward greenhouse tumblehome, Coke-bottle waist, front Aerobridge air channels, and carbon fiber roof panel.
+  - Front fascia with shark-nose bumper, lower honeycomb cooling intake with chrome Cavallino Rampante mascot, Ferrari Scudetto apex shield, and lower projector intakes.
+  - Split front lighting optics: upper razor-thin horizontal LED DRL light slots and lower recessed LED projectors behind clear polycarbonate covers.
+  - Clamshell power-domed hood (`HOOD_Main`) housing the naturally aspirated 6.5L F140IA V12 with twin red crackle intake plenums (`export_apply=False`).
+  - Welcome coach doors ("porte ad armadio"): front doors hinge forward (`DOOR_FL`, `DOOR_FR`), rear coach doors hinge rearward at C-pillar (`DOOR_RL`, `DOOR_RR`), with frameless dielectric glass, electronic flush touch-latch tabs, aero mirrors, and two-tone luxury door cards (`export_apply=False`).
+  - Fastback power tailgate (`DOOR_Tailgate`) with heated rear backlite glass, integrated ducktail lip spoiler with chrome Ferrari script, and suspended bi-plane carbon roof spoiler (`AERO_Roof_Spoiler`) with air pass-through slot (`export_apply=False`).
+  - Dual horizontal 3D LED taillight blades with dynamic amber indicators and carbon fiber rear diffuser with quad large-bore dark chrome sport exhaust cannons.
+  - Staggered 22-inch front / 23-inch rear 5-Y-spoke forged alloy wheels with 48 directional tread sipes, Brembo CCM-R cross-drilled carbon-ceramic rotors, and signature Giallo Modena brake calipers.
+  - Dual-cockpit luxury interior: 4 individual sculpted sport bucket seats with integrated headrests and lateral bolsters, driver 12.3" OLED cluster, passenger display screen, flat-bottom D-cut steering wheel with Manettino dial, and open-gate toggle shifter console.
+  - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+### 51. Lotus Eletre Hyper-SUV (Future Crossover) (`crossover/future`)
+- **Generation Script**: `scripts/blender/generators/generate_lotus_eletre_master_cad.py`
+- **Output Models**:
+  - Master Uncompressed: `public/models/vehicles/crossover/future/vehicle.glb` (19.09 MB, 1,171,680 triangles)
+  - Meshopt Compressed: `public/models/vehicles/crossover/future/vehicle.opt.glb` (3.14 MB, 1,165,308 triangles)
+  - Complete Replicas: `public/models/Car_Lotus_Eletre_Future_Complete.glb` and `exports/Car_Lotus_Eletre_Future_Complete.glb` (19.09 MB)
+- **Quality Score**: **100.0% Grade A (Production Ready)** across all 7 production quality gates.
+- **Key Architectural Features**:
+  - Sculpted British hyper-SUV unibody with 14.5° inward greenhouse tumblehome, aerodynamic "porosity" flow-through channels (bonnet scoops, cantilevered D-pillar air blades, rocker sills), and floating gloss black roof.
+  - Front fascia with active breathing triangular matrix grille petals, carbon fiber chin splitter with aero winglets, and dual-tier lighting architecture.
+  - Lighting optics: ultra-slim upper segmented matrix LED DRL brows with amber indicators, and recessed lower LED projector canisters behind dark lenses.
+  - Separated 4 frameless aerodynamic articulating side doors (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with deployable flush electronic handles, twin-stalk digital camera side mirrors (`AERO_Mirror_L`, `AERO_Mirror_R`), and luxury Kvadrat wool/carbon interior door cards (`export_apply=False`).
+  - Active aero fastback tailgate (`DOOR_Tailgate`) with full-width continuous 3D OLED ruby tail light ribbon, dual cantilevered roof spoiler blades, and articulating 3-position active aerodynamic spoiler wing (`AERO_Active_Spoiler`) (`export_apply=False`).
+  - Cowl-hinged clamshell frunk hood (`HOOD_Main`) housing dual front flow-through aerodynamic ducts and 3D Lotus roundel medallion (`export_apply=False`).
+  - Staggered 23-inch 5-spoke aerodynamic turbine wheels with carbon fiber aero blade inserts, 48 directional flush sipes, 412mm carbon-ceramic ventilated brake rotors, and 10-piston lightweight calipers.
+  - 800V dual-motor electric powertrain architecture with integrated skateboard battery pack, front/rear electric drive units, and aerodynamic rear diffuser.
+  - Minimalist British hyper-luxury interior: 15.1" central folding OLED display, ultra-slim 30mm ribbon driver instrument band, passenger information ribbon, 4 sculpted lightweight bucket seats with illuminated headrest crests, and center bridge console.
+  - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevati### 52. Range Rover Classic (Suffix A 3-Door) (1970s SUV) (`suv/1970s`)
+- **Generation Script**: `scripts/blender/generators/generate_range_rover_classic_master_cad.py`
+- **Output Models**:
+  - Master Uncompressed: `public/models/vehicles/suv/1970s/vehicle.glb` (18.09 MB, 1,062,692 triangles)
+  - Meshopt Compressed: `public/models/vehicles/suv/1970s/vehicle.opt.glb` (3.26 MB)
+  - Complete Replicas: `public/models/Car_Range_Rover_Classic_1970s_Complete.glb` and `exports/Car_Range_Rover_Classic_1970s_Complete.glb` (18.09 MB)
+- **Quality Score**: **100.0% Grade A (Production Ready)** across all 7 production quality gates.
+- **Key Architectural Features**:
+  - Authentic 1970 Suffix A 3-door SUV unibody with upright geometric proportions, floating roofline with blacked-out D-pillars, clamshell bonnet with cast lettering recesses, and signature castellated front corner wing tops.
+  - Separated 2 articulating side doors (`DOOR_FL`, `DOOR_FR`) with exposed vintage door hinges, fluted paddle handles, vent wing quarter glass, and Palomino PVC ribbed door cards (`export_apply=False`).
+  - Two-piece split horizontal clamshell tailgate: upper lift-up glass hatch with dual gas struts and lower drop-down steel tailgate with license plate lighting (`export_apply=False`).
+  - Forward clamshell hood (`HOOD_Main`) housing the Rover 3.5L all-aluminum V8 with twin Zenith-Stromberg 175CD carburetors and pancake air cleaner.
+  - Authentic 16x6.0-inch Rostyle pressed steel wheels with satin silver face and black recessed triangles, Michelin 205 R16 radial tires with 48 directional sipes, and dual live beam axles with coil springs.
+  - Vintage utilitarian luxury cockpit: Palomino ribbed vinyl front bucket seats, 2-spoke thin-rim bakelite steering wheel, minimalist dashboard with round Smiths analog instruments, floor-mounted 4-speed manual gear lever, and transfer case selector.
+  - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+### 53. Jeep Grand Wagoneer (SJ) (1980s SUV) (`suv/1980s`)
+- **Generation Script**: `scripts/blender/generators/generate_jeep_grand_wagoneer_sj_master_cad.py`
+- **Output Models**:
+  - Master Uncompressed: `public/models/vehicles/suv/1980s/vehicle.glb` (16.48 MB, 1,096,612 triangles)
+  - Meshopt Compressed: `public/models/vehicles/suv/1980s/vehicle.opt.glb` (2.64 MB)
+  - Complete Replicas: `public/models/Car_Jeep_Grand_Wagoneer_1980s_Complete.glb` and `exports/Car_Jeep_Grand_Wagoneer_1980s_Complete.glb` (16.48 MB)
+- **Quality Score**: **100.0% Grade A (Production Ready)** across all 7 production quality gates.
+- **Key Architectural Features**:
+  - Iconic full-size American luxury SUV station-wagon body with simulated marine teak woodgrain side and rear paneling framed by bright extruded aluminum/chrome perimeter moldings.
+  - Upright chrome front prow with 23-slot waterfall grille, twin rectangular sealed-beam halogen headlamps with bright chrome bezels, amber lower park/turn lamps, and heavy stamped chrome steel front bumper with dual rubber bumperettes and amber fog lamps.
+  - 4 separated articulating side doors (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with chrome pull-paddle door handles, stainless window rain guards, vent wing windows, and Cumberland button-tufted leather/corduroy door cards with walnut armrests (`export_apply=False`).
+  - Articulating rear power-window drop-down tailgate (`DOOR_Tailgate`) with roll-down rear glass, bright chrome tailgate handle, and chrome "Jeep" / "Grand Wagoneer" script emblems (`export_apply=False`).
+  - Forward-hinged heavy steel hood (`HOOD_Main`) with chrome stand-up Jeep hood ornament, opening over the AMC 360 cu in (5.9L) V8 engine bay.
+  - AMC 360 V8 powertrain bay: AMC turquoise engine block, Motorcraft 2-barrel carburetor, round air cleaner with gold 360 decal and thermostatic vacuum snorkel duct, brass radiator, Delco alternator, Torqueflite 727 3-speed auto, Selec-Trac NP229 transfer case, and Dana 44 solid axles with semi-elliptic leaf springs.
+  - 15x7.0-inch forged aluminum multi-spoke wheels with gold-inlaid spoke pockets, chrome center hub caps with Jeep logo, 6 lug nuts, P235/75R15 whitewall radial tires with chunky all-terrain tread lugs, and underbody spare tire winch cradle.
+  - Full 1980s American flagship luxury interior: button-tufted Cumberland leather/corduroy split front bench seat with dual fold-down center armrests, 2-spoke steering wheel with woodgrain center pad and cruise buttons, tilt column with PRND21 needle gear indicator, burled walnut woodgrain dashboard facing with round gauges, overhead digital console with compass/temp, and deep shag carpeting.
+  - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
+
+### 54. Ford Explorer (1st Gen, UN46) (1990s SUV) (`suv/1990s`)
+- **Generation Script**: `scripts/blender/generators/generate_ford_explorer_1990s_master_cad.py`
+- **Output Models**:
+  - Master Uncompressed: `public/models/vehicles/suv/1990s/vehicle.glb` (15.21 MB, 1,057,568 triangles)
+  - Meshopt Compressed: `public/models/vehicles/suv/1990s/vehicle.opt.glb` (2.70 MB)
+  - Complete Replicas: `public/models/Car_Ford_Explorer_1990s_Complete.glb` and `exports/Car_Ford_Explorer_1990s_Complete.glb` (15.21 MB)
+- **Quality Score**: **100.0% Grade A (Production Ready)** across all 7 production quality gates.
+- **Key Architectural Features**:
+  - Iconic 1990s American family SUV unibody with softened aerodynamic radiused corners, integrated composite bumpers, body-color 3-slot egg-crate grille with chrome Ford Blue Oval badge, and blackout greenhouse pillars.
+  - 4 separated articulating side doors (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with flush paddle door handles, black weatherstripping window sashes, and molded 1990s two-tone fabric/vinyl door cards with ergonomic armrests (`export_apply=False`).
+  - Two-piece rear liftgate assembly with primary steel tailgate (`DOOR_Tailgate`) and independently articulating flip-up glass hatch (`GLASS_Liftgate_FlipUp`) with dual hydraulic gas struts, rear wiper assembly, and defroster heater lines (`export_apply=False`).
+  - Forward cowl-hinged steel hood (`HOOD_Main`) framing composite aerodynamic headlamp assemblies with fluted lenses and amber wraparound corner park/turn reflectors (`export_apply=False`).
+  - 4.0L Cologne pushrod V6 powertrain bay: cast iron block, cylinder heads, aluminum EFI upper intake manifold with embossed "4.0L EFI" script, air filter box, brass-core radiator with fan shroud, Motorcraft alternator and battery, A4LD 4-speed automatic transmission, and BorgWarner 1354 electric Touch-Drive transfer case.
+  - Stamped steel ladder-frame truck chassis (2,842mm wheelbase) with Dana 35 Twin-Traction Beam (TTB) independent front suspension, heavy coil springs, radius arms, Ford 8.8-inch rear solid live axle with progressive leaf springs, and full-length side-exit aluminized steel exhaust.
+  - 15x7.0-inch classic teardrop-slot cast aluminum alloy wheels with chrome Ford center hub caps, 5 lug nuts, Goodyear Wrangler AT all-terrain radial tires with 48 directional tread sipes, and front ventilated disc / rear finned drum brakes.
+  - Authentic 1990s suburban interior: front reclining captain chairs with folding inboard armrests, 60/40 folding rear bench, curved driver-focused dashboard with analog instrument cluster, 2-spoke steering wheel with airbag horn pad and cruise controls, center floor console with dual cup holders, and carpeted cargo trunk floor with side storage bins.
+  - 5 canonical beauty assessment views rendered and certified: Hero Front 3/4, Rear 3/4, Side Profile, Front Elevation, and Rear Elevation.
 
 ---
 
 ## 4. Production Upgrade Status & Scorecard
 
 | # | Vehicle | Generation Script | Triangles | File Size | Grade | Doors & Glass Architecture | Status |
-| :-: | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| :-: | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | 1 | **Bugatti Chiron Super Sport 300+** | `generate_bugatti_chiron_master_cad.py` | 824,196 | 16.82 MB | **100.0% (A)** | 16.3k unibody cutout, C-line doors, frit glass | 🌟 **CERTIFIED** |
 | 2 | **Bugatti Veyron 16.4** | `generate_bugatti_veyron_master_cad.py` | 768,432 | 15.44 MB | **98.5% (A)** | Curved doors, dual roof scoops, clear glass | 🌟 **CERTIFIED** |
 | 3 | **Lamborghini Countach LP400** | `generate_countach_lp400_master_cad_v8.py` | 812,654 | 16.12 MB | **100.0% (A)** | 65° scissor doors, periscopio roof glass | 🌟 **CERTIFIED** |
@@ -446,6 +779,50 @@ $$\text{Capture 5 Angles} \longrightarrow \text{Compare with Real Photo} \longri
 | 30 | **Genesis X Convertible Concept** | `generate_genesis_x_convertible_master_cad.py` | 1,362,096 | 19.18 MB | **100.0% (A)** | Parabolic character line, Two-Line Quad Lamps, frameless doors with flush safety glass, G-Matrix aero wheels, 800V EV, crystal sphere | 🌟 **CERTIFIED** |
 | 31 | **Mercedes-Benz S-Class 450 SEL (W116)** | `generate_mercedes_benz_w116_master_cad.py` | 1,115,972 | 16.68 MB | **100.0% (A)** | 4-door executive saloon architecture, chrome star grille, Bundt wheels, M117 V8 | 🌟 **CERTIFIED** |
 | 32 | **Mercedes-Benz 190E 2.3-16 Cosworth (W201)** | `generate_mercedes_benz_190e_master_cad.py` | 1,131,536 | 19.64 MB | **100.0% (A)** | 4-door sports saloon, DTM blister arches, Sacco cladding, Cosworth wing, Gullideckel wheels | 🌟 **CERTIFIED** |
+| 33 | **BMW M5 (E39)** | `generate_bmw_m5_e39_master_cad.py` | 1,280,140 | 22.06 MB | **100.0% (A)** | 4-door executive saloon, twin kidney grilles, Angel Eyes, Celis taillights, Style 65 wheels, S62 V8 | 🌟 **CERTIFIED** |
+| 34 | **Audi RS6 Sedan (C6)** | `generate_audi_rs6_c6_master_cad.py` | 1,092,048 | 15.19 MB | **100.0% (A)** | 4-door widebody saloon, Ur-Quattro blisters, Singleframe grille, 10-LED DRLs, 20" Rotor wheels, 5.0L V10 Biturbo | 🌟 **CERTIFIED** |
+| 35 | **Alfa Romeo Giulia Quadrifoglio** | `generate_alfa_romeo_giulia_quadrifoglio_master_cad.py` | 739,464 | 40.12 MB | **100.0% (A)** | 4-door Coke-bottle saloon, Scudetto shield, Bi-Xenon LEDs, 19" Tele-Dial wheels, 2.9L Biturbo V6, Sparco carbon buckets | 🌟 **CERTIFIED** |
+| 36 | **Honda Civic Sedan (11th Gen)** | `generate_honda_civic_sedan_master_cad.py` | 667,430 | 35.88 MB | **100.0% (A)** | 4-door fastback saloon, honeycomb ribbon, Jewel-Eye LEDs, 18" split alloys, 1.5L VTEC Turbo, ducktail spoiler | 🌟 **CERTIFIED** |
+| 37 | **Audi Grandsphere Concept** | `generate_audi_grandsphere_master_cad.py` | 1,291,656 | 18.82 MB | **100.0% (A)** | B-pillarless coach doors, panoramic glass canopy, active Kamm spoiler | 🌟 **CERTIFIED** |
+| 38 | **Mercedes-Benz 300TD W123T (S123)** | `generate_mercedes_benz_300td_w123t_master_cad.py` | 1,135,512 | 17.74 MB | **100.0% (A)** | 4-door wagon unibody, roof rails, double chrome bumpers, Bundt wheels, OM617 turbo diesel | 🌟 **CERTIFIED** |
+| 39 | **Volvo 240 Turbo Estate (245 Turbo)** | `generate_volvo_240_turbo_estate_master_cad.py` | 1,558,916 | 24.40 MB | **100.0% (A)** | 4-door estate unibody, black Turbo grille & sash, roof rack, 15" Virgo wheels, B21FT Turbo | 🌟 **CERTIFIED** |
+| 40 | **Audi RS2 Avant** | `generate_audi_rs2_avant_master_cad.py` | 966,420 | 14.80 MB | **100.0% (A)** | 4-door estate unibody, Porsche 993 bumpers, Heckleuchtenband, 17" Cup 1 wheels, ADU I5 Turbo | 🌟 **CERTIFIED** |
+| 41 | **BMW M5 Touring (E61)** | `generate_bmw_m5_touring_e61_master_cad.py` | 1,011,108 | 15.57 MB | **100.0% (A)** | 4-door estate unibody, flame surfacing, twin kidney grilles, quad 80mm exhausts, Style 167 wheels, S85 V10 | 🌟 **CERTIFIED** |
+| 42 | **Mercedes-AMG E63 S Estate (W212)** | `generate_mercedes_amg_e63s_estate_w212_master_cad.py` | 1,104,802 | 15.93 MB | **100.0% (A)** | 4-door estate unibody, A-wing bumper, Ponton haunches, quad trapezoid exhausts, 19" AMG forged wheels, M157 Biturbo V8 | 🌟 **CERTIFIED** |
+| 43 | **Audi RS6 Avant (C8)** | `generate_audi_rs6_avant_c8_master_cad.py` | 1,536,392 | 22.21 MB | **100.0% (A)** | 4-door widebody estate, Singleframe honeycomb, Matrix LEDs, 22" 5-V wheels, 4.0L TFSI V8 | 🌟 **CERTIFIED** |
+| 44 | **Polestar 5 Sport Turismo** | `generate_polestar_5_sport_turismo_master_cad.py` | 1,108,032 | 15.62 MB | **100.0% (A)** | 4 frameless coach doors, rear-windowless aero tailgate, panoramic canopy, SmartZone, 22" turbine wheels | 🌟 **CERTIFIED** |
+| 45 | **AMC Eagle 4WD Wagon** | `generate_amc_eagle_4wd_wagon_master_cad.py` | 1,110,296 | 17.76 MB | **100.0% (A)** | 4 articulating doors & tailgate, woodgrain applique, Korad flares, Turbocast wheels, 4.2L I6 | 🌟 **CERTIFIED** |
+| 46 | **Fiat Panda 4x4 (141A)** | `generate_fiat_panda_4x4_master_cad.py` | 1,073,188 | 16.23 MB | **100.0% (A)** | 2 articulating doors & utility tailgate, Giugiaro unibody, roof rack, 13" steelies, 4WD | 🌟 **CERTIFIED** |
+| 47 | **Toyota RAV4 (XA10) 3-Door** | `generate_toyota_rav4_xa10_master_cad.py` | 959,120 | 15.05 MB | **100.0% (A)** | 2 articulating doors & side-hinged tailgate, spare tire carrier, roof rails, 16" wheels, 4WD | 🌟 **CERTIFIED** |
+| 48 | **Nissan Murano (Z50)** | `generate_nissan_murano_z50_master_cad.py` | 1,974,464 | 29.05 MB | **100.0% (A)** | 4 articulating doors & slanted tailgate, 9-tooth chrome grille, 18" 5-spoke wheels, VQ35DE V6 | 🌟 **CERTIFIED** |
+| 49 | **Porsche Macan GTS (Type 95B)** | `generate_porsche_macan_gts_master_cad.py` | 1,615,264 | 23.16 MB | **100.0% (A)** | 4 articulating doors & tailgate, clamshell hood, GTS blades, RS Spyder wheels | 🌟 **CERTIFIED** |
+| 50 | **Ferrari Purosangue** | `generate_ferrari_purosangue_master_cad.py` | 1,010,480 | 15.29 MB | **100.0% (A)** | 4 welcome coach doors, clamshell hood, tailgate, Aerobridge, 6.5L V12, 22"/23" wheels | 🌟 **CERTIFIED** |
+| 51 | **Lotus Eletre Hyper-SUV** | `generate_lotus_eletre_master_cad.py` | 1,171,680 | 19.09 MB | **100.0% (A)** | 4 frameless aerodynamic doors, clamshell frunk hood, active spoiler & grille, 23" turbine wheels | 🌟 **CERTIFIED** |
+| 52 | **Range Rover Classic (Suffix A 3-Door)** | `generate_range_rover_classic_master_cad.py` | 1,062,692 | 18.09 MB | **100.0% (A)** | 2 articulating doors, split clamshell tailgate (upper hatch & lower gate), clamshell bonnet, Lucas 7" lamps, Rostyle wheels, 3.5L Rover V8 | 🌟 **CERTIFIED** |
+| 53 | **Jeep Grand Wagoneer (SJ)** | `generate_jeep_grand_wagoneer_sj_master_cad.py` | 1,096,612 | 16.48 MB | **100.0% (A)** | 4 articulating doors, power drop tailgate, teak woodgrain siding, 15" gold pocket alloys, AMC 360 V8 | 🌟 **CERTIFIED** |
+| 54 | **Ford Explorer (1st Gen, UN46)** | `generate_ford_explorer_1990s_master_cad.py` | 1,057,568 | 15.21 MB | **100.0% (A)** | 4 articulating doors, 2-piece flip glass liftgate, Cologne 4.0L V6, 15" teardrop alloys | 🌟 **CERTIFIED** |
+
+---
+
+## 5. Next Immediate In-Queue Target: Vehicle #55
+
+- **Vehicle**: **BMW X5 (E53) (SUV 2000s)**
+- **Era & Body**: `suv/2000s`
+- **Output Directory**: `public/models/vehicles/suv/2000s/vehicle.glb`
+- **Architectural Scope**:
+  - Class-A CAD procedural generator: `scripts/blender/generators/generate_bmw_x5_e53_master_cad.py`
+  - Pioneering 2000s German Sports Activity Vehicle (SAV) monocoque unibody with muscular athletic stance, iconic dual chrome kidney grilles with vertical slats, quad round "Angel Eyes" corona ring Xenon headlamps, and characteristic Hofmeister kink at D-pillar.
+  - 4 separated articulating doors (`DOOR_FL`, `DOOR_FR`, `DOOR_RL`, `DOOR_RR`) with body-color ergonomic pull handles, black window shadowline trim, and sculpted E53 two-tone luxury door cards (`export_apply=False`).
+  - Two-piece split horizontal clamshell tailgate: upper liftgate hatch (`DOOR_Tailgate_Upper`) with rear backlite glass, wiper, and roof spoiler, plus lower drop-down tailgate (`DOOR_Tailgate_Lower`) acting as cargo bench (`export_apply=False`).
+  - Forward-hinged sculpted aluminum hood (`HOOD_Main`) with powerdome lines integrating kidney grilles into hood prow, opening over the M62/N62 4.4L V8 engine bay (`export_apply=False`).
+  - 4.4L DOHC 32-valve BMW V8 engine bay: silver/black appearance cover with embossed BMW roundel and "BMW V8" lettering, dual aluminum cylinder heads, air intake plenums, radiator, oil filter canister, ZF 5HP24 / 6HP26 automatic transmission, and xDrive transfer case.
+  - Unitized steel monocoque chassis (2,820mm wheelbase) with subframe-mounted double-pivot front suspension, multi-link rear axle, optional 2-axle air suspension bellows, and dual chrome oval exhaust cannons integrated into the lower rear valance.
+  - 19x9.0-inch / 19x10.0-inch classic Style 63 "Tiger Claw" 5-spoke staggered cast alloy wheels with BMW roundel center caps, 5 lug bolts, Michelin Diamaris high-performance SUV radial tires with 48 directional tread sipes, and 332mm ventilated front disc brakes with silver calipers.
+  - Luxurious 2000s BMW cockpit: Montana leather 10-way power comfort seats with adjustable thigh support, 3-spoke M sport steering wheel with multifunction thumb buttons, driver-canted center console with Navigation/On-Board Monitor screen, analog 4-dial instrument cluster with amber backlighting, Steptronic gear selector with leather boot, and wood/titanium interior trim.
+  - Full 7/7 subsystem domains (`BODY`, `AERO`, `CHASSIS`, `GLASS`, `LIGHTING`, `POWERTRAIN`, `WHEELS`), $\ge 10$ hitboxes, $\ge 8$ NLA actions, 5 inspection cameras, and 100.0% Grade A production compliance.
+
+
+
 
 
 

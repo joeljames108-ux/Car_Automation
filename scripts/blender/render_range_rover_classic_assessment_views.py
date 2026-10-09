@@ -11,9 +11,13 @@ import math
 import os
 from mathutils import Vector, Euler, Matrix
 
-# Destination directory in active agent brain
-output_dir = r"C:\Users\acer\.gemini\antigravity-ide\brain\ffb9c6c7-59f3-45ce-b19a-94c310375b11"
-os.makedirs(output_dir, exist_ok=True)
+# Destination directories
+output_dirs = [
+    r"C:\Users\acer\.gemini\antigravity-ide\brain\b4a77049-12bb-41b8-a852-bdc782fd07d7",
+    r"e:\Car_Automation\assets\screenshots\range_rover_classic"
+]
+for d in output_dirs:
+    os.makedirs(d, exist_ok=True)
 
 # Master GLB path
 glb_path = r"e:\Car_Automation\public\models\Car_Range_Rover_Classic_1970s_Complete.glb"
@@ -24,6 +28,12 @@ print("=" * 80)
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.gltf(filepath=glb_path)
+
+# Hide collision hitboxes so they don't occlude beauty geometry
+for o in bpy.data.objects:
+    if "hitbox" in o.name.lower():
+        o.hide_render = True
+        o.hide_viewport = True
 
 scene = bpy.context.scene
 scene.render.engine = 'BLENDER_EEVEE_NEXT' if 'BLENDER_EEVEE_NEXT' in dir(bpy.types) else 'BLENDER_EEVEE'
@@ -150,13 +160,19 @@ print("\n" + "=" * 80)
 print("EXECUTING AUTONOMOUS 5-VIEW ASSESSMENT RENDERS")
 print("=" * 80)
 
+import shutil
+
 for vp in validation_viewpoints:
     set_camera_view(cam_obj, vp['eye'], vp['target'])
-    out_path = os.path.join(output_dir, vp['filename'])
-    scene.render.filepath = out_path
+    primary_out = os.path.join(output_dirs[0], vp['filename'])
+    scene.render.filepath = primary_out
     print(f"Rendering: {vp['title']} -> {vp['filename']}")
     bpy.ops.render.render(write_still=True)
-    f_size = os.path.getsize(out_path)
-    print(f"  ✓ Rendered: {out_path} ({f_size:,} bytes)")
+    f_size = os.path.getsize(primary_out)
+    print(f"  ✓ Rendered: {primary_out} ({f_size:,} bytes)")
+    for secondary_dir in output_dirs[1:]:
+        sec_out = os.path.join(secondary_dir, vp['filename'])
+        shutil.copyfile(primary_out, sec_out)
+        print(f"  ✓ Replicated to: {sec_out}")
 
-print("\n✓ All 5 assessment viewpoints successfully rendered!")
+print("\n✓ All 5 assessment viewpoints successfully rendered and replicated!")
